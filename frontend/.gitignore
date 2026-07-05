@@ -11,6 +11,10 @@
 # production
 /build
 
+#Font Awesome /............................???>>
+
+/fontawesome-free-5.15.4-web
+
 # misc
 .DS_Store
 .env.local
