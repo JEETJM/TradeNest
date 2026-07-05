@@ -1,0 +1,76 @@
+/* ===========================
+        Pricing
+=========================== */
+
+.education-img {
+  width: 100%;
+  max-width: 520px;
+  transform: translate(-70px, -80px);
+}
+
+.pricing-section {
+  padding: 110px 0;
+}
+
+.pricing-heading {
+  font-size: 2.3rem;
+  font-weight: 600;
+  color: #424242;
+  margin-bottom: 22px;
+}
+
+.pricing-description {
+  color: #666;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  margin-bottom: 22px;
+}
+
+.pricing-link {
+  text-decoration: none;
+  color: #387ed1;
+  font-weight: 500;
+}
+
+.pricing-link:hover {
+  color: #1f5ea8;
+}
+
+/* Right */
+
+.pricing-images {
+  gap: 25px;
+}
+
+.price-box {
+  text-align: center;
+}
+
+.price-box img {
+  width: 145px;
+}
+
+.price-box p {
+  margin-top: 15px;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* Responsive */
+
+@media (max-width: 992px) {
+  .pricing-section {
+    text-align: center;
+  }
+
+  .pricing-images {
+    flex-direction: column;
+    gap: 45px;
+    margin-top: 45px;
+  }
+
+  .price-box img {
+    width: 130px;
+  }
+}

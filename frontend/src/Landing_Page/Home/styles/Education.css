@@ -1,0 +1,49 @@
+/* ===========================
+      EDUCATION
+=========================== */
+
+.education-section {
+  padding: 110px 0;
+}
+
+.education-img {
+  width: 100%;
+  max-width: 520px;
+  margin: auto;
+}
+
+.education-heading {
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #424242;
+  margin-bottom: 25px;
+}
+
+.education-text {
+  font-size: 1.05rem;
+  color: #666;
+  line-height: 1.8;
+  margin-bottom: 18px;
+}
+
+.education-link {
+  text-decoration: none;
+  color: #387ed1;
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+.education-link:hover {
+  color: #1f5ea8;
+}
+
+@media (max-width: 992px) {
+  .education-section {
+    text-align: center;
+    padding: 70px 0;
+  }
+
+  .education-img {
+    margin-bottom: 45px;
+  }
+}
