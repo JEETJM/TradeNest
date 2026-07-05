@@ -1,0 +1,67 @@
+/*==========================
+    Investment Section
+==========================*/
+
+.investment-section {
+  padding: 90px 0;
+}
+
+.investment-heading {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #424242;
+}
+
+.investment-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+
+  padding: 15px;
+
+  border-radius: 12px;
+
+  transition: 0.3s;
+}
+
+.investment-card:hover {
+  transform: translateY(-5px);
+}
+
+.investment-card img {
+  width: 72px;
+}
+
+.investment-card h4 {
+  font-size: 22px;
+  color: #424242;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.investment-card p {
+  color: #666;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.btn-primary {
+  background: #387ed1;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #2e6fbe;
+}
+
+/*==========================
+    Responsive
+==========================*/
+
+@media (max-width: 992px) {
+  .investment-card {
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+  }
+}

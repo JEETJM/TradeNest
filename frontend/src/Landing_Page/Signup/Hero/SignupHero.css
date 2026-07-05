@@ -1,0 +1,97 @@
+.signupHero {
+  padding-top: 120px;
+  padding-bottom: 90px;
+}
+
+.heroHeading {
+  font-size: 42px;
+  font-weight: 600;
+  color: #424242;
+}
+
+.heroSubHeading {
+  margin-top: 18px;
+  font-size: 20px;
+  color: #666;
+}
+
+.heroImage {
+  width: 90%;
+  max-width: 540px;
+}
+
+.signupCard {
+  width: 430px;
+  margin: auto;
+}
+
+.signupCard h3 {
+  font-weight: 600;
+}
+
+.track {
+  color: #777;
+  margin-bottom: 30px;
+}
+
+.track a {
+  text-decoration: none;
+}
+
+.mobileBox {
+  display: flex;
+
+  height: 56px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 5px;
+
+  overflow: hidden;
+}
+
+.mobileBox span {
+  width: 95px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  border-right: 1px solid #ddd;
+
+  font-weight: 500;
+}
+
+.mobileBox input {
+  flex: 1;
+
+  border: none;
+
+  outline: none;
+
+  padding-left: 18px;
+}
+
+.otpBtn {
+  height: 55px;
+
+  font-size: 18px;
+
+  font-weight: 600;
+}
+
+.signupCard small {
+  display: block;
+
+  margin-top: 18px;
+
+  color: #777;
+
+  line-height: 1.8;
+}
+
+.signupCard a {
+  text-decoration: none;
+}
