@@ -9,7 +9,7 @@ function Awards() {
 
         {/* Left Image */}
 
-        <div className="col-lg-6 text-center">
+        <div className="col-lg-6  text-center">
 
           <img
             src="Media/Images/largestBroker.svg"
@@ -23,7 +23,7 @@ function Awards() {
 
         <div className="col-lg-6">
 
-          <h2 className="awards-title">
+          <h2 className="awards-title ">
             India's Trusted Trading Platform
           </h2>
 
@@ -56,6 +56,7 @@ function Awards() {
             </div>
 
           </div>
+          <img src="Media\Images\pressLogos.png" alt="PresLOGO HERE" style={{width:"85%"}}></img>
 
         </div>
 
