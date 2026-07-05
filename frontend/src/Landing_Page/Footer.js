@@ -9,11 +9,13 @@ function Footer() {
           {/* Column 1 */}
 
           <div className="col-lg-3 col-md-6">
-            <img
-              src="\Media\Images\TradeNest.png"
-              alt="TradeNest Logo"
-              className="footer-logo"
-            />
+            <a className="#" href="/">
+              <img
+                src="\Media\Images\TradeNest.png"
+                alt="TradeNest Logo"
+                className="footer-logo"
+              />
+            </a>
 
             <p className="copyright">
               © 2026 TradeNest Technologies.
@@ -68,7 +70,7 @@ function Footer() {
               </li>
 
               <li>
-                <a href="/">Portfolio</a>
+                <a href="https://portfolio-jm-web.netlify.app/">Portfolio</a>
               </li>
 
               <li>
