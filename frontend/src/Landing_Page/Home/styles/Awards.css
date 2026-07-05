@@ -1,0 +1,70 @@
+/* =======================
+     AWARDS SECTION
+======================= */
+
+.awards-section{
+    padding:110px 0;
+}
+
+.awards-img{
+    width:100%;
+    max-width:480px;
+    margin:auto;
+}
+
+.awards-title{
+    font-size:2.2rem;
+    font-weight:600;
+    color:#424242;
+    margin-bottom:25px;
+}
+
+.awards-desc{
+    font-size:1.08rem;
+    line-height:1.8;
+    color:#666;
+    margin-bottom:25px;
+}
+
+.awards-list{
+    list-style:none;
+    padding:0;
+}
+
+.awards-list li{
+    margin-bottom:18px;
+    color:#424242;
+    font-size:1rem;
+    position:relative;
+    padding-left:22px;
+}
+
+.awards-list li::before{
+    content:"•";
+    color:#387ed1;
+    position:absolute;
+    left:0;
+    font-size:1.2rem;
+}
+
+/* Responsive */
+
+@media(max-width:992px){
+
+.awards-section{
+    padding:70px 0;
+}
+
+.awards-img{
+    margin-bottom:45px;
+}
+
+.awards-title{
+    text-align:center;
+}
+
+.awards-desc{
+    text-align:center;
+}
+
+}
