@@ -1,0 +1,91 @@
+/*=========================
+      Account Types
+==========================*/
+
+.account-section {
+  padding: 110px 0;
+
+  background: #fafafa;
+}
+
+.account-heading {
+  font-size: 2.2rem;
+
+  font-weight: 600;
+
+  color: #424242;
+}
+
+.account-subheading {
+  margin-top: 15px;
+
+  color: #666;
+
+  font-size: 17px;
+}
+
+.account-card {
+  background: #fff;
+
+  border: 1px solid #e7e7e7;
+
+  border-radius: 15px;
+
+  padding: 35px;
+
+  height: 100%;
+
+  transition: 0.35s;
+}
+
+.account-card:hover {
+  transform: translateY(-8px);
+
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+}
+
+.account-card img {
+  width: 75px;
+
+  margin-bottom: 25px;
+}
+
+.account-card h4 {
+  font-size: 24px;
+
+  font-weight: 600;
+
+  color: #424242;
+
+  margin-bottom: 15px;
+}
+
+.account-card p {
+  color: #666;
+
+  line-height: 1.8;
+
+  margin-bottom: 22px;
+}
+
+.account-card a {
+  color: #387ed1;
+
+  text-decoration: none;
+
+  font-weight: 600;
+}
+
+.account-card a:hover {
+  color: #245fa8;
+}
+
+@media (max-width: 992px) {
+  .account-section {
+    text-align: center;
+  }
+
+  .account-card {
+    padding: 30px;
+  }
+}

@@ -1,0 +1,45 @@
+/*==========================
+      Benefits Section
+===========================*/
+
+.benefits-section {
+  padding: 110px 0;
+}
+
+.benefits-image {
+  width: 80%;
+  max-width: 430px;
+}
+
+.benefits-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #424242;
+}
+
+.benefit-box {
+  margin-bottom: 45px;
+}
+
+.benefit-box h4 {
+  font-size: 25px;
+  color: #424242;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.benefit-box p {
+  color: #666;
+  line-height: 1.9;
+  font-size: 17px;
+}
+
+@media (max-width: 992px) {
+  .benefits-section {
+    text-align: center;
+  }
+
+  .benefits-image {
+    margin-bottom: 50px;
+  }
+}

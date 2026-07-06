@@ -14,11 +14,12 @@ root.render(
       <Route path="/" element={<HomePage />}></Route>
       <Route path="/signup" element={<Signup />}></Route>
 
-      <Route path="/" element={<HomePage />}></Route>
+      <Route path="/about" element={<HomePage />}></Route>
 
-      <Route path="/" element={<HomePage />}></Route>
+      <Route path="/products" element={<HomePage />}></Route>
 
-      <Route path="/" element={<HomePage />}></Route>
+      <Route path="/pricing" element={<HomePage />}></Route>
+      <Route path="/support" element={<HomePage />}></Route>
     </Routes>
   </BrowserRouter>,
 );
