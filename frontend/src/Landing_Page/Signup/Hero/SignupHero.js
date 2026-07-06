@@ -12,19 +12,16 @@ function SignupHero() {
     setError("");
     setSuccess("");
 
-    // যদি Mobile Number দেওয়া থাকে
     if (mobile.trim() !== "") {
       if (!/^[6-9]\d{9}$/.test(mobile)) {
         setError("Please enter a valid 10-digit mobile number.");
         return;
       }
 
-      // এখানে পরে Mobile OTP API Call করবে
       setSuccess("OTP has been sent to your mobile number.");
       return;
     }
 
-    // যদি Email দেওয়া থাকে
     if (email.trim() !== "") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -33,12 +30,10 @@ function SignupHero() {
         return;
       }
 
-      // এখানে পরে Email OTP API Call করবে
       setSuccess("OTP has been sent to your email successfully.");
       return;
     }
 
-    // কিছুই না লিখলে
     setError("Please enter your mobile number or email address.");
   };
 

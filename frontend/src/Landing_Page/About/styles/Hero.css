@@ -1,0 +1,55 @@
+.aboutHero {
+  padding: 110px 0 70px;
+}
+
+.aboutHero h1 {
+  font-size: 54px;
+
+  font-weight: 600;
+
+  color: #424242;
+
+  line-height: 1.4;
+}
+
+.aboutHero hr {
+  width: 70%;
+
+  margin: 45px auto;
+}
+
+.aboutHero p {
+  font-size: 21px;
+
+  color: #666;
+
+  line-height: 2;
+}
+
+.companyStory {
+  padding: 90px 0;
+}
+
+.companyStory p {
+  font-size: 18px;
+
+  line-height: 2;
+
+  color: #666;
+
+  margin-bottom: 35px;
+}
+
+.companyStory {
+  padding: 100px 0;
+}
+
+.companyStory p {
+  font-size: 18px;
+
+  color: #666;
+
+  line-height: 2;
+
+  margin-bottom: 35px;
+}

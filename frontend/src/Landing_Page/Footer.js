@@ -62,11 +62,11 @@ function Footer() {
 
             <ul>
               <li>
-                <a href="/">Open Account</a>
+                <a href="/signup">Open Account</a>
               </li>
 
               <li>
-                <a href="/">Login</a>
+                <a href="/signup">Login</a>
               </li>
 
               <li>
@@ -86,19 +86,19 @@ function Footer() {
 
             <ul>
               <li>
-                <a href="/">Stocks</a>
+                <a href="/signup">Stocks</a>
               </li>
 
               <li>
-                <a href="/">Mutual Funds</a>
+                <a href="/signup">Mutual Funds</a>
               </li>
 
               <li>
-                <a href="/">IPO</a>
+                <a href="/signup">IPO</a>
               </li>
 
               <li>
-                <a href="/">Bonds</a>
+                <a href="/signup">Bonds</a>
               </li>
             </ul>
           </div>
@@ -110,7 +110,7 @@ function Footer() {
 
             <ul>
               <li>
-                <a href="/">About</a>
+                <a href="/about">About</a>
               </li>
 
               <li>
@@ -118,7 +118,7 @@ function Footer() {
               </li>
 
               <li>
-                <a href="/">Contact</a>
+                <a href="/about">Contact</a>
               </li>
 
               <li>

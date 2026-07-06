@@ -1,11 +1,11 @@
-import CreteTicket from "./CreteTicket";
+// import CreteTicket from "./CreteTicket";
 
-import Home from "./Home";
+import React from "react";
 function SupportPage() {
   return (
     <>
-      <CreteTicket />
-      <Home />
+      {/* <CreteTicket /> */}
+      <h1>SupportPage</h1>
     </>
   );
 }
