@@ -1,0 +1,171 @@
+.products-hero {
+  padding: 95px 0 85px;
+
+  border-bottom: 1px solid #ececec;
+
+  background: #fff;
+}
+
+.products-hero h1 {
+  font-size: 52px;
+
+  font-weight: 500;
+
+  color: #424242;
+
+  line-height: 1.35;
+
+  margin-bottom: 28px;
+}
+
+.products-hero p {
+  font-size: 20px;
+
+  color: #666;
+
+  line-height: 1.8;
+
+  max-width: 650px;
+
+  margin: auto;
+}
+
+.products-hero a {
+  display: inline-block;
+
+  margin-top: 28px;
+
+  font-size: 19px;
+
+  font-weight: 500;
+
+  color: #387ed1;
+
+  text-decoration: none;
+
+  transition: 0.25s;
+}
+
+.products-hero a:hover {
+  color: #245fa8;
+}
+
+/* Responsive */
+
+@media (max-width: 992px) {
+  .products-hero {
+    padding: 75px 0;
+  }
+
+  .products-hero h1 {
+    font-size: 40px;
+  }
+
+  .products-hero p {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 576px) {
+  .products-hero {
+    padding: 60px 0;
+  }
+
+  .products-hero h1 {
+    font-size: 31px;
+  }
+
+  .products-hero p {
+    font-size: 16px;
+  }
+
+  .products-hero a {
+    font-size: 17px;
+  }
+}
+
+.OFF {
+  position: relative;
+  overflow: hidden;
+
+  padding: 10px 10px;
+  margin: 30px;
+
+  border: 2px solid #2563eb;
+  border-radius: 50px;
+
+  background: linear-gradient(135deg, #2563eb, #1d4ed8, #3b82f6);
+  background-size: 300% 300%;
+
+  color: #fff !important; 
+  font-family: "Poppins", sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+
+  text-align: center !important;
+  cursor: pointer !important;
+
+  box-shadow:
+    0 12px 30px rgba(37, 99, 235, 0.35),
+    0 0 30px rgba(59, 130, 246, 0.25);
+
+  transition: all 0.4s ease;
+  animation: gradientMove 6s ease infinite;
+}
+
+/* Shine Effect */
+
+.OFF::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  left: -120%;
+
+  width: 70%;
+  height: 100%;
+
+  background: rgba(255, 255, 255, 0.35);
+
+  transform: skewX(-25deg);
+
+  transition: 0.8s;
+}
+
+.OFF:hover::before {
+  left: 150%;
+}
+
+/* Hover */
+
+.OFF:hover {
+  transform: translateY(-8px) scale(1.03);
+
+  box-shadow:
+    0 20px 45px rgba(37, 99, 235, 0.45),
+    0 0 40px rgba(59, 130, 246, 0.45);
+
+  border-color: #60a5fa;
+}
+
+/* Click */
+
+.OFF:active {
+  transform: scale(0.96);
+}
+
+/* Gradient Animation */
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}

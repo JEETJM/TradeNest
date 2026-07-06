@@ -1,0 +1,53 @@
+.investmentHero {
+  padding: 100px 0 90px;
+
+  border-bottom: 1px solid #ececec;
+
+  background: #fff;
+}
+
+.investmentHero h1 {
+  font-size: 54px;
+
+  font-weight: 600;
+
+  color: #424242;
+
+  margin-bottom: 25px;
+}
+
+.investmentHero p {
+  font-size: 20px;
+
+  line-height: 1.9;
+
+  color: #666;
+
+  max-width: 700px;
+
+  margin: auto;
+}
+
+@media (max-width: 992px) {
+  .investmentHero h1 {
+    font-size: 40px;
+  }
+
+  .investmentHero p {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 576px) {
+  .investmentHero {
+    padding: 70px 0;
+  }
+
+  .investmentHero h1 {
+    font-size: 32px;
+  }
+
+  .investmentHero p {
+    font-size: 16px;
+  }
+}

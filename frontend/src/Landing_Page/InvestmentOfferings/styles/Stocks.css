@@ -1,0 +1,107 @@
+/*==============================
+        STOCKS
+===============================*/
+
+.stocksSection {
+  padding: 110px 0;
+
+  background: #fff;
+}
+
+.stocksImage {
+  width: 95%;
+
+  transition: 0.35s;
+}
+
+.stocksImage:hover {
+  transform: translateY(-10px);
+}
+
+.stocksSection h2 {
+  font-size: 42px;
+
+  font-weight: 600;
+
+  color: #424242;
+
+  margin-bottom: 22px;
+}
+
+.stocksSection p {
+  color: #666;
+
+  font-size: 18px;
+
+  line-height: 1.9;
+}
+
+.availableTitle {
+  margin-top: 30px;
+
+  margin-bottom: 18px;
+
+  font-size: 22px;
+
+  color: #424242;
+
+  font-weight: 600;
+}
+
+.platformLinks {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 16px 35px;
+}
+
+.platformLinks a {
+  color: #387ed1;
+
+  text-decoration: none;
+
+  font-size: 17px;
+
+  font-weight: 500;
+
+  transition: 0.3s;
+}
+
+.platformLinks a:hover {
+  color: #245fa8;
+
+  padding-left: 6px;
+}
+
+@media (max-width: 992px) {
+  .stocksSection {
+    text-align: center;
+
+    padding: 80px 0;
+  }
+
+  .stocksImage {
+    margin-bottom: 50px;
+
+    width: 100%;
+  }
+
+  .platformLinks {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .stocksSection h2 {
+    font-size: 30px;
+  }
+
+  .stocksSection p {
+    font-size: 16px;
+  }
+
+  .availableTitle {
+    font-size: 20px;
+  }
+}

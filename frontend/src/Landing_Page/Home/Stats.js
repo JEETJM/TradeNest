@@ -59,6 +59,7 @@ function Trust() {
 
           <div className="trust-links mt-4">
             <a href="/">Explore our products</a>
+            <i className="fa-solid fa-arrow-right ms-2"></i>
 
             <a href="/" className="ms-4">
               Try TradeNest Demo

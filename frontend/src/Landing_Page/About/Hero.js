@@ -10,6 +10,7 @@ function Hero() {
           <div className="row">
             <div className="col-lg-10 mx-auto text-center">
               <h1>Revolutionizing investing through technology.</h1>
+              <img src="\Media\Images\coffe.png" alt="cofee"></img>
 
               <hr />
 

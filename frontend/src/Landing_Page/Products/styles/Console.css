@@ -1,0 +1,89 @@
+/*==================================
+        CONSOLE SECTION
+===================================*/
+
+.consoleSection {
+  padding: 110px 0;
+
+  background: #fff;
+}
+
+.consoleSection h2 {
+  font-size: 42px;
+
+  font-weight: 600;
+
+  color: #424242;
+
+  margin-bottom: 25px;
+}
+
+.consoleSection p {
+  font-size: 18px;
+
+  color: #666;
+
+  line-height: 1.9;
+
+  margin-bottom: 28px;
+}
+
+.consoleSection a {
+  color: #387ed1;
+
+  font-size: 18px;
+
+  text-decoration: none;
+
+  font-weight: 500;
+
+  transition: 0.3s;
+}
+
+.consoleSection a:hover {
+  color: #245fa8;
+}
+
+.consoleImage {
+  width: 95%;
+
+  transition: 0.4s;
+}
+
+.consoleImage:hover {
+  transform: translateY(-10px);
+}
+
+/* Responsive */
+
+@media (max-width: 992px) {
+  .consoleSection {
+    text-align: center;
+
+    padding: 80px 0;
+  }
+
+  .consoleImage {
+    margin-top: 50px;
+
+    width: 100%;
+  }
+
+  .consoleSection h2 {
+    font-size: 34px;
+  }
+
+  .consoleSection p {
+    font-size: 17px;
+  }
+}
+
+@media (max-width: 576px) {
+  .consoleSection h2 {
+    font-size: 30px;
+  }
+
+  .consoleSection p {
+    font-size: 16px;
+  }
+}
