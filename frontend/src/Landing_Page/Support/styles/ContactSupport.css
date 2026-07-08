@@ -1,0 +1,181 @@
+/*======================================
+        CONTACT SUPPORT
+=======================================*/
+
+.contactSupport{
+
+    padding:100px 0;
+
+    background:#ffffff;
+
+}
+
+.contactHeading{
+
+    text-align:center;
+
+    margin-bottom:60px;
+
+}
+
+.contactHeading h2{
+
+    font-size:42px;
+
+    font-weight:600;
+
+    color:#424242;
+
+    margin-bottom:15px;
+
+}
+
+.contactHeading p{
+
+    font-size:18px;
+
+    color:#777;
+
+}
+
+/* Card */
+
+.supportCard{
+
+    background:#fff;
+
+    border:1px solid #ececec;
+
+    border-radius:18px;
+
+    padding:35px;
+
+    text-align:center;
+
+    height:100%;
+
+    transition:.35s;
+
+}
+
+.supportCard:hover{
+
+    transform:translateY(-8px);
+
+    border-color:#387ed1;
+
+    box-shadow:0 20px 40px rgba(0,0,0,.08);
+
+}
+
+.supportIcon{
+
+    width:75px;
+
+    height:75px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:#eef5ff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+    transition:.35s;
+
+}
+
+.supportIcon i{
+
+    font-size:30px;
+
+    color:#387ed1;
+
+}
+
+.supportCard:hover .supportIcon{
+
+    background:#387ed1;
+
+    transform:rotate(10deg);
+
+}
+
+.supportCard:hover .supportIcon i{
+
+    color:#fff;
+
+}
+
+.supportCard h4{
+
+    font-size:24px;
+
+    color:#424242;
+
+    margin-bottom:15px;
+
+}
+
+.supportCard p{
+
+    color:#666;
+
+    font-size:16px;
+
+    line-height:1.8;
+
+    min-height:70px;
+
+}
+
+.supportCard a{
+
+    text-decoration:none;
+
+    color:#387ed1;
+
+    font-weight:600;
+
+}
+
+.supportCard a:hover{
+
+    color:#255fa7;
+
+}
+
+@media(max-width:768px){
+
+.contactSupport{
+
+padding:70px 0;
+
+}
+
+.contactHeading h2{
+
+font-size:32px;
+
+}
+
+.contactHeading p{
+
+font-size:16px;
+
+}
+
+.supportCard{
+
+padding:25px;
+
+}
+
+}

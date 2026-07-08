@@ -1,0 +1,89 @@
+/*==============================
+      CALCULATORS
+===============================*/
+
+.calculatorSection {
+  padding: 100px 0;
+
+  background: #fff;
+}
+
+.calculatorSection h2 {
+  font-size: 42px;
+
+  font-weight: 600;
+
+  color: #424242;
+}
+
+.calculatorSection p {
+  font-size: 18px;
+
+  color: #777;
+}
+
+.calculatorCard {
+  padding: 35px;
+
+  border: 1px solid #ececec;
+
+  border-radius: 18px;
+
+  height: 100%;
+
+  transition: 0.35s;
+
+  background: #fff;
+}
+
+.calculatorCard:hover {
+  transform: translateY(-10px);
+
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.calculatorIcon {
+  font-size: 52px;
+
+  margin-bottom: 20px;
+}
+
+.calculatorCard h4 {
+  font-size: 25px;
+
+  margin-bottom: 15px;
+
+  font-weight: 600;
+
+  color: #424242;
+}
+
+.calculatorCard p {
+  font-size: 16px;
+
+  line-height: 1.8;
+
+  margin-bottom: 20px;
+}
+
+.calculatorCard a {
+  text-decoration: none;
+
+  color: #387ed1;
+
+  font-weight: 600;
+}
+
+.calculatorCard a:hover {
+  padding-left: 5px;
+}
+
+@media (max-width: 768px) {
+  .calculatorSection {
+    padding: 70px 0;
+  }
+
+  .calculatorSection h2 {
+    font-size: 32px;
+  }
+}

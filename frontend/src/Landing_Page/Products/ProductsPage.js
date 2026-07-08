@@ -1,9 +1,9 @@
 import React from "react";
-import Navbar from "../Navbar";
+// import Navbar from "../Navbar";
 import Hero from "./Hero";
 
 import Universe from "./Universe";
-import Footer from "../Footer";
+// import Footer from "../Footer";
 import TradePro from "./TradePro";
 import Console from "./Console";
 import Coin from "./Coin";
@@ -13,7 +13,7 @@ import OpenAccount from "../OpenAccount"
 function ProductsPage() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <Hero />
       <TradePro />
       <Console />
@@ -23,7 +23,7 @@ function ProductsPage() {
 
       <Universe />
       <OpenAccount />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

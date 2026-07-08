@@ -1,0 +1,208 @@
+/*==========================================
+            TRADE NEST FAQ
+==========================================*/
+
+.faqSection {
+  padding: 100px 0;
+  background: #ffffff;
+}
+
+.faqHeading {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.faqHeading h2 {
+  font-size: 42px;
+  font-weight: 600;
+  color: #424242;
+  margin-bottom: 12px;
+}
+
+.faqHeading p {
+  font-size: 18px;
+  color: #666;
+  margin: 0;
+}
+
+/* Accordion */
+
+.accordion {
+  --bs-accordion-border-width: 0;
+}
+
+.accordion-item {
+  border: 1px solid #e8e8e8 !important;
+
+  border-radius: 12px !important;
+
+  overflow: hidden;
+
+  margin-bottom: 18px;
+
+  transition: 0.35s;
+
+  background: #fff;
+}
+
+.accordion-item:hover {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
+
+  border-color: #387ed1 !important;
+}
+
+/* Header */
+
+.accordion-header {
+  position: relative;
+}
+
+.accordion-button {
+  background: #fff !important;
+
+  color: #424242 !important;
+
+  font-size: 20px;
+
+  font-weight: 500;
+
+  padding: 24px 30px;
+
+  box-shadow: none !important;
+
+  position: relative;
+
+  transition: 0.35s;
+}
+
+.accordion-button:hover {
+  color: #387ed1 !important;
+}
+
+/* Zerodha style blue line */
+
+.accordion-button::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+
+  bottom: 0;
+
+  width: 70px;
+
+  height: 3px;
+
+  background: #387ed1;
+
+  transform: scaleX(0);
+
+  transform-origin: left;
+
+  transition: 0.35s;
+}
+
+.accordion-button:not(.collapsed)::before {
+  transform: scaleX(1);
+}
+
+/* Remove Bootstrap Background */
+
+.accordion-button:not(.collapsed) {
+  background: #fff !important;
+}
+
+/* Arrow */
+
+.accordion-button::after {
+  transition: 0.35s;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+}
+
+/* Body */
+
+.accordion-body {
+  padding: 24px 30px;
+
+  font-size: 17px;
+
+  line-height: 1.9;
+
+  color: #666;
+
+  background: #fcfcfc;
+}
+
+/* Animation */
+
+.accordion-collapse {
+  transition: all 0.35s ease;
+}
+
+/* Mobile */
+
+@media (max-width: 992px) {
+  .faqSection {
+    padding: 80px 0;
+  }
+
+  .faqHeading h2 {
+    font-size: 34px;
+  }
+
+  .faqHeading p {
+    font-size: 17px;
+  }
+
+  .accordion-button {
+    font-size: 18px;
+
+    padding: 20px;
+  }
+
+  .accordion-body {
+    padding: 20px;
+
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .faqSection {
+    padding: 60px 0;
+  }
+
+  .faqHeading {
+    margin-bottom: 40px;
+  }
+
+  .faqHeading h2 {
+    font-size: 28px;
+  }
+
+  .faqHeading p {
+    font-size: 15px;
+  }
+
+  .accordion-button {
+    font-size: 16px;
+
+    padding: 18px;
+  }
+
+  .accordion-body {
+    padding: 18px;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+  }
+
+  .accordion-button::before {
+    width: 55px;
+  }
+}

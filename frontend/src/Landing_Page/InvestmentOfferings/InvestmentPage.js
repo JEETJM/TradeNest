@@ -1,6 +1,6 @@
 import Hero from "./Hero";
-import Navbar from "../Navbar";
-import Footer from "../Footer";
+// import Navbar from "../Navbar";
+// import Footer from "../Footer";
 import Stocks from "./Stocks";
 import MutualFunds from "./MutualFunds";
 import FuturesOptions from "./FuturesOptions";
@@ -13,7 +13,7 @@ import GovernmentBonds from "./GovernmentBonds";
 function InvestmentPage() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <Hero />
       <Stocks />
       <MutualFunds />
@@ -22,7 +22,7 @@ function InvestmentPage() {
       <GiftStocks />
       <GovernmentBonds />
       <OpenAccount />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

@@ -1,0 +1,74 @@
+/*==================================
+        CHARGES TABLE
+===================================*/
+
+.chargesSection {
+  padding: 100px 0;
+
+  background: #fff;
+}
+
+.chargesSection h2 {
+  font-size: 42px;
+
+  color: #424242;
+
+  font-weight: 600;
+}
+
+.chargesSection p {
+  color: #777;
+
+  font-size: 18px;
+}
+
+.chargeTable {
+  border: 1px solid #e6e6e6;
+}
+
+.chargeTable thead {
+  background: #387ed1;
+
+  color: #fff;
+}
+
+.chargeTable th {
+  padding: 20px;
+
+  font-size: 18px;
+
+  border: none;
+}
+
+.chargeTable td {
+  padding: 20px;
+
+  font-size: 17px;
+
+  color: #555;
+}
+
+.chargeTable tbody tr {
+  transition: 0.3s;
+}
+
+.chargeTable tbody tr:hover {
+  background: #f8fbff;
+}
+
+@media (max-width: 768px) {
+  .chargesSection {
+    padding: 70px 0;
+  }
+
+  .chargesSection h2 {
+    font-size: 32px;
+  }
+
+  .chargeTable td,
+  .chargeTable th {
+    font-size: 15px;
+
+    padding: 14px;
+  }
+}

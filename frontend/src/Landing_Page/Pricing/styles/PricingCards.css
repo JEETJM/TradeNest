@@ -1,0 +1,89 @@
+/*==================================
+        PRICING CARDS
+===================================*/
+
+.pricingCards {
+  padding: 100px 0;
+
+  background: #fff;
+}
+
+.priceCard {
+  text-align: center;
+
+  padding: 35px;
+
+  border-radius: 18px;
+
+  transition: 0.35s;
+
+  height: 100%;
+}
+
+.priceCard:hover {
+  transform: translateY(-10px);
+
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+}
+
+.priceImage {
+  width: 190px;
+
+  margin-bottom: 30px;
+
+  transition: 0.35s;
+}
+
+.priceCard:hover .priceImage {
+  transform: scale(1.06);
+}
+
+.priceCard h4 {
+  font-size: 28px;
+
+  color: #424242;
+
+  margin-bottom: 15px;
+
+  font-weight: 600;
+}
+
+.priceCard p {
+  color: #666;
+
+  font-size: 17px;
+
+  line-height: 1.8;
+}
+
+/* Tablet */
+
+@media (max-width: 992px) {
+  .priceImage {
+    width: 170px;
+  }
+
+  .priceCard {
+    padding: 25px;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 576px) {
+  .pricingCards {
+    padding: 70px 0;
+  }
+
+  .priceImage {
+    width: 140px;
+  }
+
+  .priceCard h4 {
+    font-size: 24px;
+  }
+
+  .priceCard p {
+    font-size: 15px;
+  }
+}

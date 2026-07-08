@@ -1,5 +1,5 @@
-import Footer from "../Footer";
-import Navbar from "../Navbar";
+// import Footer from "../Footer";
+// import Navbar from "../Navbar";
 import SignupHero from "./Hero/SignupHero";
 import Investment from "./Investment/InvestmentOptions";
 import Steps from "./Steps/Steps";
@@ -10,7 +10,7 @@ import OpenAccount from "../OpenAccount";
 function SignupPage() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <SignupHero />
       <Investment />
       <Steps />
@@ -18,7 +18,7 @@ function SignupPage() {
       <AccountTypes />
       <FAQ />
       <OpenAccount />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

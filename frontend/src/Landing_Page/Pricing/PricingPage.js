@@ -1,15 +1,21 @@
 import React from "react";
-import Navbar from "../Navbar";
 import Hero from "./Hero";
-import Footer from "../Footer";
-import BrokerPage from "./Brokerage";
+import PricingCards from "./PricingCards";
+import Charges from "./Charges";
+import OtherCharges from "./OtherCharges";
+import Calculators from "./Calculators";
+import FAQ from "./FAQ";
+import OpenAccount from "../OpenAccount";
 function PricingPage() {
   return (
     <>
-      <Navbar />
       <Hero />
-      <BrokerPage />
-      <Footer />
+      <PricingCards />
+      <Charges />
+      <OtherCharges />
+      <Calculators />
+      <FAQ />
+      <OpenAccount />
     </>
   );
 }

@@ -1,0 +1,76 @@
+/*==================================
+      OTHER CHARGES
+===================================*/
+
+.otherCharges {
+  padding: 100px 0;
+
+  background: #fafafa;
+}
+
+.otherCharges h2 {
+  font-size: 42px;
+
+  font-weight: 600;
+
+  color: #424242;
+}
+
+.otherCharges p {
+  color: #777;
+
+  font-size: 18px;
+}
+
+.otherChargeTable {
+  background: #fff;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.otherChargeTable thead {
+  background: #387ed1;
+
+  color: #fff;
+}
+
+.otherChargeTable th {
+  padding: 18px;
+
+  border: none;
+}
+
+.otherChargeTable td {
+  padding: 18px;
+
+  color: #555;
+}
+
+.otherChargeTable tbody tr {
+  transition: 0.3s;
+}
+
+.otherChargeTable tbody tr:hover {
+  background: #f5f9ff;
+}
+
+@media (max-width: 768px) {
+  .otherCharges {
+    padding: 70px 0;
+  }
+
+  .otherCharges h2 {
+    font-size: 32px;
+  }
+
+  .otherChargeTable th,
+  .otherChargeTable td {
+    font-size: 14px;
+
+    padding: 12px;
+  }
+}
