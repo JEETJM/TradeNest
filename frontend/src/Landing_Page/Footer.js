@@ -74,7 +74,7 @@ function Footer() {
               </li>
 
               <li>
-                <a href="/">Pricing</a>
+                <a href="/pricing">Pricing</a>
               </li>
             </ul>
           </div>
@@ -94,11 +94,11 @@ function Footer() {
               </li>
 
               <li>
-                <a href="/signup">IPO</a>
+                <a href="/InvestmentOfferings">IPO</a>
               </li>
 
               <li>
-                <a href="/signup">Bonds</a>
+                <a href="/InvestmentOfferings">Bonds</a>
               </li>
             </ul>
           </div>
@@ -122,7 +122,7 @@ function Footer() {
               </li>
 
               <li>
-                <a href="/">Support</a>
+                <a href="/support">Support</a>
               </li>
             </ul>
           </div>

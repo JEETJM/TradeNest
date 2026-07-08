@@ -104,7 +104,7 @@ function SignupHero() {
               {/* Email Input */}
 
               <div className="inputBox">
-                <i className="fa-regular fa-envelope inputIcon"></i>
+                <i class="fa-solid fa-envelope fa-beat-fade  inputIcon"></i>
 
                 <input
                   type="email"
@@ -144,6 +144,9 @@ function SignupHero() {
                 onClick={handleGetOTP}
               >
                 Get OTP
+                <i
+                  className="fa-brands fa-mailchimp fa-flip Monkey fa-2xl"
+                ></i>
               </button>
 
               <small className="d-block mt-3">

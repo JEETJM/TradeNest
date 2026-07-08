@@ -1,0 +1,111 @@
+/*====================================
+            IPO SECTION
+=====================================*/
+
+.ipoSection {
+  padding: 110px 0;
+
+  background: #fff;
+}
+
+.ipoSection h2 {
+  font-size: 42px;
+
+  font-weight: 600;
+
+  color: #424242;
+
+  margin-bottom: 24px;
+}
+
+.ipoSection p {
+  font-size: 18px;
+
+  line-height: 1.9;
+
+  color: #666;
+}
+
+.availableTitle {
+  margin-top: 30px;
+
+  margin-bottom: 18px;
+
+  font-size: 22px;
+
+  font-weight: 600;
+
+  color: #424242;
+}
+
+.platformLinks {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 16px 35px;
+}
+
+.platformLinks a {
+  text-decoration: none;
+
+  color: #387ed1;
+
+  font-size: 17px;
+
+  font-weight: 500;
+
+  transition: 0.3s;
+}
+
+.platformLinks a:hover {
+  color: #245fa8;
+
+  padding-left: 6px;
+}
+
+.ipoImage {
+  width: 94%;
+
+  transition: 0.35s;
+}
+
+.ipoImage:hover {
+  transform: translateY(-10px);
+}
+
+@media (max-width: 992px) {
+  .ipoSection {
+    text-align: center;
+
+    padding: 80px 0;
+  }
+
+  .ipoImage {
+    margin-top: 50px;
+
+    width: 100%;
+  }
+
+  .platformLinks {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .ipoSection {
+    padding: 60px 0;
+  }
+
+  .ipoSection h2 {
+    font-size: 30px;
+  }
+
+  .ipoSection p {
+    font-size: 16px;
+  }
+
+  .availableTitle {
+    font-size: 20px;
+  }
+}

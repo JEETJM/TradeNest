@@ -1,0 +1,111 @@
+/*==============================
+    GOVERNMENT BONDS
+===============================*/
+
+.bondSection {
+  padding: 110px 0;
+
+  background: #fff;
+}
+
+.bondImage {
+  width: 94%;
+
+  transition: 0.35s;
+}
+
+.bondImage:hover {
+  transform: translateY(-10px);
+}
+
+.bondSection h2 {
+  font-size: 42px;
+
+  font-weight: 600;
+
+  color: #424242;
+
+  margin-bottom: 24px;
+}
+
+.bondSection p {
+  font-size: 18px;
+
+  color: #666;
+
+  line-height: 1.9;
+}
+
+.availableTitle {
+  margin-top: 30px;
+
+  margin-bottom: 18px;
+
+  font-size: 22px;
+
+  font-weight: 600;
+
+  color: #424242;
+}
+
+.platformLinks {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 16px 35px;
+}
+
+.platformLinks a {
+  color: #387ed1;
+
+  text-decoration: none;
+
+  font-size: 17px;
+
+  font-weight: 500;
+
+  transition: 0.3s;
+}
+
+.platformLinks a:hover {
+  color: #245fa8;
+
+  padding-left: 6px;
+}
+
+@media (max-width: 992px) {
+  .bondSection {
+    text-align: center;
+
+    padding: 80px 0;
+  }
+
+  .bondImage {
+    margin-top: 50px;
+
+    width: 100%;
+  }
+
+  .platformLinks {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .bondSection {
+    padding: 60px 0;
+  }
+
+  .bondSection h2 {
+    font-size: 30px;
+  }
+
+  .bondSection p {
+    font-size: 16px;
+  }
+
+  .availableTitle {
+    font-size: 20px;
+  }
+}
