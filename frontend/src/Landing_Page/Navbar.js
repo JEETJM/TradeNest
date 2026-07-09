@@ -32,7 +32,7 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <a className="nav-link" href="/signup">
+              <a className="nav-link" href="/open-account">
                 Signup
               </a>
             </li>

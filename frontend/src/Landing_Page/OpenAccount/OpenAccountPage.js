@@ -7,7 +7,7 @@ import Benefits from "./Benefits/Benefits";
 import AccountTypes from "./AccountTypes/AccountTypes";
 import FAQ from "./FAQ/FAQ";
 import OpenAccount from "../OpenAccount";
-function SignupPage() {
+function OpenAccountPage() {
   return (
     <>
       {/* <Navbar /> */}
@@ -23,4 +23,4 @@ function SignupPage() {
   );
 }
 
-export default SignupPage;
+export default OpenAccountPage;

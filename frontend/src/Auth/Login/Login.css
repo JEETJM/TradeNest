@@ -1,0 +1,372 @@
+/* ===========================
+        LOGIN PAGE
+=========================== */
+
+.loginPage {
+  width: 100%;
+  min-height: calc(100vh - 140px);
+  background: #f5f7fb;
+  padding: 40px 0;
+}
+
+.loginContainer {
+  max-width: 1280px;
+  margin: auto;
+  display: flex;
+  min-height: 760px;
+  border-radius: 25px;
+  overflow: hidden;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.08);
+}
+
+/* ===========================
+        LEFT SIDE
+=========================== */
+
+.loginLeft {
+  width: 50%;
+  background: linear-gradient(135deg, #387ed1, #2358b8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.loginLeft::before {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  left: -80px;
+  top: -80px;
+}
+
+.loginLeft::after {
+  content: "";
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  right: -130px;
+  bottom: -130px;
+}
+
+.loginLeftContent {
+  width: 72%;
+  color: white;
+  position: relative;
+  z-index: 2;
+}
+
+.loginLogo {
+  width: 220px;
+  margin-bottom: 25px;
+}
+
+.loginLeftContent span {
+  font-size: 20px;
+  opacity: 0.9;
+}
+
+.loginLeftContent h1 {
+  font-size: 58px;
+  margin: 10px 0;
+  font-weight: 700;
+}
+
+.loginLeftContent h2 {
+  font-size: 72px;
+  line-height: 1.08;
+  margin: 30px 0;
+  font-weight: 800;
+}
+
+.loginLeftContent p {
+  font-size: 22px;
+  line-height: 36px;
+  opacity: 0.92;
+}
+
+/* ===========================
+        RIGHT SIDE
+=========================== */
+
+.loginRight {
+  width: 50%;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.loginCard {
+  width: 420px;
+}
+
+.loginCard h2 {
+  font-size: 46px;
+  color: #222;
+  margin-bottom: 8px;
+}
+
+.loginCard p {
+  color: #666;
+  margin-bottom: 35px;
+}
+
+/* ===========================
+        INPUT
+=========================== */
+
+.inputBox {
+  height: 56px;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  margin-bottom: 18px;
+  transition: 0.3s;
+  background: white;
+}
+
+.inputBox:hover {
+  border-color: #387ed1;
+}
+
+.inputBox:focus-within {
+  border-color: #387ed1;
+  box-shadow: 0 0 0 4px rgba(56, 126, 209, 0.12);
+}
+
+.inputBox svg {
+  color: #387ed1;
+  font-size: 18px;
+}
+
+.inputBox input {
+  flex: 1;
+  border: none;
+  outline: none;
+  margin-left: 15px;
+  font-size: 16px;
+  background: transparent;
+}
+
+.eyeIcon {
+  cursor: pointer;
+  color: #888 !important;
+}
+
+/* ===========================
+      OPTIONS
+=========================== */
+
+.loginOptions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0 28px;
+  font-size: 15px;
+}
+
+.loginOptions label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #555;
+}
+
+.loginOptions a {
+  text-decoration: none;
+  color: #387ed1;
+  font-weight: 600;
+}
+
+/* ===========================
+      BUTTON
+=========================== */
+
+.loginBtn {
+  width: 100%;
+  height: 52px;
+  border: none;
+  border-radius: 14px;
+  background: #387ed1;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.loginBtn:hover {
+  background: #2567b7;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 28px 0;
+  width: 100%;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.divider span {
+  background: #fff;     /* Card-এর background */
+  padding: 0 16px;
+  color: #777;
+  font-size: 15px;
+  font-weight: 600;
+  z-index: 2;
+  position: relative;
+}
+
+.googleBtn {
+  width: 100%;
+  height: 52px;
+  border-radius: 14px;
+  background: white;
+  border: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-size: 17px;
+  transition: 0.3s;
+}
+
+.googleBtn:hover {
+  background: #f8f9fb;
+}
+
+.signupLink {
+  margin-top: 28px;
+  text-align: center;
+  color: #666;
+}
+
+.signupLink a {
+  margin-left: 8px;
+  text-decoration: none;
+  color: #387ed1;
+  font-weight: 600;
+}
+
+/* ===========================
+      RESPONSIVE
+=========================== */
+
+@media (max-width: 991px) {
+  .loginContainer {
+    flex-direction: column;
+  }
+
+  .loginLeft,
+  .loginRight {
+    width: 100%;
+  }
+
+  .loginLeft {
+    min-height: 420px;
+  }
+
+  .loginLeftContent {
+    width: 85%;
+    text-align: center;
+  }
+
+  .loginLeftContent h1 {
+    font-size: 46px;
+  }
+
+  .loginLeftContent h2 {
+    font-size: 52px;
+  }
+
+  .loginLeftContent p {
+    font-size: 18px;
+    line-height: 30px;
+  }
+
+  .loginRight {
+    padding: 30px 20px;
+  }
+
+  .loginCard {
+    width: 100%;
+    max-width: 430px;
+  }
+
+  .loginCard h2 {
+    font-size: 38px;
+  }
+}
+
+@media (max-width: 576px) {
+  .loginPage {
+    padding: 15px;
+  }
+
+  .loginLeft {
+    min-height: 330px;
+  }
+
+  .loginLogo {
+    width: 170px;
+  }
+
+  .loginLeftContent h1 {
+    font-size: 36px;
+  }
+
+  .loginLeftContent h2 {
+    font-size: 42px;
+  }
+
+  .loginLeftContent p {
+    font-size: 16px;
+  }
+
+  .loginCard h2 {
+    font-size: 30px;
+  }
+
+  .loginOptions {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+}
+
+
+
+.errorText{
+
+display:block;
+
+margin-top:-10px;
+
+margin-bottom:15px;
+
+font-size:14px;
+
+color:#e53935;
+
+font-weight:500;
+
+}
