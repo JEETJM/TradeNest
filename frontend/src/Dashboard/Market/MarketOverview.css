@@ -1,0 +1,71 @@
+.marketOverview {
+  margin-top: 45px;
+}
+
+.marketOverview h2 {
+  font-size: 28px;
+
+  margin-bottom: 22px;
+
+  color: #222;
+}
+
+.marketGrid {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 22px;
+}
+
+.marketCard {
+  background: #fff;
+
+  padding: 25px;
+
+  border-radius: 18px;
+
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+
+  transition: 0.3s;
+}
+
+.marketCard:hover {
+  transform: translateY(-5px);
+}
+
+.marketCard h4 {
+  color: #666;
+
+  margin-bottom: 12px;
+}
+
+.marketCard h3 {
+  font-size: 28px;
+
+  margin-bottom: 10px;
+}
+
+.green {
+  color: #1ba94c;
+
+  font-weight: 600;
+}
+
+.red {
+  color: #e53935;
+
+  font-weight: 600;
+}
+
+@media (max-width: 1200px) {
+  .marketGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .marketGrid {
+    grid-template-columns: 1fr;
+  }
+}

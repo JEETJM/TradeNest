@@ -1,0 +1,49 @@
+.watchlistCard {
+  margin-top: 35px;
+
+  background: #fff;
+
+  padding: 25px;
+
+  border-radius: 18px;
+
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+}
+
+.watchlistCard h2 {
+  margin-bottom: 25px;
+}
+
+.stockRow {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 18px 0;
+
+  border-bottom: 1px solid #eee;
+}
+
+.stockRow:last-child {
+  border-bottom: none;
+}
+
+.stockRow h4 {
+  margin: 0;
+}
+
+.stockRow h3 {
+  margin: 0;
+
+  text-align: right;
+}
+
+.green {
+  color: #14a44d;
+}
+
+.red {
+  color: #dc3545;
+}

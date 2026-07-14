@@ -1,0 +1,85 @@
+.ordersCard {
+  background: #fff;
+
+  margin-top: 35px;
+
+  padding: 28px;
+
+  border-radius: 18px;
+
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+}
+
+.ordersHeader {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 25px;
+}
+
+.ordersHeader button {
+  background: #387ed1;
+
+  color: #fff;
+
+  border: none;
+
+  padding: 10px 18px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+.ordersCard table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.ordersCard th {
+  padding: 16px;
+
+  text-align: left;
+
+  color: #666;
+
+  border-bottom: 1px solid #eee;
+}
+
+.ordersCard td {
+  padding: 18px 16px;
+
+  border-bottom: 1px solid #f3f3f3;
+}
+
+.completed {
+  background: #dff6e6;
+
+  color: #198754;
+
+  padding: 6px 12px;
+
+  border-radius: 20px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+.pending {
+  background: #fff4d6;
+
+  color: #d48806;
+
+  padding: 6px 12px;
+
+  border-radius: 20px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}

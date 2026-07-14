@@ -16,6 +16,11 @@ import NotFound from "./Landing_Page/NotFound";
 import SignupPage from "./Auth/Signup/SignupPage";
 import LoginPage from "./Auth/Login/LoginPage";
 import ForgotPasswordPage from "./Auth/ForgotPassword/ForgotPasswordPage";
+import OTPPage from "./Auth/OTP/OTPPage";
+import ResetPasswordPage from "./Auth/ResetPassword/ResetPasswordPage";
+import DashboardPage from "./Dashboard/DashboardPage";
+import PortfolioChart from "./Dashboard/Charts/PortfolioChart";
+import Watchlist from "./Dashboard/Watchlist/Watchlist";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -36,6 +41,12 @@ root.render(
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/otp" element={<OTPPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
+      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/Watchlist" element={<Watchlist />} />
+      <Route path="/PortfolioChart" element={<PortfolioChart />} />
+
       <Route path="/*" element={<NotFound />} />
     </Routes>
     <Footer />

@@ -7,6 +7,8 @@ function NotFound() {
         <b>404 Not Found</b>
       </h2>
       <p className="open-description">
+        <img src="\Media\Images\ERROR.png" alt="VOOT"></img>
+        <br></br>
         We couldn’t find the page you were looking for. Visit{" "}
         <a style={{ textDecoration: "none" }} href="/">
           <b>TradeNest home page. </b>

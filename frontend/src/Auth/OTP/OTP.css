@@ -1,0 +1,138 @@
+/* ===========================
+        OTP PAGE
+=========================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.otpPage {
+  min-height: calc(100vh - 140px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f6f9fc;
+  padding: 50px 20px;
+}
+
+.otpCard {
+  width: 100%;
+  max-width: 500px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 45px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+.otpCard h2 {
+  font-size: 36px;
+  color: #222;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.otpCard p {
+  color: #666;
+  text-align: center;
+  line-height: 28px;
+  margin-bottom: 35px;
+}
+
+.otpInputs {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 35px;
+}
+
+.otpInputs input {
+  width: 58px;
+  height: 58px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  outline: none;
+  transition: 0.3s;
+}
+
+.otpInputs input:focus {
+  border-color: #387ed1;
+  box-shadow: 0 0 0 4px rgba(56, 126, 209, 0.12);
+}
+
+.verifyBtn {
+  width: 100%;
+  height: 56px;
+  border: none;
+  border-radius: 12px;
+  background: #387ed1;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.verifyBtn:hover {
+  background: #2d6dc2;
+}
+
+.timer {
+  margin-top: 30px;
+  text-align: center;
+  color: #666;
+}
+
+.timer button {
+  background: transparent;
+  border: none;
+  color: #387ed1;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+.timer button:hover {
+  text-decoration: underline;
+}
+
+.backLogin {
+  display: block;
+  text-align: center;
+  margin-top: 30px;
+  text-decoration: none;
+  color: #387ed1;
+  font-weight: 600;
+}
+
+.backLogin:hover {
+  text-decoration: underline;
+}
+
+/* ===========================
+      RESPONSIVE
+=========================== */
+
+@media (max-width: 576px) {
+  .otpCard {
+    padding: 30px 20px;
+  }
+
+  .otpCard h2 {
+    font-size: 28px;
+  }
+
+  .otpInputs {
+    gap: 8px;
+  }
+
+  .otpInputs input {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
+}
