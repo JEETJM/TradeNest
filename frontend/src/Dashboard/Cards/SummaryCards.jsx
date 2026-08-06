@@ -6,30 +6,35 @@ import {
   FaMoneyBillWave,
 } from "react-icons/fa6";
 
-const cards = [
-  {
-    title: "Portfolio Value",
-    value: "₹ 2,48,520",
-    icon: <FaWallet />,
-  },
-  {
-    title: "Today's P&L",
-    value: "+ ₹2,350",
-    icon: <FaArrowTrendUp />,
-  },
-  {
-    title: "Overall Return",
-    value: "+18.62%",
-    icon: <FaChartLine />,
-  },
-  {
-    title: "Available Balance",
-    value: "₹ 52,450",
-    icon: <FaMoneyBillWave />,
-  },
-];
+function SummaryCards({ data }) {
+  const cards = [
+    {
+      title: "Portfolio Value",
+      value: data.portfolioValue.formatted,
+      icon: <FaWallet />,
+    },
 
-function SummaryCards() {
+    {
+      title: "Today's P&L",
+      value: data.todaysPnL.formatted,
+      icon: <FaArrowTrendUp />,
+      positive: data.todaysPnL.positive,
+    },
+
+    {
+      title: "Overall Return",
+      value: `${data.overallReturn.formatted} (${data.overallReturn.percentage})`,
+      icon: <FaChartLine />,
+      positive: data.overallReturn.positive,
+    },
+
+    {
+      title: "Available Balance",
+      value: data.availableBalance.formatted,
+      icon: <FaMoneyBillWave />,
+    },
+  ];
+
   return (
     <div className="summaryGrid">
       {cards.map((card, index) => (
@@ -38,7 +43,16 @@ function SummaryCards() {
 
           <h4>{card.title}</h4>
 
-          <h2>{card.value}</h2>
+          <h2
+            className={
+              card.positive === true ? "profit"
+              : card.positive === false ?
+                "loss"
+              : ""
+            }
+          >
+            {card.value}
+          </h2>
         </div>
       ))}
     </div>

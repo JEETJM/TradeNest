@@ -1,49 +1,58 @@
+import { NavLink } from "react-router-dom";
 import "./Sidebar.css";
 
 import {
   FaChartPie,
-  FaBriefcase,
+  FaChartLine,
   FaBookmark,
+  FaBriefcase,
   FaWallet,
+  FaUniversity,
   FaUser,
   FaCog,
   FaSignOutAlt,
-  FaChartLine,
-  FaUniversity,
 } from "react-icons/fa";
 
 const menuItems = [
   {
     title: "Dashboard",
     icon: <FaChartPie />,
+    path: "/dashboard",
   },
   {
     title: "Portfolio",
     icon: <FaChartLine />,
+    path: "/dashboard/portfolio",
   },
   {
     title: "Watchlist",
     icon: <FaBookmark />,
+    path: "/dashboard/watchlist",
   },
   {
     title: "Holdings",
     icon: <FaBriefcase />,
+    path: "/dashboard/holdings",
   },
   {
     title: "Orders",
     icon: <FaWallet />,
+    path: "/dashboard/orders",
   },
   {
     title: "Funds",
     icon: <FaUniversity />,
+    path: "/dashboard/funds",
   },
   {
     title: "Profile",
     icon: <FaUser />,
+    path: "/dashboard/profile",
   },
   {
     title: "Settings",
     icon: <FaCog />,
+    path: "/dashboard/settings",
   },
 ];
 
@@ -55,18 +64,27 @@ function Sidebar() {
       </div>
 
       <ul className="sidebarMenu">
-        {menuItems.map((item, index) => (
-          <li key={index} className={index === 0 ? "active" : ""}>
-            <span>{item.icon}</span>
+        {menuItems.map((item) => (
+          <li key={item.title}>
+            <NavLink
+              to={item.path}
+              end={item.path === "/dashboard"}
+              className={({ isActive }) =>
+                isActive ? "menuLink active" : "menuLink"
+              }
+            >
+              <span>{item.icon}</span>
 
-            <p>{item.title}</p>
+              <p>{item.title}</p>
+            </NavLink>
           </li>
         ))}
       </ul>
 
       <button className="logoutBtn">
         <FaSignOutAlt />
-        Logout
+
+        <span>Logout</span>
       </button>
     </aside>
   );

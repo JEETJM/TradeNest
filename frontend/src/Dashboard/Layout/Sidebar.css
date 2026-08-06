@@ -1,97 +1,123 @@
 .sidebar {
   position: fixed;
-
+  top: 0;
   left: 0;
 
-  top: 0;
-
   width: 260px;
-
   height: 100vh;
 
-  background: #fff;
+  background: #ffffff;
 
   border-right: 1px solid #ececec;
 
   display: flex;
-
   flex-direction: column;
 
-  justify-content: space-between;
+  padding: 25px 18px;
 
-  padding: 30px 20px;
+  box-sizing: border-box;
+}
+
+.sidebarLogo {
+  margin-bottom: 35px;
 }
 
 .sidebarLogo h2 {
+  margin: 0;
+
   color: #387ed1;
 
-  font-size: 30px;
+  font-size: 34px;
 
   font-weight: 700;
 }
 
 .sidebarMenu {
-  list-style: none;
+  flex: 1;
 
-  margin-top: 50px;
+  padding: 0;
+
+  margin: 0;
+
+  list-style: none;
 }
 
 .sidebarMenu li {
+  list-style: none;
+
+  margin-bottom: 8px;
+}
+
+.menuLink {
   display: flex;
 
   align-items: center;
 
   gap: 15px;
 
-  padding: 16px 18px;
+  width: 100%;
+
+  padding: 14px 16px;
+
+  text-decoration: none;
+
+  color: #555;
 
   border-radius: 12px;
 
-  margin-bottom: 10px;
+  transition: all .25s ease;
 
-  cursor: pointer;
-
-  transition: 0.3s;
+  box-sizing: border-box;
 }
 
-.sidebarMenu li:hover {
+.menuLink:hover {
   background: #edf5ff;
+
+  color: #387ed1;
 }
 
-.sidebarMenu li.active {
+.menuLink.active {
   background: #387ed1;
 
-  color: #fff;
+  color: white;
 }
 
-.sidebarMenu li span {
-  font-size: 20px;
+.menuLink span {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 24px;
+
+  font-size: 19px;
+
+  flex-shrink: 0;
 }
 
-.sidebarMenu li p {
+.menuLink p {
   margin: 0;
 
-  font-size: 17px;
+  font-size: 16px;
 
   font-weight: 500;
 }
 
 .logoutBtn {
+  margin-top: 20px;
+
+  width: 100%;
+
+  height: 48px;
+
   border: none;
-
-  background: #387ed1;
-
-  color: #fff;
-
-  height: 50px;
 
   border-radius: 10px;
 
-  cursor: pointer;
+  background: #387ed1;
 
-  font-size: 16px;
-
-  font-weight: 600;
+  color: white;
 
   display: flex;
 
@@ -100,34 +126,42 @@
   align-items: center;
 
   gap: 10px;
+
+  cursor: pointer;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  transition: .25s;
 }
 
 .logoutBtn:hover {
   background: #2b6ab8;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 992px) {
   .sidebar {
-    width: 80px;
+    width: 85px;
   }
 
   .sidebarLogo h2 {
     display: none;
   }
 
-  .sidebarMenu li {
+  .menuLink {
     justify-content: center;
   }
 
-  .sidebarMenu li p {
+  .menuLink p {
+    display: none;
+  }
+
+  .logoutBtn span {
     display: none;
   }
 
   .logoutBtn {
-    font-size: 0;
-  }
-
-  .logoutBtn svg {
-    font-size: 22px;
+    padding: 0;
   }
 }

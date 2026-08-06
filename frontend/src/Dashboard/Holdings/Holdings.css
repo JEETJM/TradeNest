@@ -69,3 +69,26 @@ td {
 
   font-weight: 600;
 }
+
+
+table {
+  overflow-x: auto;
+}
+
+tbody tr:hover {
+  background: #f8fbff;
+}
+
+td strong {
+  color: #222;
+}
+
+td small {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #888;
+
+  font-size: 12px;
+}

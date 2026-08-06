@@ -73,3 +73,11 @@
     grid-template-columns: 1fr;
   }
 }
+
+.profit {
+  color: #16a34a;
+}
+
+.loss {
+  color: #dc2626;
+}

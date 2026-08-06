@@ -47,3 +47,93 @@
 .red {
   color: #dc3545;
 }
+
+.watchlistCard{
+    background:#fff;
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 5px 18px rgba(0,0,0,.05);
+    margin-top:30px;
+}
+
+.watchHeader{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.searchBox{
+    display:flex;
+    align-items:center;
+    background:#f4f6f9;
+    border-radius:10px;
+    padding:12px 15px;
+    margin-bottom:20px;
+}
+
+.searchIcon{
+    color:#888;
+}
+
+.searchBox input{
+    border:none;
+    outline:none;
+    background:none;
+    margin-left:12px;
+    width:100%;
+    font-size:15px;
+}
+
+.watchRow{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 0;
+    border-bottom:1px solid #eee;
+}
+
+.watchInfo h4{
+    margin:0;
+}
+
+.watchInfo p{
+    margin-top:5px;
+    color:#777;
+    font-size:13px;
+}
+
+.watchPrice{
+    text-align:right;
+}
+
+.watchPrice span{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    justify-content:flex-end;
+    margin-top:5px;
+}
+
+.watchBtns{
+    display:flex;
+    gap:10px;
+}
+
+.buyBtn{
+    background:#18a558;
+    color:white;
+    border:none;
+    padding:8px 18px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.sellBtn{
+    background:#e53935;
+    color:white;
+    border:none;
+    padding:8px 18px;
+    border-radius:8px;
+    cursor:pointer;
+}

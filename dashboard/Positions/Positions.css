@@ -1,0 +1,49 @@
+.positionsCard {
+  margin-top: 35px;
+  background: #fff;
+  padding: 28px;
+  border-radius: 18px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+}
+
+.positionsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.positionsHeader button {
+  background: #387ed1;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.positionsCard table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.positionsCard th,
+.positionsCard td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.positionsCard tbody tr:hover {
+  background: #f8fbff;
+}
+
+.profit {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.loss {
+  color: #dc2626;
+  font-weight: 600;
+}

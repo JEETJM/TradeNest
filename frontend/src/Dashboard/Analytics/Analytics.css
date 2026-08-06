@@ -1,0 +1,45 @@
+.analyticsSection {
+  margin-top: 35px;
+}
+
+.analyticsHeader {
+  margin-bottom: 25px;
+}
+
+.analyticsHeader h2 {
+  font-size: 30px;
+
+  color: #222;
+
+  margin-bottom: 8px;
+}
+
+.analyticsHeader p {
+  color: #777;
+
+  font-size: 15px;
+}
+
+.analyticsGrid {
+  display: grid;
+
+  grid-template-columns: 2fr 1fr;
+
+  gap: 25px;
+}
+
+.analyticsCard {
+  background: #fff;
+
+  border-radius: 18px;
+
+  padding: 24px;
+
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 1100px) {
+  .analyticsGrid {
+    grid-template-columns: 1fr;
+  }
+}

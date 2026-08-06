@@ -1,17 +1,15 @@
-.chartCard {
+.portfolioSection {
+  display: grid;
+
+  grid-template-columns: 2fr 1fr;
+
+  gap: 25px;
+
   margin-top: 35px;
-
-  background: #fff;
-
-  padding: 25px;
-
-  border-radius: 18px;
-
-  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
 }
 
-.chartCard h2 {
-  margin-bottom: 25px;
-
-  font-size: 28px;
+@media (max-width: 1200px) {
+  .portfolioSection {
+    grid-template-columns: 1fr;
+  }
 }

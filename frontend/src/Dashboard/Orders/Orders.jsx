@@ -1,8 +1,11 @@
 import "./Orders.css";
+import dashboardData from "../../data/dashboard";
 
-function Orders({ orders }) {
+function Orders() {
+  const orders = dashboardData.orders;
+
   return (
-    <div className="ordersCard">
+    <section className="ordersCard">
       <div className="ordersHeader">
         <h2>Recent Orders</h2>
 
@@ -17,19 +20,28 @@ function Orders({ orders }) {
             <th>Qty</th>
             <th>Price</th>
             <th>Status</th>
+            <th>Time</th>
           </tr>
         </thead>
 
         <tbody>
           {orders.map((order) => (
             <tr key={order.id}>
-              <td>{order.stock}</td>
+              <td>
+                <strong>{order.symbol}</strong>
+              </td>
 
-              <td>{order.type}</td>
+              <td>
+                <span
+                  className={order.type === "BUY" ? "buyBadge" : "sellBadge"}
+                >
+                  {order.type}
+                </span>
+              </td>
 
-              <td>{order.qty}</td>
+              <td>{order.quantity}</td>
 
-              <td>{order.price}</td>
+              <td>₹{order.price}</td>
 
               <td>
                 <span
@@ -40,11 +52,13 @@ function Orders({ orders }) {
                   {order.status}
                 </span>
               </td>
+
+              <td>{order.time}</td>
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
+    </section>
   );
 }
 

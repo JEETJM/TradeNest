@@ -1,46 +1,24 @@
 import "./MarketOverview.css";
 
-const market = [
-  {
-    name: "NIFTY 50",
-    value: "25,184.60",
-    change: "+0.82%",
-    positive: true,
-  },
-  {
-    name: "SENSEX",
-    value: "82,456.30",
-    change: "+0.75%",
-    positive: true,
-  },
-  {
-    name: "BANK NIFTY",
-    value: "56,874.20",
-    change: "-0.34%",
-    positive: false,
-  },
-  {
-    name: "FINNIFTY",
-    value: "24,365.55",
-    change: "+1.12%",
-    positive: true,
-  },
-];
+import dashboardData from "../../data/dashboard";
 
 function MarketOverview() {
+  const { indices } = dashboardData.market;
+
   return (
     <section className="marketOverview">
       <h2>Market Overview</h2>
 
       <div className="marketGrid">
-        {market.map((item, index) => (
-          <div className="marketCard" key={index}>
+        {indices.map((item) => (
+          <div className="marketCard" key={item.id}>
             <h4>{item.name}</h4>
 
-            <h3>{item.value}</h3>
+            <h3>{item.current.toLocaleString("en-IN")}</h3>
 
             <span className={item.positive ? "green" : "red"}>
-              {item.change}
+              {item.positive ? "+" : ""}
+              {item.changePercent}%
             </span>
           </div>
         ))}

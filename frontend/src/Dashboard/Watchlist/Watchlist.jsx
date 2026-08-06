@@ -1,76 +1,52 @@
 import "./Watchlist.css";
 
-const stocks = [
-  {
-    name: "Reliance",
+import { useState } from "react";
 
-    price: "₹2,985",
+import dashboardData from "../../data/dashboard";
 
-    change: "+2.15%",
+import SearchStock from "./SearchStock";
 
-    green: true,
-  },
-
-  {
-    name: "TCS",
-
-    price: "₹4,125",
-
-    change: "+1.10%",
-
-    green: true,
-  },
-
-  {
-    name: "Infosys",
-
-    price: "₹1,654",
-
-    change: "-0.64%",
-
-    green: false,
-  },
-
-  {
-    name: "HDFC Bank",
-
-    price: "₹1,785",
-
-    change: "+0.82%",
-
-    green: true,
-  },
-
-  {
-    name: "ITC",
-
-    price: "₹468",
-
-    change: "-1.22%",
-
-    green: false,
-  },
-];
+import WatchlistRow from "./WatchlistRow";
 
 function Watchlist() {
+  const [search, setSearch] = useState("");
+
+  const stocks = dashboardData.watchlist;
+
+  const filteredStocks = stocks.filter(
+    (stock) =>
+      stock.symbol.toLowerCase().includes(search.toLowerCase()) ||
+      stock.company.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
-    <div className="watchlistCard">
-      <h2>Watchlist</h2>
+    <section className="watchlistCard">
+      <div className="watchHeader">
+        <h2>Watchlist</h2>
 
-      {stocks.map((stock, index) => (
-        <div key={index} className="stockRow">
-          <div>
-            <h4>{stock.name}</h4>
-          </div>
+        <span>{filteredStocks.length} Stocks</span>
+      </div>
 
-          <div>
-            <h3>{stock.price}</h3>
+      <SearchStock
+        search={search}
+        setSearch={setSearch}
+      />
 
-            <p className={stock.green ? "green" : "red"}>{stock.change}</p>
-          </div>
-        </div>
-      ))}
-    </div>
+      <div className="watchContainer">
+        {filteredStocks.map((stock) => (
+          <WatchlistRow
+            key={stock.id}
+            stock={{
+              symbol: stock.symbol,
+              company: stock.company,
+              price: stock.currentPrice,
+              change: stock.changePercent,
+              positive: stock.changePercent >= 0,
+            }}
+          />
+        ))}
+      </div>
+    </section>
   );
 }
 

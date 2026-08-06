@@ -1,14 +1,22 @@
 import "./Dashboard.css";
 
+import { Routes, Route } from "react-router-dom";
+
 import Sidebar from "./Layout/Sidebar";
 import Topbar from "./Layout/Topbar";
 
 import DashboardHome from "./Home/DashboardHome";
-import MarketOverview from "./Market/MarketOverview";
-import SummaryCards from "./Cards/SummaryCards";
-import PortfolioChart from "./Charts/PortfolioChart";
-// import MarketOverview from "./Market/MarketOverview"
-import Watchlist from "./Watchlist/Watchlist";
+
+// Pages
+import PortfolioPage from "./Pages/PortfolioPage";
+import WatchlistPage from "./Pages/WatchlistPage";
+import HoldingsPage from "./Pages/HoldingsPage";
+import OrdersPage from "./Pages/OrdersPage";
+import FundsPage from "./Pages/FundsPage";
+import AnalyticsPage from "./Pages/AnalyticsPage";
+import ProfilePage from "./Pages/ProfilePage";
+import SettingsPage from "./Pages/SettingsPage";
+
 function DashboardPage() {
   return (
     <div className="dashboard">
@@ -17,16 +25,25 @@ function DashboardPage() {
       <div className="dashboardMain">
         <Topbar />
 
-        <DashboardHome />
-        <SummaryCards />
+        <Routes>
+          <Route index element={<DashboardHome />} />
 
-        <MarketOverview />
+          <Route path="portfolio" element={<PortfolioPage />} />
 
-        <div className="dashboardBottom">
-          <PortfolioChart />
+          <Route path="watchlist" element={<WatchlistPage />} />
 
-          <Watchlist />
-        </div>
+          <Route path="holdings" element={<HoldingsPage />} />
+
+          <Route path="orders" element={<OrdersPage />} />
+
+          <Route path="funds" element={<FundsPage />} />
+
+          <Route path="analytics" element={<AnalyticsPage />} />
+
+          <Route path="profile" element={<ProfilePage />} />
+
+          <Route path="settings" element={<SettingsPage />} />
+        </Routes>
       </div>
     </div>
   );

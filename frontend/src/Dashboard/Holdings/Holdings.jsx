@@ -4,7 +4,7 @@ function Holdings({ holdings }) {
   return (
     <div className="holdingsCard">
       <div className="holdingHeader">
-        <h2>Holdings</h2>
+        <h2>My Holdings</h2>
 
         <button>View All</button>
       </div>
@@ -12,7 +12,9 @@ function Holdings({ holdings }) {
       <table>
         <thead>
           <tr>
-            <th>Stock</th>
+            <th>Symbol</th>
+
+            <th>Company</th>
 
             <th>Qty</th>
 
@@ -20,22 +22,33 @@ function Holdings({ holdings }) {
 
             <th>LTP</th>
 
-            <th>P&L</th>
+            <th>Total P&L</th>
           </tr>
         </thead>
 
         <tbody>
           {holdings.map((item) => (
             <tr key={item.id}>
-              <td>{item.stock}</td>
+              <td>
+                <strong>{item.symbol}</strong>
+              </td>
 
-              <td>{item.qty}</td>
+              <td>{item.company}</td>
 
-              <td>{item.avgPrice}</td>
+              <td>{item.quantity}</td>
 
-              <td>{item.ltp}</td>
+              <td>₹{item.averagePrice}</td>
 
-              <td className={item.profit ? "profit" : "loss"}>{item.pnl}</td>
+              <td>₹{item.ltp}</td>
+
+              <td className={item.positive ? "profit" : "loss"}>
+                {item.positive ? "+" : "-"}₹{Math.abs(item.totalPnL)}
+                <br />
+                <small>
+                  {item.totalPnLPercent > 0 ? "+" : ""}
+                  {item.totalPnLPercent}%
+                </small>
+              </td>
             </tr>
           ))}
         </tbody>
