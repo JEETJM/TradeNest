@@ -17,7 +17,17 @@ export function getTradeData() {
       return defaultData;
     }
 
-    return JSON.parse(saved);
+    const data = JSON.parse(saved);
+
+    return {
+      orders: data.orders || [],
+      holdings: data.holdings || [],
+      funds: {
+        availableBalance: Number(data.funds?.availableBalance || 0),
+
+        usedMargin: Number(data.funds?.usedMargin || 0),
+      },
+    };
   } catch (error) {
     console.error("Trade data error:", error);
 
@@ -27,6 +37,8 @@ export function getTradeData() {
 
 export function saveTradeData(data) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+  window.dispatchEvent(new Event("tradenest-update"));
 }
 
 export function placeOrder({ symbol, company, side, quantity, price }) {
@@ -61,9 +73,9 @@ export function placeOrder({ symbol, company, side, quantity, price }) {
     const existing = data.holdings.find((item) => item.symbol === symbol);
 
     if (existing) {
-      const oldQuantity = Number(existing.quantity);
+      const oldQuantity = Number(existing.quantity || 0);
 
-      const oldAverage = Number(existing.averagePrice);
+      const oldAverage = Number(existing.averagePrice || 0);
 
       const newQuantity = oldQuantity + qty;
 
@@ -74,11 +86,18 @@ export function placeOrder({ symbol, company, side, quantity, price }) {
 
       existing.averagePrice = newAverage;
 
-      existing.currentPrice = orderPrice;
+      /*
+       * IMPORTANT:
+       * Don't make current price equal
+       * to buy price.
+       */
+      existing.currentPrice = Number(
+        existing.currentPrice || existing.ltp || orderPrice,
+      );
 
-      existing.invested = newQuantity * newAverage;
+      updateHoldingValues(existing);
     } else {
-      data.holdings.push({
+      const holding = {
         id: Date.now(),
 
         symbol,
@@ -90,9 +109,11 @@ export function placeOrder({ symbol, company, side, quantity, price }) {
         averagePrice: orderPrice,
 
         currentPrice: orderPrice,
+      };
 
-        invested: orderValue,
-      });
+      updateHoldingValues(holding);
+
+      data.holdings.push(holding);
     }
   }
 
@@ -108,25 +129,33 @@ export function placeOrder({ symbol, company, side, quantity, price }) {
       };
     }
 
-    if (Number(existing.quantity) < qty) {
+    const existingQuantity = Number(existing.quantity || 0);
+
+    if (existingQuantity < qty) {
       return {
         success: false,
         message: "Not enough shares to sell.",
       };
     }
 
-    existing.quantity -= qty;
+    existing.quantity = existingQuantity - qty;
 
     data.funds.availableBalance += orderValue;
 
-    data.funds.usedMargin -= existing.averagePrice * qty;
+    data.funds.usedMargin -= Number(existing.averagePrice || 0) * qty;
+
+    data.funds.usedMargin = Math.max(0, data.funds.usedMargin);
 
     if (existing.quantity === 0) {
       data.holdings = data.holdings.filter((item) => item.symbol !== symbol);
     } else {
-      existing.invested = existing.quantity * existing.averagePrice;
-
-      existing.currentPrice = orderPrice;
+      /*
+       * Keep average buy price.
+       *
+       * Current price remains the
+       * existing market price.
+       */
+      updateHoldingValues(existing);
     }
   }
 
@@ -158,10 +187,55 @@ export function placeOrder({ symbol, company, side, quantity, price }) {
 
   return {
     success: true,
+
     message:
       side === "BUY" ?
         `${symbol} bought successfully.`
       : `${symbol} sold successfully.`,
+
     order,
   };
+}
+
+/* =================================================
+   HOLDING CALCULATIONS
+================================================= */
+
+function updateHoldingValues(holding) {
+  const quantity = Number(holding.quantity || 0);
+
+  const averagePrice = Number(holding.averagePrice || 0);
+
+  const currentPrice = Number(
+    holding.currentPrice || holding.ltp || averagePrice || 0,
+  );
+
+  const investedValue = quantity * averagePrice;
+
+  const currentValue = quantity * currentPrice;
+
+  const totalPnL = currentValue - investedValue;
+
+  const totalPnLPercent =
+    investedValue > 0 ? (totalPnL / investedValue) * 100 : 0;
+
+  holding.quantity = quantity;
+
+  holding.averagePrice = averagePrice;
+
+  holding.currentPrice = currentPrice;
+
+  holding.ltp = currentPrice;
+
+  holding.invested = investedValue;
+
+  holding.investedValue = investedValue;
+
+  holding.currentValue = currentValue;
+
+  holding.totalPnL = totalPnL;
+
+  holding.totalPnLPercent = totalPnLPercent;
+
+  holding.positive = totalPnL >= 0;
 }
