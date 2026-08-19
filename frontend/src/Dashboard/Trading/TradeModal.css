@@ -1,0 +1,172 @@
+.tradeModalOverlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 9999;
+}
+
+.tradeModal {
+  width: 420px;
+
+  max-width: calc(100% - 30px);
+
+  background: white;
+
+  border-radius: 16px;
+
+  padding: 25px;
+
+  box-sizing: border-box;
+}
+
+.tradeModalHeader {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  margin-bottom: 25px;
+}
+
+.tradeModalHeader h2 {
+  margin: 0;
+
+  font-size: 22px;
+}
+
+.tradeModalHeader p {
+  margin: 5px 0 0;
+
+  color: #888;
+
+  font-size: 13px;
+}
+
+.closeTradeBtn {
+  border: none;
+
+  background: #f3f3f3;
+
+  width: 34px;
+  height: 34px;
+
+  border-radius: 50%;
+
+  font-size: 22px;
+
+  cursor: pointer;
+}
+
+.tradePrice,
+.tradeSummary {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 15px 0;
+
+  border-bottom: 1px solid #eee;
+}
+
+.tradePrice span,
+.tradeSummary span {
+  color: #777;
+
+  font-size: 13px;
+}
+
+.tradePrice strong,
+.tradeSummary strong {
+  font-size: 17px;
+}
+
+.tradeField {
+  margin-top: 20px;
+}
+
+.tradeField label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 13px;
+
+  color: #555;
+}
+
+.tradeField input {
+  width: 100%;
+
+  height: 45px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #ddd;
+
+  border-radius: 8px;
+
+  padding: 0 12px;
+
+  font-size: 15px;
+
+  outline: none;
+}
+
+.tradeField input:focus {
+  border-color: #387ed1;
+}
+
+.tradeSummary {
+  margin: 20px 0;
+}
+
+.placeBuyBtn,
+.placeSellBtn {
+  width: 100%;
+
+  height: 48px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  color: white;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.placeBuyBtn {
+  background: #149447;
+}
+
+.placeSellBtn {
+  background: #e53935;
+}
+
+.placeBuyBtn:hover {
+  background: #117d3b;
+}
+
+.placeSellBtn:hover {
+  background: #c92f2b;
+}
+
+.placeBuyBtn:disabled,
+.placeSellBtn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}

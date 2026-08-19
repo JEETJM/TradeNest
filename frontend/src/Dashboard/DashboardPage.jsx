@@ -26,22 +26,31 @@ function DashboardPage() {
         <Topbar />
 
         <Routes>
+          {/* Dashboard Home */}
           <Route index element={<DashboardHome />} />
 
+          {/* Portfolio */}
           <Route path="portfolio" element={<PortfolioPage />} />
 
+          {/* Watchlist */}
           <Route path="watchlist" element={<WatchlistPage />} />
 
+          {/* Holdings */}
           <Route path="holdings" element={<HoldingsPage />} />
 
+          {/* Orders */}
           <Route path="orders" element={<OrdersPage />} />
 
+          {/* Funds */}
           <Route path="funds" element={<FundsPage />} />
 
+          {/* Analytics */}
           <Route path="analytics" element={<AnalyticsPage />} />
 
+          {/* Profile */}
           <Route path="profile" element={<ProfilePage />} />
 
+          {/* Settings */}
           <Route path="settings" element={<SettingsPage />} />
         </Routes>
       </div>

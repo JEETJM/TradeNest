@@ -1,88 +1,62 @@
-.holdingsPage {
-  width: 100%;
-  min-height: calc(100vh - 70px);
-
+.ordersPage {
   padding: 30px;
-
   background: #f8f9fb;
-
-  box-sizing: border-box;
+  min-height: calc(100vh - 70px);
 }
 
-.holdingsPageHeader {
+.ordersHeader {
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
-
   margin-bottom: 25px;
 }
 
-.holdingsPageHeader h1 {
+.ordersHeader h1 {
   margin: 0;
-
   font-size: 30px;
-
   color: #222;
 }
 
-.holdingsPageHeader p {
+.ordersHeader p {
   margin: 7px 0 0;
-
   color: #777;
-
-  font-size: 14px;
 }
 
-.holdingsCount {
+.orderCount {
   padding: 9px 15px;
-
   border-radius: 8px;
 
   background: #edf5ff;
-
   color: #387ed1;
 
   font-size: 13px;
-
   font-weight: 600;
 }
 
-.holdingsCard {
-  width: 100%;
-
-  background: #fff;
-
-  border: 1px solid #e8e8e8;
-
+.ordersCard {
+  background: white;
+  border: 1px solid #eee;
   border-radius: 14px;
-
   overflow: hidden;
 }
 
-.holdingsTableWrapper {
+.ordersTableWrapper {
   width: 100%;
-
   overflow-x: auto;
 }
 
-.holdingsTable {
+.ordersTable {
   width: 100%;
-
-  min-width: 950px;
-
+  min-width: 1000px;
   border-collapse: collapse;
 }
 
-.holdingsTable th {
+.ordersTable th {
+  text-align: left;
+
   padding: 16px 18px;
 
   background: #fafafa;
-
-  border-bottom: 1px solid #eee;
-
-  text-align: left;
 
   color: #777;
 
@@ -91,25 +65,22 @@
   font-weight: 600;
 }
 
-.holdingsTable td {
-  padding: 18px;
+.ordersTable td {
+  padding: 17px 18px;
 
-  border-bottom: 1px solid #f1f1f1;
-
-  color: #333;
+  border-top: 1px solid #f1f1f1;
 
   font-size: 13px;
+
+  color: #333;
 }
 
-.holdingStock strong {
+.orderStock strong {
   display: block;
-
   font-size: 14px;
-
-  color: #222;
 }
 
-.holdingStock small {
+.orderStock small {
   display: block;
 
   margin-top: 4px;
@@ -119,47 +90,56 @@
   font-size: 11px;
 }
 
-.holdingProfit {
-  color: #159447 !important;
+.buyType,
+.sellType,
+.completedStatus {
+  display: inline-block;
+
+  padding: 5px 9px;
+
+  border-radius: 6px;
+
+  font-size: 11px;
 
   font-weight: 600;
 }
 
-.holdingLoss {
-  color: #e53935 !important;
-
-  font-weight: 600;
+.buyType {
+  background: #e9f8ef;
+  color: #149447;
 }
 
-.holdingsEmpty {
-  min-height: 420px;
+.sellType {
+  background: #fff0f0;
+  color: #e53935;
+}
+
+.completedStatus {
+  background: #e9f8ef;
+  color: #149447;
+}
+
+.emptyOrders {
+  min-height: 400px;
 
   display: flex;
 
   flex-direction: column;
 
-  justify-content: center;
-
   align-items: center;
 
+  justify-content: center;
+
   text-align: center;
-
-  background: #fff;
-
-  border: 1px solid #eee;
-
-  border-radius: 14px;
 }
 
-.holdingsEmptyIcon {
+.emptyOrderIcon {
   width: 65px;
-
   height: 65px;
 
   display: flex;
 
   align-items: center;
-
   justify-content: center;
 
   border-radius: 50%;
@@ -171,15 +151,13 @@
   margin-bottom: 15px;
 }
 
-.holdingsEmpty h2 {
+.emptyOrders h2 {
   margin: 0;
 
   font-size: 20px;
-
-  color: #222;
 }
 
-.holdingsEmpty p {
+.emptyOrders p {
   margin-top: 8px;
 
   color: #888;
@@ -187,12 +165,12 @@
   font-size: 13px;
 }
 
-@media (max-width: 700px) {
-  .holdingsPage {
+@media (max-width: 650px) {
+  .ordersPage {
     padding: 20px 15px;
   }
 
-  .holdingsPageHeader {
+  .ordersHeader {
     align-items: flex-start;
 
     flex-direction: column;

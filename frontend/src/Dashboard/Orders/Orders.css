@@ -1,79 +1,358 @@
-.ordersCard {
-  background: white;
-  margin-top: 35px;
-  padding: 28px;
-  border-radius: 18px;
-  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+.ordersPage {
+  padding: 30px;
+  background: #f8f9fb;
+  min-height: calc(100vh - 70px);
 }
 
 .ordersHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 25px;
 }
 
-.ordersHeader button {
-  background: #387ed1;
-  color: white;
+.ordersHeader h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #222;
+}
+
+.ordersHeader p {
+  margin-top: 7px;
+  color: #777;
+}
+
+.ordersLayout {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 25px;
+}
+
+/* Stock Selector */
+
+.stockSelector {
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.sectionTitle {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.sectionTitle h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.stockSelectorItem {
+  width: 100%;
   border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
+  background: white;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 17px 20px;
+
+  cursor: pointer;
+
+  text-align: left;
+
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.stockSelectorItem:hover {
+  background: #f7faff;
+}
+
+.stockSelectorItem.selected {
+  background: #edf5ff;
+  border-left: 4px solid #387ed1;
+}
+
+.stockSelectorItem strong {
+  display: block;
+  color: #222;
+  font-size: 14px;
+}
+
+.stockSelectorItem small {
+  display: block;
+  color: #888;
+  margin-top: 4px;
+  font-size: 11px;
+}
+
+.stockSelectorItem span {
+  font-weight: 600;
+  color: #222;
+}
+
+/* Order Card */
+
+.orderCard {
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 14px;
+
+  padding: 28px;
+
+  max-width: 650px;
+}
+
+.orderStockHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 25px;
+}
+
+.orderStockHeader h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.orderStockHeader p {
+  margin: 5px 0 0;
+  color: #777;
+  font-size: 13px;
+}
+
+.currentPrice {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* Buy Sell */
+
+.orderTabs {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 25px;
+}
+
+.orderTabs button {
+  flex: 1;
+
+  padding: 13px;
+
+  border: none;
+
+  background: transparent;
+
+  color: #777;
+
+  font-weight: 600;
+
   cursor: pointer;
 }
 
-.ordersCard table {
+.orderTabs .buyActive {
+  color: #149447;
+  border-bottom: 2px solid #149447;
+}
+
+.orderTabs .sellActive {
+  color: #e53935;
+  border-bottom: 2px solid #e53935;
+}
+
+/* Fields */
+
+.orderField {
+  margin-bottom: 18px;
+}
+
+.orderField label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #555;
+
+  font-size: 13px;
+
+  font-weight: 500;
+}
+
+.orderField input,
+.orderField select {
   width: 100%;
-  border-collapse: collapse;
+
+  height: 44px;
+
+  box-sizing: border-box;
+
+  padding: 0 12px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 8px;
+
+  outline: none;
+
+  font-size: 14px;
 }
 
-.ordersCard th,
-.ordersCard td {
-  padding: 16px;
-  border-bottom: 1px solid #eee;
-  text-align: left;
+.orderField input:focus,
+.orderField select:focus {
+  border-color: #387ed1;
 }
 
-.ordersCard tbody tr:hover {
-  background: #f8fbff;
+/* Product */
+
+.productButtons {
+  display: flex;
+  gap: 10px;
 }
 
-.buyBadge {
-  background: #dcfce7;
+.productButtons button {
+  flex: 1;
 
-  color: #15803d;
+  height: 40px;
 
-  padding: 6px 12px;
+  border: 1px solid #ddd;
 
-  border-radius: 20px;
+  background: white;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+}
+
+.productButtons .selectedProduct {
+  background: #edf5ff;
+
+  border-color: #387ed1;
+
+  color: #387ed1;
+
+  font-weight: 600;
+}
+
+/* Summary */
+
+.orderSummary {
+  background: #f8f9fb;
+
+  padding: 17px;
+
+  border-radius: 10px;
+
+  margin-top: 20px;
+}
+
+.orderSummary div {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+}
+
+.orderSummary div:last-child {
+  margin-bottom: 0;
+}
+
+.orderSummary span {
+  color: #777;
+  font-size: 13px;
+}
+
+.orderSummary strong {
+  color: #222;
+}
+
+.totalRow {
+  border-top: 1px solid #ddd;
+
+  padding-top: 13px;
+
+  margin-top: 13px;
+}
+
+.totalRow strong {
+  font-size: 18px;
+}
+
+/* Success */
+
+.orderSuccess {
+  margin-top: 15px;
+
+  padding: 12px;
+
+  background: #eaf8ef;
+
+  color: #149447;
+
+  border-radius: 8px;
 
   font-size: 13px;
 
   font-weight: 600;
 }
 
-.sellBadge {
-  background: #fee2e2;
+/* Place Order */
 
-  color: #dc2626;
+.placeOrder {
+  width: 100%;
 
-  padding: 6px 12px;
+  height: 48px;
 
-  border-radius: 20px;
+  border: none;
 
-  font-size: 13px;
+  border-radius: 9px;
+
+  margin-top: 18px;
+
+  color: white;
+
+  font-size: 15px;
 
   font-weight: 600;
+
+  cursor: pointer;
 }
 
-.completed {
-  color: #16a34a;
-
-  font-weight: 600;
+.buyOrder {
+  background: #149447;
 }
 
-.pending {
-  color: #f59e0b;
+.buyOrder:hover {
+  background: #107b3a;
+}
 
-  font-weight: 600;
+.sellOrder {
+  background: #e53935;
+}
+
+.sellOrder:hover {
+  background: #c92e2e;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .ordersLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .orderCard {
+    max-width: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .ordersPage {
+    padding: 20px 15px;
+  }
+
+  .orderStockHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
 }

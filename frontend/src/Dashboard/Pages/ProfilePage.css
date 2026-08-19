@@ -1,0 +1,255 @@
+.profilePage {
+  padding: 30px;
+  background: #f8f9fb;
+  min-height: calc(100vh - 70px);
+}
+
+/* Header */
+
+.profileHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.profileHeader h1 {
+  margin: 0;
+  font-size: 30px;
+  color: #222;
+}
+
+.profileHeader p {
+  margin: 7px 0 0;
+  color: #777;
+}
+
+.editProfileBtn,
+.saveProfileBtn {
+  border: none;
+  padding: 11px 20px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.editProfileBtn {
+  background: #387ed1;
+}
+
+.saveProfileBtn {
+  background: #149447;
+}
+
+/* Grid */
+
+.profileGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin-bottom: 22px;
+}
+
+/* Card */
+
+.profileCard {
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.profileCardHeader {
+  padding: 22px;
+  border-bottom: 1px solid #eee;
+}
+
+.profileCardHeader h2 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.profileCardHeader p {
+  margin: 6px 0 0;
+  color: #888;
+  font-size: 13px;
+}
+
+/* Form */
+
+.profileForm {
+  padding: 25px;
+}
+
+.profileAvatar {
+  width: 72px;
+  height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 25px;
+
+  border-radius: 50%;
+
+  background: #edf5ff;
+
+  color: #387ed1;
+
+  font-size: 23px;
+  font-weight: 700;
+}
+
+.profileField {
+  margin-bottom: 18px;
+}
+
+.profileField label {
+  display: block;
+  margin-bottom: 7px;
+
+  color: #555;
+
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.profileField input {
+  width: 100%;
+  height: 44px;
+
+  box-sizing: border-box;
+
+  padding: 0 12px;
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  outline: none;
+
+  font-size: 14px;
+}
+
+.profileField input:disabled {
+  background: #f8f9fb;
+  color: #555;
+}
+
+.profileField input:not(:disabled):focus {
+  border-color: #387ed1;
+}
+
+/* Account */
+
+.accountInfo {
+  padding: 10px 22px;
+}
+
+.accountRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 17px 0;
+
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.accountRow:last-child {
+  border-bottom: none;
+}
+
+.accountRow span {
+  color: #777;
+  font-size: 13px;
+}
+
+.accountRow strong {
+  color: #333;
+  font-size: 13px;
+}
+
+.activeStatus,
+.verifiedStatus {
+  color: #149447 !important;
+}
+
+/* Security */
+
+.securityCard {
+  margin-bottom: 25px;
+}
+
+.securityRows {
+  padding: 5px 22px;
+}
+
+.securityRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 20px 0;
+
+  border-bottom: 1px solid #f1f1f1;
+}
+
+.securityRow:last-child {
+  border-bottom: none;
+}
+
+.securityRow strong {
+  font-size: 14px;
+}
+
+.securityRow p {
+  margin: 5px 0 0;
+  color: #888;
+  font-size: 12px;
+}
+
+.securityRow button {
+  border: 1px solid #387ed1;
+  background: white;
+  color: #387ed1;
+
+  padding: 9px 15px;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  font-weight: 500;
+}
+
+.securityRow button:hover {
+  background: #edf5ff;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .profileGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .profilePage {
+    padding: 20px 15px;
+  }
+
+  .profileHeader {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .securityRow {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+}

@@ -1,5 +1,7 @@
+import Watchlist from "../Watchlist/Watchlist";
+
 function WatchlistPage() {
-  return <h1>Watchlist Page</h1>;
+  return <Watchlist />;
 }
 
 export default WatchlistPage;
