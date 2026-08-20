@@ -1,5 +1,5 @@
 import "./Login.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaEnvelope,
   FaLock,
@@ -8,31 +8,33 @@ import {
   FaEyeSlash,
 } from "react-icons/fa";
 import { useState } from "react";
+
 function LoginPage() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
-
   const [rememberMe, setRememberMe] = useState(false);
-
   const [loading, setLoading] = useState(false);
 
   const validateForm = () => {
-    let newErrors = {};
+    const newErrors = {};
 
-    // Email
     if (!email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
       newErrors.email = "Enter a valid email address";
     }
 
-    // Password
     if (!password) {
       newErrors.password = "Password is required";
-    } else if (password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     setErrors(newErrors);
@@ -40,30 +42,72 @@ function LoginPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleLogin = () => {
-    if (!validateForm()) return;
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    setServerError("");
+
+    if (!validateForm()) {
+      return;
+    }
 
     setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email.trim(),
+          password,
+        }),
+      });
 
-      alert("Backend Login API will be connected here.");
-    }, 1500);
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        setServerError(data.message || "Login failed.");
+        return;
+      }
+
+      /*
+       * =========================
+       * SAVE AUTH DATA
+       * =========================
+       */
+
+      const storage = rememberMe ? localStorage : sessionStorage;
+
+      storage.setItem("tradenest_token", data.token);
+      storage.setItem("tradenest_user", JSON.stringify(data.user));
+
+      /*
+       * =========================
+       * REDIRECT
+       * =========================
+       */
+
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login error:", error);
+
+      setServerError(
+        "Unable to connect to server. Please make sure backend is running.",
+      );
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <section className="loginPage">
       <div className="loginContainer">
-        {/* LEFT */}
+        {/* ================= LEFT ================= */}
 
         <div className="loginLeft">
           <div className="loginLeftContent">
-            {/* <img
-              src="/Media/Images/logoSign.png"
-              alt="TradeNest"
-              className="loginLogo"
-            /> */}
-
             <span>Welcome Back</span>
 
             <h1>TradeNest</h1>
@@ -83,7 +127,7 @@ function LoginPage() {
           </div>
         </div>
 
-        {/* RIGHT */}
+        {/* ================= RIGHT ================= */}
 
         <div className="loginRight">
           <div className="loginCard">
@@ -91,61 +135,96 @@ function LoginPage() {
 
             <p>Login to your TradeNest account.</p>
 
-            <div className="inputBox">
-              <FaEnvelope />
-              <input
-                type="email"
-                placeholder="Email Address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />{" "}
+            <form onSubmit={handleLogin}>
+              {/* EMAIL */}
+
+              <div className="inputBox">
+                <FaEnvelope />
+
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setServerError("");
+                  }}
+                />
+              </div>
+
               {errors.email && (
                 <small className="errorText">{errors.email}</small>
               )}
-            </div>
 
-            <div className="inputBox">
-              <FaLock />
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />{" "}
-              <span
-                className="eyeIcon"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ?
-                  <FaEyeSlash />
-                : <FaEye />}
-              </span>{" "}
-            </div>
+              {/* PASSWORD */}
 
-            <div className="loginOptions">
-              <label>
+              <div className="inputBox">
+                <FaLock />
+
                 <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                />{" "}
-                Remember me
-              </label>
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setServerError("");
+                  }}
+                />
 
-              <Link to="/forgot-password">Forgot Password?</Link>
-            </div>
+                <span
+                  className="eyeIcon"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ?
+                    <FaEyeSlash />
+                  : <FaEye />}
+                </span>
+              </div>
 
-            <button className="loginBtn" onClick={handleLogin}>
-              {loading ? "Logging in..." : "Login"}
-            </button>
+              {errors.password && (
+                <small className="errorText">{errors.password}</small>
+              )}
+
+              {/* SERVER ERROR */}
+
+              {serverError && <div className="serverError">{serverError}</div>}
+
+              {/* OPTIONS */}
+
+              <div className="loginOptions">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                  />
+                  Remember me
+                </label>
+
+                <Link to="/forgot-password">Forgot Password?</Link>
+              </div>
+
+              {/* LOGIN */}
+
+              <button type="submit" className="loginBtn" disabled={loading}>
+                {loading ? "Logging in..." : "Login"}
+              </button>
+            </form>
+
+            {/* DIVIDER */}
+
             <div className="divider">
               <span>OR</span>
             </div>
 
-            <button className="googleBtn">
+            {/* GOOGLE */}
+
+            <button className="googleBtn" type="button">
               <FaGoogle />
               Continue with Google
             </button>
+
+            {/* SIGNUP */}
 
             <div className="signupLink">
               Don't have an account?

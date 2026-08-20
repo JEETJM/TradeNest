@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
+    /* =========================
+       BASIC USER INFO
+    ========================= */
+
     firstName: {
       type: String,
       required: true,
@@ -31,8 +35,24 @@ const userSchema = new mongoose.Schema(
     phone: {
       type: String,
       trim: true,
+      default: "",
+    },
+
+    /* =========================
+       PASSWORD RESET
+    ========================= */
+
+    resetPasswordToken: {
+      type: String,
+      default: null,
+    },
+
+    resetPasswordExpire: {
+      type: Date,
+      default: null,
     },
   },
+
   {
     timestamps: true,
   },

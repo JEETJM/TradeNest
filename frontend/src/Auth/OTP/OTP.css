@@ -1,138 +1,449 @@
-/* ===========================
-        OTP PAGE
-=========================== */
+.otpPage {
+  min-height: 100vh;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  background: #f5f7fb;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 40px 20px;
 }
 
-.otpPage {
-  min-height: calc(100vh - 140px);
+.otpContainer {
+  width: 100%;
+
+  max-width: 1200px;
+
+  min-height: 650px;
+
   display: flex;
-  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 26px;
+
+  background: white;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================
+   LEFT
+========================= */
+
+.otpLeft {
+  width: 50%;
+
+  position: relative;
+
+  overflow: hidden;
+
+  display: flex;
+
   align-items: center;
-  background: #f6f9fc;
-  padding: 50px 20px;
+
+  justify-content: center;
+
+  background: linear-gradient(135deg, #387ed1, #2358b8);
+}
+
+.otpLeft::before {
+  content: "";
+
+  position: absolute;
+
+  width: 320px;
+  height: 320px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  top: -100px;
+  left: -100px;
+}
+
+.otpLeft::after {
+  content: "";
+
+  position: absolute;
+
+  width: 450px;
+  height: 450px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.06);
+
+  right: -180px;
+  bottom: -180px;
+}
+
+.otpLeftContent {
+  width: 72%;
+
+  position: relative;
+
+  z-index: 2;
+
+  color: white;
+}
+
+.otpSecurityIcon {
+  width: 65px;
+  height: 65px;
+
+  border-radius: 18px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.15);
+
+  font-size: 25px;
+
+  margin-bottom: 25px;
+}
+
+.otpLeftContent span {
+  font-size: 18px;
+
+  opacity: 0.9;
+}
+
+.otpLeftContent h1 {
+  font-size: 60px;
+
+  line-height: 1.05;
+
+  margin: 20px 0 30px;
+
+  font-weight: 800;
+}
+
+.otpLeftContent p {
+  font-size: 20px;
+
+  line-height: 34px;
+
+  opacity: 0.92;
+}
+
+/* =========================
+   RIGHT
+========================= */
+
+.otpRight {
+  width: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 50px;
 }
 
 .otpCard {
-  width: 100%;
-  max-width: 500px;
-  background: #fff;
-  border-radius: 20px;
-  padding: 45px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+  width: 420px;
+
+  text-align: center;
+}
+
+.otpSuccessIcon {
+  width: 72px;
+  height: 72px;
+
+  margin: 0 auto 25px;
+
+  border-radius: 22px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #ecfdf5;
+
+  color: #16a34a;
+
+  font-size: 34px;
 }
 
 .otpCard h2 {
-  font-size: 36px;
+  font-size: 38px;
+
+  margin-bottom: 10px;
+
   color: #222;
-  margin-bottom: 12px;
-  text-align: center;
 }
 
-.otpCard p {
+.otpSubtitle {
+  margin-bottom: 5px;
+
   color: #666;
-  text-align: center;
-  line-height: 28px;
-  margin-bottom: 35px;
 }
+
+.otpEmail {
+  display: block;
+
+  margin-bottom: 30px;
+
+  color: #387ed1;
+
+  word-break: break-word;
+}
+
+/* =========================
+   OTP INPUTS
+========================= */
 
 .otpInputs {
   display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 35px;
+
+  justify-content: center;
+
+  gap: 10px;
+
+  margin-bottom: 20px;
 }
 
 .otpInputs input {
-  width: 58px;
+  width: 52px;
   height: 58px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+
   text-align: center;
+
   font-size: 24px;
-  font-weight: 600;
+
+  font-weight: 700;
+
+  border: 1px solid #ddd;
+
+  border-radius: 12px;
+
   outline: none;
+
   transition: 0.3s;
 }
 
 .otpInputs input:focus {
   border-color: #387ed1;
+
   box-shadow: 0 0 0 4px rgba(56, 126, 209, 0.12);
 }
 
-.verifyBtn {
+/* =========================
+   MESSAGE
+========================= */
+
+.otpError {
+  padding: 11px;
+
+  margin-bottom: 15px;
+
+  border-radius: 10px;
+
+  background: #fff1f2;
+
+  color: #dc2626;
+
+  font-size: 14px;
+}
+
+.otpSuccess {
+  padding: 11px;
+
+  margin-bottom: 15px;
+
+  border-radius: 10px;
+
+  background: #ecfdf5;
+
+  color: #16a34a;
+
+  font-size: 14px;
+}
+
+/* =========================
+   VERIFY
+========================= */
+
+.verifyOtpBtn {
   width: 100%;
-  height: 56px;
+
+  height: 54px;
+
   border: none;
-  border-radius: 12px;
+
+  border-radius: 14px;
+
   background: #387ed1;
-  color: #fff;
-  font-size: 18px;
+
+  color: white;
+
+  font-size: 17px;
+
   font-weight: 600;
+
   cursor: pointer;
+
   transition: 0.3s;
 }
 
-.verifyBtn:hover {
-  background: #2d6dc2;
+.verifyOtpBtn:hover {
+  background: #2358b8;
+
+  transform: translateY(-2px);
 }
 
-.timer {
-  margin-top: 30px;
-  text-align: center;
+.verifyOtpBtn:disabled {
+  opacity: 0.7;
+
+  cursor: not-allowed;
+
+  transform: none;
+}
+
+/* =========================
+   RESEND
+========================= */
+
+.resendSection {
+  margin-top: 25px;
+
+  min-height: 35px;
+}
+
+.resendSection p {
   color: #666;
+
+  font-size: 14px;
 }
 
-.timer button {
-  background: transparent;
+.resendSection strong {
+  color: #387ed1;
+}
+
+.resendBtn {
   border: none;
+
+  background: transparent;
+
   color: #387ed1;
+
+  font-size: 15px;
+
   font-weight: 600;
+
   cursor: pointer;
-  margin-left: 6px;
 }
 
-.timer button:hover {
+.resendBtn:hover {
   text-decoration: underline;
 }
 
-.backLogin {
-  display: block;
-  text-align: center;
-  margin-top: 30px;
+/* =========================
+   BACK
+========================= */
+
+.backForgot {
+  margin-top: 25px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
   text-decoration: none;
+
   color: #387ed1;
+
   font-weight: 600;
 }
 
-.backLogin:hover {
-  text-decoration: underline;
+.backForgot:hover {
+  color: #2358b8;
 }
 
-/* ===========================
-      RESPONSIVE
-=========================== */
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .otpContainer {
+    flex-direction: column;
+  }
+
+  .otpLeft,
+  .otpRight {
+    width: 100%;
+  }
+
+  .otpLeft {
+    min-height: 320px;
+  }
+
+  .otpLeftContent {
+    text-align: center;
+  }
+
+  .otpSecurityIcon {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .otpLeftContent h1 {
+    font-size: 48px;
+  }
+}
 
 @media (max-width: 576px) {
-  .otpCard {
-    padding: 30px 20px;
+  .otpPage {
+    padding: 15px;
+  }
+
+  .otpLeft {
+    min-height: 280px;
+  }
+
+  .otpLeftContent {
+    width: 85%;
+  }
+
+  .otpLeftContent h1 {
+    font-size: 40px;
+  }
+
+  .otpLeftContent p {
+    font-size: 16px;
+
+    line-height: 26px;
+  }
+
+  .otpRight {
+    padding: 35px 15px;
   }
 
   .otpCard h2 {
-    font-size: 28px;
+    font-size: 30px;
   }
 
   .otpInputs {
-    gap: 8px;
+    gap: 6px;
   }
 
   .otpInputs input {
     width: 45px;
-    height: 45px;
-    font-size: 20px;
+    height: 52px;
+
+    font-size: 21px;
   }
 }

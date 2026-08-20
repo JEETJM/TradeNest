@@ -10,28 +10,53 @@ import PricingPage from "./Landing_Page/Pricing/PricingPage";
 import SupportPage from "./Landing_Page/Support/SupportPage";
 import OpenAccountPage from "./Landing_Page/OpenAccount/OpenAccountPage";
 
+// Investment Offerings
+import InvestmentPage from "./Landing_Page/InvestmentOfferings/InvestmentPage";
+
+// Auth
 import SignupPage from "./Auth/Signup/SignupPage";
 import LoginPage from "./Auth/Login/LoginPage";
 import ForgotPasswordPage from "./Auth/ForgotPassword/ForgotPasswordPage";
 import OTPPage from "./Auth/OTP/OTPPage";
 import ResetPasswordPage from "./Auth/ResetPassword/ResetPasswordPage";
 
+// Dashboard
 import DashboardPage from "./Dashboard/DashboardPage";
+
+// 404
 import NotFound from "./Landing_Page/NotFound";
+
+// Authentication protection
+import ProtectedRoute from "./Auth/ProtectedRoute";
+
+/* =========================================
+   LANDING LAYOUT
+========================================= */
 
 function LandingLayout({ children }) {
   return (
     <>
       <Navbar />
+
       {children}
+
       <Footer />
     </>
   );
 }
 
+/* =========================================
+   APP
+========================================= */
+
 function App() {
   return (
     <Routes>
+      {/* =====================================
+          LANDING PAGES
+      ===================================== */}
+
+      {/* HOME */}
       <Route
         path="/"
         element={
@@ -41,6 +66,7 @@ function App() {
         }
       />
 
+      {/* ABOUT */}
       <Route
         path="/about"
         element={
@@ -50,6 +76,7 @@ function App() {
         }
       />
 
+      {/* PRODUCTS */}
       <Route
         path="/products"
         element={
@@ -59,6 +86,7 @@ function App() {
         }
       />
 
+      {/* PRICING */}
       <Route
         path="/pricing"
         element={
@@ -68,6 +96,7 @@ function App() {
         }
       />
 
+      {/* SUPPORT */}
       <Route
         path="/support"
         element={
@@ -77,6 +106,7 @@ function App() {
         }
       />
 
+      {/* OPEN ACCOUNT */}
       <Route
         path="/open-account"
         element={
@@ -86,20 +116,59 @@ function App() {
         }
       />
 
+      {/* =====================================
+          INVESTMENT OFFERINGS
+      ===================================== */}
+
+      <Route
+        path="/investment-offerings"
+        element={
+          <LandingLayout>
+            <InvestmentPage />
+          </LandingLayout>
+        }
+      />
+
+      {/* Optional: old URL also works */}
+      <Route
+        path="/InvestmentOfferings"
+        element={
+          <LandingLayout>
+            <InvestmentPage />
+          </LandingLayout>
+        }
+      />
+
+      {/* =====================================
+          AUTHENTICATION
+      ===================================== */}
+
+      {/* SIGNUP */}
       <Route path="/signup" element={<SignupPage />} />
 
+      {/* LOGIN */}
       <Route path="/login" element={<LoginPage />} />
 
+      {/* FORGOT PASSWORD */}
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
+      {/* OTP */}
       <Route path="/otp" element={<OTPPage />} />
 
+      {/* RESET PASSWORD */}
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-      <Route path="/dashboard/*" element={<DashboardPage />} />
+      {/* =====================================
+          PROTECTED DASHBOARD
+      ===================================== */}
 
-      
-      {/* <Route path="/dashboard/*" element={<DashboardPage />} /> */}
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard/*" element={<DashboardPage />} />
+      </Route>
+
+      {/* =====================================
+          404
+      ===================================== */}
 
       <Route path="*" element={<NotFound />} />
     </Routes>

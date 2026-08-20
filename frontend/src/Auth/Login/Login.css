@@ -370,3 +370,23 @@ color:#e53935;
 font-weight:500;
 
 }
+
+.serverError {
+  margin: 10px 0 18px;
+  padding: 12px 14px;
+
+  border-radius: 10px;
+
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+
+  color: #dc2626;
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.loginBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

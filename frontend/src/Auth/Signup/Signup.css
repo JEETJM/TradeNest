@@ -30,11 +30,11 @@
   background: #387ed1;
 }
 
-.rightSide{
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    padding:40px;
+.rightSide {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px;
 }
 
 @media (max-width: 991px) {
@@ -361,210 +361,197 @@
   color: #387ed1;
 }
 
+.featureList {
+  margin-top: 45px;
 
+  display: flex;
 
+  flex-direction: column;
 
-.featureList{
-
-margin-top:45px;
-
-display:flex;
-
-flex-direction:column;
-
-gap:18px;
-
+  gap: 18px;
 }
 
-.featureCard{
+.featureCard {
+  display: flex;
 
-display:flex;
+  align-items: center;
 
-align-items:center;
+  gap: 18px;
 
-gap:18px;
+  background: rgba(255, 255, 255, 0.12);
 
-background:rgba(255,255,255,.12);
+  backdrop-filter: blur(14px);
 
-backdrop-filter:blur(14px);
+  padding: 18px 20px;
 
-padding:18px 20px;
+  border-radius: 18px;
 
-border-radius:18px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 
-border:1px solid rgba(255,255,255,.15);
+  transition: 0.35s;
 
-transition:.35s;
-
-cursor:pointer;
-
+  cursor: pointer;
 }
 
-.featureCard:hover{
+.featureCard:hover {
+  transform: translateX(10px);
 
-transform:translateX(10px);
-
-background:rgba(255,255,255,.18);
-
+  background: rgba(255, 255, 255, 0.18);
 }
 
-.featureCard span{
-
-font-size:34px;
-
+.featureCard span {
+  font-size: 34px;
 }
 
-.featureCard h4{
+.featureCard h4 {
+  margin: 0;
 
-margin:0;
+  font-size: 18px;
 
-font-size:18px;
-
-font-weight:600;
-
+  font-weight: 600;
 }
 
-.featureCard p{
+.featureCard p {
+  margin-top: 5px;
 
-margin-top:5px;
+  font-size: 15px;
 
-font-size:15px;
+  line-height: 24px;
 
-line-height:24px;
-
-opacity:.9;
-
+  opacity: 0.9;
 }
 
+.terms {
+  display: flex;
 
-.terms{
+  align-items: flex-start;
 
-display:flex;
+  gap: 12px;
 
-align-items:flex-start;
+  margin: 25px 0;
 
-gap:12px;
+  font-size: 15px;
 
-margin:25px 0;
-
-font-size:15px;
-
-color:#555;
-
+  color: #555;
 }
 
-.terms input{
+.terms input {
+  margin-top: 5px;
 
-margin-top:5px;
-
-cursor:pointer;
-
+  cursor: pointer;
 }
 
-.terms a{
+.terms a {
+  text-decoration: none;
 
-text-decoration:none;
+  color: #387ed1;
 
-color:#387ed1;
-
-font-weight:600;
-
+  font-weight: 600;
 }
 
-.eyeIcon{
+.eyeIcon {
+  cursor: pointer;
 
-cursor:pointer;
+  font-size: 18px;
 
-font-size:18px;
+  color: #888;
 
-color:#888;
+  transition: 0.3s;
 
-transition:.3s;
+  display: flex;
 
-display:flex;
-
-align-items:center;
-
+  align-items: center;
 }
 
-.eyeIcon:hover{
-
-color:#387ed1;
-
+.eyeIcon:hover {
+  color: #387ed1;
 }
 
+.strengthWrapper {
+  margin-top: -8px;
 
-
-.strengthWrapper{
-
-margin-top:-8px;
-
-margin-bottom:18px;
-
+  margin-bottom: 18px;
 }
 
-.strengthBar{
+.strengthBar {
+  height: 6px;
 
-height:6px;
+  border-radius: 20px;
 
-border-radius:20px;
+  margin-bottom: 8px;
 
-margin-bottom:8px;
+  transition: 0.35s;
 
-transition:.35s;
+  background: #ddd;
 
-background:#ddd;
-
-width:100%;
-
+  width: 100%;
 }
 
-.strengthBar.weak{
+.strengthBar.weak {
+  background: #ef4444;
 
-background:#ef4444;
-
-width:30%;
-
+  width: 30%;
 }
 
-.strengthBar.medium{
+.strengthBar.medium {
+  background: #f59e0b;
 
-background:#f59e0b;
-
-width:65%;
-
+  width: 65%;
 }
 
-.strengthBar.strong{
+.strengthBar.strong {
+  background: #22c55e;
 
-background:#22c55e;
-
-width:100%;
-
+  width: 100%;
 }
 
-small{
+small {
+  font-size: 14px;
 
-font-size:14px;
-
-font-weight:600;
-
+  font-weight: 600;
 }
 
-small.weak{
-
-color:#ef4444;
-
+small.weak {
+  color: #ef4444;
 }
 
-small.medium{
-
-color:#f59e0b;
-
+small.medium {
+  color: #f59e0b;
 }
 
-small.strong{
+small.strong {
+  color: #22c55e;
+}
 
-color:#22c55e;
+.signupError {
+  margin: 12px 0;
+  padding: 12px 14px;
 
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: 10px;
+
+  color: #dc2626;
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.signupSuccess {
+  margin: 12px 0;
+  padding: 12px 14px;
+
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+
+  color: #16a34a;
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.createBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }

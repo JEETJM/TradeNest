@@ -1,36 +1,104 @@
-import "./Topbar.css";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { FaSearch, FaBell, FaMoon } from "react-icons/fa";
+import { FaBell, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
 
 function Topbar() {
+  const navigate = useNavigate();
+
+  const [user, setUser] = useState(null);
+
+  /* =====================================
+     GET LOGGED IN USER
+  ===================================== */
+
+  useEffect(() => {
+    const storedUser =
+      localStorage.getItem("tradenest_user") ||
+      sessionStorage.getItem("tradenest_user");
+
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+
+        setUser(parsedUser);
+      } catch (error) {
+        console.error("Unable to read logged in user:", error);
+      }
+    }
+  }, []);
+
+  /* =====================================
+     LOGOUT
+  ===================================== */
+
+  const handleLogout = () => {
+    // Local storage clear
+    localStorage.removeItem("tradenest_token");
+    localStorage.removeItem("tradenest_user");
+
+    // Session storage clear
+    sessionStorage.removeItem("tradenest_token");
+    sessionStorage.removeItem("tradenest_user");
+
+    // Go to login
+    navigate("/login", {
+      replace: true,
+    });
+  };
+
+  /* =====================================
+     USER NAME
+  ===================================== */
+
+  const firstName = user?.firstName || "User";
+
+  const fullName = user ? `${user.firstName} ${user.lastName}` : "User";
+
   return (
     <header className="topbar">
-      <div className="searchBox">
-        <FaSearch className="searchIcon" />
+      {/* =================================
+          LEFT
+      ================================= */}
 
-        <input type="text" placeholder="Search stocks, mutual funds..." />
+      <div className="topbarLeft">
+        <div>
+          <h2>Welcome back, {firstName} 👋</h2>
+
+          <p>Here's what's happening with your investments today.</p>
+        </div>
       </div>
 
+      {/* =================================
+          RIGHT
+      ================================= */}
+
       <div className="topbarRight">
-        <button className="iconBtn">
-          <FaMoon />
-        </button>
+        {/* Notification */}
 
-        <button className="iconBtn notificationBtn">
+        <button className="notificationBtn" type="button">
           <FaBell />
-
-          <span className="notificationDot"></span>
         </button>
 
-        <div className="profileBox">
-          <div className="profileImage">JM</div>
+        {/* User */}
+
+        <div className="profileInfo">
+          <FaUserCircle className="profileIcon" />
 
           <div>
-            <h4>Jeet Mondal</h4>
+            <strong>{fullName}</strong>
 
-            <p>Premium Investor</p>
+            <span>{user?.email || ""}</span>
           </div>
         </div>
+
+        {/* Logout */}
+
+        <button className="logoutBtn" type="button" onClick={handleLogout}>
+          <FaSignOutAlt />
+
+          <span>Logout</span>
+        </button>
       </div>
     </header>
   );

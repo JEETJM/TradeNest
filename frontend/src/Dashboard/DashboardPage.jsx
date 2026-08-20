@@ -17,6 +17,9 @@ import AnalyticsPage from "./Pages/AnalyticsPage";
 import ProfilePage from "./Pages/ProfilePage";
 import SettingsPage from "./Pages/SettingsPage";
 
+// Investment Offering
+import InvestmentPage from "../Landing_Page/InvestmentOfferings/InvestmentPage";
+
 function DashboardPage() {
   return (
     <div className="dashboard">
@@ -46,6 +49,9 @@ function DashboardPage() {
 
           {/* Analytics */}
           <Route path="analytics" element={<AnalyticsPage />} />
+
+          {/* Investment Offering */}
+          <Route path="investment-offering" element={<InvestmentPage />} />
 
           {/* Profile */}
           <Route path="profile" element={<ProfilePage />} />
