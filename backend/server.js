@@ -49,16 +49,39 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 
 /* =========================
+   ERROR HANDLER
+========================= */
+
+app.use((err, req, res, next) => {
+  console.error("Server error:", err);
+
+  res.status(500).json({
+    success: false,
+    message: err.message || "Internal server error.",
+  });
+});
+
+/* =========================
    SERVER
 ========================= */
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, async () => {
-  console.log(`TradeNest backend running on http://localhost:${PORT}`);
+  console.log(
+    `TradeNest backend running on http://localhost:${PORT}`,
+  );
 
-  console.log("SMTP USER exists:", Boolean(process.env.SMTP_USER));
-  console.log("SMTP PASS exists:", Boolean(process.env.SMTP_PASS));
+  console.log(
+    "SMTP USER exists:",
+    Boolean(process.env.SMTP_USER),
+  );
+
+  console.log(
+    "SMTP PASS exists:",
+    Boolean(process.env.SMTP_PASS),
+  );
+
   console.log("EMAIL FROM:", process.env.EMAIL_FROM);
 
   await verifyMailConnection();

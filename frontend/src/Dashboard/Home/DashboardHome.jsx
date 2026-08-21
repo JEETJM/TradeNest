@@ -5,32 +5,35 @@ import Holdings from "../Holdings/Holdings";
 import Analytics from "../Analytics/Analytics";
 import Orders from "../Orders/Orders";
 import MarketInsights from "../MarketInsights/MarketInsights";
+
 import dashboardData from "../../data/dashboard";
 
 function DashboardHome() {
   return (
-    <>
-      <section className="dashboardHome">
-        <h1>Welcome back, Jeet 👋</h1>
+    <section className="dashboardHome">
+      {/* HEADER */}
+      <div className="dashboardWelcome">
+        <div>
+          <h1>Dashboard</h1>
+          <p>Manage your investments and portfolio</p>
+        </div>
+      </div>
 
-        <p>Here's a quick overview of your investments and portfolio.</p>
-      </section>
-
-      {/* Summary Cards */}
+      {/* SUMMARY */}
       <SummaryCards data={dashboardData.summary} />
 
-      {/* Holdings */}
+      {/* HOLDINGS */}
       <Holdings holdings={dashboardData.holdings} />
 
-      {/* Analytics */}
+      {/* ANALYTICS */}
       <Analytics />
 
-      {/* Orders */}
-      <Orders orders={dashboardData.orders} />
+      {/* ORDERS */}
       <Orders orders={dashboardData.orders} />
 
+      {/* MARKET */}
       <MarketInsights />
-    </>
+    </section>
   );
 }
 

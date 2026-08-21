@@ -1,122 +1,372 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import dashboardData from "../../data/dashboard";
+import {
+  FaUser,
+  FaCamera,
+  FaCheckCircle,
+  FaLock,
+  FaEnvelope,
+} from "react-icons/fa";
+
+import { fetchCurrentUser, updateProfile } from "../../Auth/auth";
 
 import "./ProfilePage.css";
 
 function ProfilePage() {
-  const profile = dashboardData.profile || {};
+  const [user, setUser] = useState(null);
+
+  const [loading, setLoading] = useState(true);
+
+  const [saving, setSaving] = useState(false);
 
   const [editing, setEditing] = useState(false);
 
-  const [name, setName] = useState(profile.name || "Jeet Mondal");
+  const [success, setSuccess] = useState("");
 
-  const [email, setEmail] = useState(profile.email || "jeet@example.com");
+  const [error, setError] = useState("");
 
-  const [phone, setPhone] = useState(profile.phone || "+91 XXXXX XXXXX");
+  const [imageFile, setImageFile] = useState(null);
 
-  const [city, setCity] = useState(profile.city || "West Bengal");
+  const [preview, setPreview] = useState("");
 
-  const handleSave = () => {
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    phone: "",
+  });
+
+  /* =========================
+     LOAD USER
+  ========================= */
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const data = await fetchCurrentUser();
+
+        setUser(data);
+
+        setForm({
+          firstName: data.firstName || "",
+          lastName: data.lastName || "",
+          phone: data.phone || "",
+        });
+
+        setPreview(data.profileImage || "");
+      } catch (err) {
+        setError(err.message || "Unable to load profile.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUser();
+  }, []);
+
+  /* =========================
+     INPUT
+  ========================= */
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setForm((previous) => ({
+      ...previous,
+      [name]: value,
+    }));
+  };
+
+  /* =========================
+     IMAGE
+  ========================= */
+
+  const handleImageChange = (event) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setError("Please select a valid image.");
+
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Image must be smaller than 5MB.");
+
+      return;
+    }
+
+    setError("");
+
+    setImageFile(file);
+
+    setPreview(URL.createObjectURL(file));
+  };
+
+  /* =========================
+     SAVE
+  ========================= */
+
+  const handleSave = async () => {
+    setSuccess("");
+    setError("");
+
+    if (!form.firstName.trim()) {
+      setError("First name is required.");
+
+      return;
+    }
+
+    if (!form.lastName.trim()) {
+      setError("Last name is required.");
+
+      return;
+    }
+
+    try {
+      setSaving(true);
+
+      const updatedUser = await updateProfile({
+        firstName: form.firstName.trim(),
+
+        lastName: form.lastName.trim(),
+
+        phone: form.phone.trim(),
+
+        profileImage: imageFile,
+      });
+
+      setUser(updatedUser);
+
+      setForm({
+        firstName: updatedUser.firstName || "",
+
+        lastName: updatedUser.lastName || "",
+
+        phone: updatedUser.phone || "",
+      });
+
+      setPreview(updatedUser.profileImage || "");
+
+      setImageFile(null);
+
+      localStorage.setItem("tradenest_user", JSON.stringify(updatedUser));
+
+      sessionStorage.setItem("tradenest_user", JSON.stringify(updatedUser));
+
+      setEditing(false);
+
+      setSuccess("Profile updated successfully.");
+    } catch (err) {
+      setError(err.message || "Unable to update profile.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  /* =========================
+     CANCEL
+  ========================= */
+
+  const handleCancel = () => {
+    setForm({
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      phone: user?.phone || "",
+    });
+
+    setPreview(user?.profileImage || "");
+
+    setImageFile(null);
+
+    setError("");
+
     setEditing(false);
   };
 
+  if (loading) {
+    return (
+      <section className="profilePage">
+        <div className="profileLoading">Loading profile...</div>
+      </section>
+    );
+  }
+
+  const fullName = `${user?.firstName || ""} ${user?.lastName || ""}`.trim();
+
+  const avatarLetter = user?.firstName?.charAt(0)?.toUpperCase() || "U";
+
   return (
     <section className="profilePage">
-      {/* ================= HEADER ================= */}
+      {/* HEADER */}
 
       <div className="profileHeader">
         <div>
-          <h1>Profile</h1>
+          <h1>My Profile</h1>
 
-          <p>Manage your personal and account information.</p>
+          <p>Manage your personal information and account details.</p>
         </div>
 
         {!editing ?
-          <button className="editProfileBtn" onClick={() => setEditing(true)}>
+          <button
+            className="editProfileMainBtn"
+            onClick={() => setEditing(true)}
+          >
             Edit Profile
           </button>
-        : <button className="saveProfileBtn" onClick={handleSave}>
-            Save Changes
-          </button>
+        : <div className="profileActions">
+            <button
+              className="cancelProfileBtn"
+              onClick={handleCancel}
+              disabled={saving}
+            >
+              Cancel
+            </button>
+
+            <button
+              className="saveProfileBtn"
+              onClick={handleSave}
+              disabled={saving}
+            >
+              {saving ? "Saving..." : "Save Changes"}
+            </button>
+          </div>
         }
       </div>
 
-      {/* ================= PROFILE CARD ================= */}
+      {/* MESSAGES */}
+
+      {success && (
+        <div className="profileSuccess">
+          <FaCheckCircle />
+          {success}
+        </div>
+      )}
+
+      {error && <div className="profileError">{error}</div>}
+
+      {/* PROFILE HERO */}
+
+      <div className="profileHero">
+        <div className="profileHeroLeft">
+          <div className="largeProfileAvatar">
+            {preview ?
+              <img src={preview} alt={fullName} />
+            : avatarLetter}
+
+            {editing && (
+              <>
+                <label
+                  htmlFor="profileImage"
+                  className="cameraButton"
+                  title="Change profile photo"
+                >
+                  <FaCamera />
+                </label>
+
+                <input
+                  id="profileImage"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  hidden
+                />
+              </>
+            )}
+          </div>
+
+          <div>
+            <h2>{fullName}</h2>
+
+            <p>{user?.email}</p>
+
+            <span className="profileVerified">
+              <FaCheckCircle />
+              Account Active
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* GRID */}
 
       <div className="profileGrid">
-        {/* Personal Information */}
+        {/* PERSONAL INFORMATION */}
 
         <div className="profileCard">
           <div className="profileCardHeader">
-            <h2>Personal Information</h2>
+            <div>
+              <h2>Personal Information</h2>
 
-            <p>Your basic account information.</p>
+              <p>Your basic account information.</p>
+            </div>
+
+            <FaUser />
           </div>
 
           <div className="profileForm">
-            <div className="profileAvatar">
-              {name
-                .split(" ")
-                .map((word) => word[0])
-                .join("")
-                .slice(0, 2)
-                .toUpperCase()}
-            </div>
+            <div className="profileFormGrid">
+              <div className="profileField">
+                <label>First Name</label>
 
-            <div className="profileField">
-              <label>Full Name</label>
+                <input
+                  name="firstName"
+                  value={form.firstName}
+                  onChange={handleChange}
+                  disabled={!editing}
+                />
+              </div>
 
-              <input
-                type="text"
-                value={name}
-                disabled={!editing}
-                onChange={(e) => setName(e.target.value)}
-              />
+              <div className="profileField">
+                <label>Last Name</label>
+
+                <input
+                  name="lastName"
+                  value={form.lastName}
+                  onChange={handleChange}
+                  disabled={!editing}
+                />
+              </div>
             </div>
 
             <div className="profileField">
               <label>Email Address</label>
 
-              <input
-                type="email"
-                value={email}
-                disabled={!editing}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+              <div className="inputWithIcon">
+                <FaEnvelope />
+
+                <input value={user?.email || ""} disabled />
+              </div>
+
+              <small>Email address cannot be changed.</small>
             </div>
 
             <div className="profileField">
               <label>Phone Number</label>
 
               <input
-                type="text"
-                value={phone}
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
                 disabled={!editing}
-                onChange={(e) => setPhone(e.target.value)}
-              />
-            </div>
-
-            <div className="profileField">
-              <label>City</label>
-
-              <input
-                type="text"
-                value={city}
-                disabled={!editing}
-                onChange={(e) => setCity(e.target.value)}
+                placeholder="Enter phone number"
               />
             </div>
           </div>
         </div>
 
-        {/* Account Information */}
+        {/* ACCOUNT */}
 
         <div className="profileCard">
           <div className="profileCardHeader">
-            <h2>Account Information</h2>
+            <div>
+              <h2>Account Information</h2>
 
-            <p>Your TradeNest account details.</p>
+              <p>Your TradeNest account status.</p>
+            </div>
+
+            <FaLock />
           </div>
 
           <div className="accountInfo">
@@ -127,60 +377,26 @@ function ProfilePage() {
             </div>
 
             <div className="accountRow">
-              <span>Account Type</span>
+              <span>Email Verification</span>
 
-              <strong>Individual</strong>
+              <strong className="verifiedStatus">Verified</strong>
             </div>
 
             <div className="accountRow">
-              <span>Trading Segment</span>
+              <span>Member Since</span>
 
-              <strong>Equity</strong>
+              <strong>
+                {user?.createdAt ?
+                  new Date(user.createdAt).toLocaleDateString("en-IN")
+                : "-"}
+              </strong>
             </div>
 
             <div className="accountRow">
               <span>Account ID</span>
 
-              <strong>TN-2026-001</strong>
+              <strong>{user?.id || user?._id || "-"}</strong>
             </div>
-
-            <div className="accountRow">
-              <span>KYC Status</span>
-
-              <strong className="verifiedStatus">Verified</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ================= SECURITY ================= */}
-
-      <div className="profileCard securityCard">
-        <div className="profileCardHeader">
-          <h2>Security</h2>
-
-          <p>Manage your account security.</p>
-        </div>
-
-        <div className="securityRows">
-          <div className="securityRow">
-            <div>
-              <strong>Password</strong>
-
-              <p>Last changed recently</p>
-            </div>
-
-            <button>Change Password</button>
-          </div>
-
-          <div className="securityRow">
-            <div>
-              <strong>Two-Factor Authentication</strong>
-
-              <p>Add an extra layer of security</p>
-            </div>
-
-            <button>Enable 2FA</button>
           </div>
         </div>
       </div>

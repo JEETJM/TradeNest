@@ -39,6 +39,20 @@ const userSchema = new mongoose.Schema(
     },
 
     /* =========================
+       PROFILE IMAGE
+    ========================= */
+
+    profileImage: {
+      type: String,
+      default: "",
+    },
+
+    cloudinaryPublicId: {
+      type: String,
+      default: "",
+    },
+
+    /* =========================
        PASSWORD RESET
     ========================= */
 
@@ -52,7 +66,6 @@ const userSchema = new mongoose.Schema(
       default: null,
     },
   },
-
   {
     timestamps: true,
   },

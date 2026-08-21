@@ -1,104 +1,132 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { FaBell, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
+import { FaBell, FaChevronDown, FaSignOutAlt } from "react-icons/fa";
+
+import "./Topbar.css";
+
+import { fetchCurrentUser, getStoredUser, logout } from "../../Auth/auth";
 
 function Topbar() {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(getStoredUser());
 
-  /* =====================================
-     GET LOGGED IN USER
-  ===================================== */
+  const [showMenu, setShowMenu] = useState(false);
+
+  /* =====================================================
+     GET CURRENT USER
+  ===================================================== */
 
   useEffect(() => {
-    const storedUser =
-      localStorage.getItem("tradenest_user") ||
-      sessionStorage.getItem("tradenest_user");
-
-    if (storedUser) {
+    const loadUser = async () => {
       try {
-        const parsedUser = JSON.parse(storedUser);
+        const currentUser = await fetchCurrentUser();
 
-        setUser(parsedUser);
+        setUser(currentUser);
       } catch (error) {
-        console.error("Unable to read logged in user:", error);
+        console.error("Unable to load current user:", error);
       }
-    }
+    };
+
+    loadUser();
   }, []);
 
-  /* =====================================
+  /* =====================================================
      LOGOUT
-  ===================================== */
+  ===================================================== */
 
   const handleLogout = () => {
-    // Local storage clear
-    localStorage.removeItem("tradenest_token");
-    localStorage.removeItem("tradenest_user");
+    logout();
 
-    // Session storage clear
-    sessionStorage.removeItem("tradenest_token");
-    sessionStorage.removeItem("tradenest_user");
-
-    // Go to login
     navigate("/login", {
       replace: true,
     });
   };
 
-  /* =====================================
-     USER NAME
-  ===================================== */
+  /* =====================================================
+     USER
+  ===================================================== */
 
   const firstName = user?.firstName || "User";
 
   const fullName = user ? `${user.firstName} ${user.lastName}` : "User";
 
+  const email = user?.email || "";
+
+  const initial = firstName.charAt(0).toUpperCase();
+
   return (
     <header className="topbar">
-      {/* =================================
+      {/* =================================================
           LEFT
-      ================================= */}
+      ================================================= */}
 
       <div className="topbarLeft">
         <div>
-          <h2>Welcome back, {firstName} 👋</h2>
+          <h2>Dashboard</h2>
 
-          <p>Here's what's happening with your investments today.</p>
+          <p>Manage your investments and portfolio</p>
         </div>
       </div>
 
-      {/* =================================
+      {/* =================================================
           RIGHT
-      ================================= */}
+      ================================================= */}
 
       <div className="topbarRight">
         {/* Notification */}
 
-        <button className="notificationBtn" type="button">
+        <button type="button" className="iconBtn" title="Notifications">
           <FaBell />
+
+          <span className="notificationDot" />
         </button>
 
-        {/* User */}
+        {/* Profile */}
 
-        <div className="profileInfo">
-          <FaUserCircle className="profileIcon" />
+        <div className="profileDropdown">
+          <button
+            type="button"
+            className="profileBox"
+            onClick={() => setShowMenu(!showMenu)}
+          >
+            <div className="profileImage">{initial}</div>
 
-          <div>
-            <strong>{fullName}</strong>
+            <div className="profileText">
+              <strong>{fullName}</strong>
 
-            <span>{user?.email || ""}</span>
-          </div>
+              <span>{email}</span>
+            </div>
+
+            <FaChevronDown
+              className={showMenu ? "profileArrow rotate" : "profileArrow"}
+            />
+          </button>
+
+          {/* Dropdown */}
+
+          {showMenu && (
+            <div className="profileMenu">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowMenu(false);
+
+                  navigate("/dashboard/profile");
+                }}
+              >
+                <span>Profile</span>
+              </button>
+
+              <button type="button" onClick={handleLogout} className="danger">
+                <FaSignOutAlt />
+
+                <span>Logout</span>
+              </button>
+            </div>
+          )}
         </div>
-
-        {/* Logout */}
-
-        <button className="logoutBtn" type="button" onClick={handleLogout}>
-          <FaSignOutAlt />
-
-          <span>Logout</span>
-        </button>
       </div>
     </header>
   );

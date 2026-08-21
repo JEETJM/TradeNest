@@ -1,95 +1,159 @@
 .settingsPage {
-  padding: 30px;
-  background: #f8f9fb;
-  min-height: calc(100vh - 70px);
+  min-height: calc(100vh - 100px);
+
+  padding: 5px 0 40px;
+
+  color: var(--text);
 }
 
+/* HEADER */
+
 .settingsHeader {
-  margin-bottom: 28px;
+  margin-bottom: 25px;
 }
 
 .settingsHeader h1 {
   margin: 0;
+
+  color: var(--text);
+
   font-size: 30px;
-  color: #222;
 }
 
 .settingsHeader p {
   margin: 7px 0 0;
-  color: #777;
+
+  color: var(--text-secondary);
+
+  font-size: 14px;
 }
 
-/* Card */
+/* CARD */
 
 .settingsCard {
-  background: white;
-  border: 1px solid #eee;
-  border-radius: 14px;
-  margin-bottom: 22px;
+  background: var(--card);
+
+  border: 1px solid var(--border);
+
+  border-radius: 16px;
+
+  margin-bottom: 20px;
+
   overflow: hidden;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.03);
+
+  transition:
+    background 0.3s,
+    border-color 0.3s;
 }
 
 .settingsCardHeader {
-  padding: 22px;
-  border-bottom: 1px solid #eee;
+  padding: 22px 24px;
+
+  border-bottom: 1px solid var(--border);
 }
 
 .settingsCardHeader h2 {
   margin: 0;
-  font-size: 19px;
+
+  color: var(--text);
+
+  font-size: 18px;
 }
 
 .settingsCardHeader p {
   margin: 6px 0 0;
-  color: #888;
+
+  color: var(--text-secondary);
+
   font-size: 13px;
 }
 
 .settingsRows {
-  padding: 5px 22px;
+  padding: 0 24px;
 }
 
+/* ROW */
+
 .settingsRow {
+  min-height: 76px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
-  padding: 20px 0;
+  gap: 20px;
 
-  border-bottom: 1px solid #f1f1f1;
+  border-bottom: 1px solid var(--border);
 }
 
 .settingsRow:last-child {
   border-bottom: none;
 }
 
+.settingsRowInfo {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+.settingsIcon {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 11px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #edf5ff;
+
+  color: #2878d7;
+
+  flex-shrink: 0;
+}
+
 .settingsRow strong {
+  color: var(--text);
+
   font-size: 14px;
-  color: #333;
 }
 
 .settingsRow p {
   margin: 5px 0 0;
-  color: #888;
+
+  color: var(--text-secondary);
+
   font-size: 12px;
 }
 
-/* Toggle */
+/* TOGGLE */
 
 .toggle {
   width: 48px;
   height: 26px;
 
   border: none;
+
   border-radius: 20px;
 
-  background: #ddd;
+  background: #64748b;
 
   padding: 3px;
 
   cursor: pointer;
 
-  transition: 0.2s;
+  transition: 0.25s;
+
+  flex-shrink: 0;
 }
 
 .toggle span {
@@ -102,44 +166,58 @@
 
   border-radius: 50%;
 
-  transition: 0.2s;
+  transition: 0.25s;
 }
 
 .toggle.active {
-  background: #387ed1;
+  background: #2878d7;
 }
 
 .toggle.active span {
   transform: translateX(22px);
 }
 
-/* Action */
+/* ACTION */
 
 .settingsAction {
-  border: 1px solid #387ed1;
-  background: white;
-  color: #387ed1;
+  border: 1px solid #2878d7;
+
+  background: transparent;
+
+  color: #2878d7;
 
   padding: 9px 17px;
 
-  border-radius: 7px;
+  border-radius: 8px;
 
   cursor: pointer;
+
+  font-weight: 600;
 }
 
 .settingsAction:hover {
-  background: #edf5ff;
+  background: #2878d7;
+
+  color: white;
 }
 
-/* Responsive */
+/* MOBILE */
 
 @media (max-width: 650px) {
   .settingsPage {
-    padding: 20px 15px;
+    padding: 0 0 30px;
   }
 
   .settingsRow {
-    align-items: flex-start;
-    gap: 15px;
+    min-height: 85px;
+  }
+
+  .settingsRowInfo {
+    gap: 10px;
+  }
+
+  .settingsIcon {
+    width: 35px;
+    height: 35px;
   }
 }
