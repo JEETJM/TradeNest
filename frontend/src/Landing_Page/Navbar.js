@@ -1,71 +1,92 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Home/styles/Navbar.css";
 
 function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
       <div className="container">
-        {/* Logo */}
+        {/* ================= LOGO ================= */}
 
-        <a className="navbar-brand" href="/">
+        <Link className="navbar-brand" to="/">
           <img
             src="/Media/Images/logo.png"
             alt="TradeNest"
-            style={{ height: "70px", width: "260px" }}
             className="logo"
           />
-        </a>
+        </Link>
 
-        {/* Mobile Toggle */}
+        {/* ================= MOBILE TOGGLE ================= */}
 
         <button
           className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* Menu */}
+        {/* ================= NAVIGATION ================= */}
 
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto">
+          <ul className="navbar-nav ms-auto align-items-lg-center">
+
+            {/* SIGNUP */}
+
             <li className="nav-item">
-              <a className="nav-link" href="/open-account">
+              <Link className="nav-link" to="/signup">
                 Signup
-              </a>
+              </Link>
             </li>
 
+            {/* ABOUT */}
+
             <li className="nav-item">
-              <a className="nav-link" href="/about">
+              <Link className="nav-link" to="/about">
                 About
-              </a>
+              </Link>
             </li>
 
+            {/* PRODUCTS */}
+
             <li className="nav-item">
-              <a className="nav-link" href="/products">
+              <Link className="nav-link" to="/products">
                 Products
-              </a>
+              </Link>
             </li>
 
+            {/* PRICING */}
+
             <li className="nav-item">
-              <a className="nav-link" href="/pricing">
+              <Link className="nav-link" to="/pricing">
                 Pricing
-              </a>
+              </Link>
             </li>
 
+            {/* SUPPORT */}
+
             <li className="nav-item">
-              <a className="nav-link" href="/support">
+              <Link className="nav-link" to="/support">
                 Support
-              </a>
+              </Link>
             </li>
 
+            {/* MENU */}
+
             <li className="nav-item">
-              <button className="menu-btn">
+              <button
+                type="button"
+                className="menu-btn"
+                aria-label="Open menu"
+              >
                 <i className="fa-solid fa-bars"></i>
               </button>
             </li>
+
           </ul>
         </div>
       </div>

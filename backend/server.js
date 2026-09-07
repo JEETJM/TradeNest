@@ -9,6 +9,7 @@ const connectDB = require("./config/db");
 const { verifyMailConnection } = require("./config/mail");
 
 const authRoutes = require("./routes/authRoutes");
+const tradeRoutes = require("./routes/tradeRoutes");
 
 /* =========================
    DATABASE
@@ -47,6 +48,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/trades", tradeRoutes);
 
 /* =========================
    ERROR HANDLER

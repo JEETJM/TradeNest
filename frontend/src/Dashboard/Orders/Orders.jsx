@@ -14,67 +14,215 @@ function Orders() {
   const stocks = dashboardData.watchlist || [];
 
   const initialStock =
-    stocks.find((stock) => stock.symbol === stockSymbol) || stocks[0] || null;
+    stocks.find((stock) => stock.symbol === stockSymbol) ||
+    stocks[0] ||
+    null;
 
-  const [selectedStock, setSelectedStock] = useState(initialStock);
+  const [selectedStock, setSelectedStock] =
+    useState(initialStock);
 
   const [orderType, setOrderType] = useState(
-    action === "SELL" ? "SELL" : "BUY",
+    action === "SELL" ? "SELL" : "BUY"
   );
 
   const [quantity, setQuantity] = useState(1);
 
-  const [price, setPrice] = useState(initialStock?.currentPrice || 0);
+  const [price, setPrice] = useState(
+    initialStock?.currentPrice || 0
+  );
 
-  const [productType, setProductType] = useState("CNC");
+  const [productType, setProductType] =
+    useState("CNC");
 
-  const [orderStatus, setOrderStatus] = useState("");
+  const [selectedOrderType, setSelectedOrderType] =
+    useState("MARKET");
 
-  // -----------------------------
-  // Change Stock
-  // -----------------------------
+  const [orderStatus, setOrderStatus] =
+    useState("");
+
+  const [loading, setLoading] =
+    useState(false);
+
+  /* =====================================================
+     CHANGE STOCK
+  ===================================================== */
 
   const handleStockChange = (stock) => {
     setSelectedStock(stock);
-
-    setPrice(stock.currentPrice);
-
+    setPrice(stock.currentPrice || 0);
     setOrderStatus("");
   };
 
-  // -----------------------------
-  // Change BUY / SELL
-  // -----------------------------
+  /* =====================================================
+     CHANGE BUY / SELL
+  ===================================================== */
 
   const handleOrderTypeChange = (type) => {
     setOrderType(type);
-
     setOrderStatus("");
   };
 
-  // -----------------------------
-  // Total Amount
-  // -----------------------------
+  /* =====================================================
+     TOTAL
+  ===================================================== */
 
-  const totalAmount = quantity * price;
+  const totalAmount =
+    Number(quantity || 0) * Number(price || 0);
 
-  // -----------------------------
-  // Place Order
-  // -----------------------------
+  /* =====================================================
+     PLACE BUY / SELL ORDER
+  ===================================================== */
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     if (!selectedStock) {
+      setOrderStatus("❌ Please select a stock.");
       return;
     }
 
-    setOrderStatus(
-      `${orderType} order placed successfully for ${quantity} ${selectedStock.symbol}`,
+    if (loading) return;
+
+    const cleanQuantity = Number(quantity);
+    const cleanPrice = Number(price);
+
+    /* =========================
+       VALIDATE QUANTITY
+    ========================= */
+
+    if (
+      !Number.isFinite(cleanQuantity) ||
+      cleanQuantity <= 0
+    ) {
+      setOrderStatus(
+        "❌ Quantity must be greater than 0."
+      );
+      return;
+    }
+
+    /* =========================
+       VALIDATE PRICE
+    ========================= */
+
+    if (
+      !Number.isFinite(cleanPrice) ||
+      cleanPrice <= 0
+    ) {
+      setOrderStatus(
+        "❌ Price must be greater than 0."
+      );
+      return;
+    }
+
+    /* =========================
+       GET JWT TOKEN
+    ========================= */
+
+    const token =
+      localStorage.getItem("tradenest_token") ||
+      sessionStorage.getItem("tradenest_token");
+
+    if (!token) {
+      setOrderStatus(
+        "❌ Login session expired. Please login again."
+      );
+      return;
+    }
+
+    /* =========================
+       REQUEST BODY
+    ========================= */
+
+    const orderData = {
+      symbol: selectedStock.symbol,
+      company: selectedStock.company,
+      side: orderType,
+      quantity: cleanQuantity,
+      price: cleanPrice,
+      productType: productType,
+      orderType: selectedOrderType,
+    };
+
+    console.log(
+      "📤 TRADE REQUEST:",
+      orderData
     );
+
+    try {
+      setLoading(true);
+      setOrderStatus("Placing order...");
+
+      /* =========================
+         CALL BACKEND
+      ========================= */
+
+      const response = await fetch(
+        "http://localhost:5000/api/trades/orders",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+
+          body: JSON.stringify(orderData),
+        }
+      );
+
+      const data = await response.json();
+
+      console.log(
+        "📥 TRADE RESPONSE:",
+        data
+      );
+
+      /* =========================
+         BACKEND ERROR
+      ========================= */
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+            "Unable to place order."
+        );
+      }
+
+      /* =========================
+         SUCCESS
+      ========================= */
+
+      setOrderStatus(
+        `✓ ${data.message}`
+      );
+
+      /* =========================
+         REFRESH DASHBOARD DATA
+      ========================= */
+
+      window.dispatchEvent(
+        new Event("tradenest-update")
+      );
+
+      console.log(
+        "✅ ORDER SUCCESSFULLY SENT TO BACKEND"
+      );
+
+    } catch (error) {
+      console.error(
+        "❌ PLACE ORDER ERROR:",
+        error
+      );
+
+      setOrderStatus(
+        `❌ ${error.message}`
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // -----------------------------
-  // No Stock
-  // -----------------------------
+  /* =====================================================
+     NO STOCK
+  ===================================================== */
 
   if (!selectedStock) {
     return (
@@ -88,237 +236,364 @@ function Orders() {
     );
   }
 
+  /* =====================================================
+     UI
+  ===================================================== */
+
   return (
     <section className="ordersPage">
-      {/* =========================
-          HEADER
-      ========================== */}
+
+      {/* HEADER */}
 
       <div className="ordersHeader">
         <div>
           <h1>Orders</h1>
 
-          <p>Place and manage your stock orders.</p>
+          <p>
+            Place and manage your stock orders.
+          </p>
         </div>
       </div>
 
-      {/* =========================
-          MAIN LAYOUT
-      ========================== */}
+      {/* MAIN LAYOUT */}
 
       <div className="ordersLayout">
-        {/* =========================
-            STOCK LIST
-        ========================== */}
+
+        {/* STOCK LIST */}
 
         <div className="stockSelector">
+
           <div className="sectionTitle">
             <h2>Select Stock</h2>
           </div>
 
           {stocks.map((stock) => (
             <button
-              key={stock.id}
+              type="button"
+              key={stock.id || stock.symbol}
               className={
-                selectedStock.id === stock.id ?
-                  "stockSelectorItem selected"
-                : "stockSelectorItem"
+                selectedStock.symbol ===
+                stock.symbol
+                  ? "stockSelectorItem selected"
+                  : "stockSelectorItem"
               }
-              onClick={() => handleStockChange(stock)}
+              onClick={() =>
+                handleStockChange(stock)
+              }
             >
               <div>
-                <strong>{stock.symbol}</strong>
+                <strong>
+                  {stock.symbol}
+                </strong>
 
-                <small>{stock.company}</small>
+                <small>
+                  {stock.company}
+                </small>
               </div>
 
-              <span>₹{stock.currentPrice.toLocaleString("en-IN")}</span>
+              <span>
+                ₹
+                {Number(
+                  stock.currentPrice || 0
+                ).toLocaleString("en-IN")}
+              </span>
             </button>
           ))}
+
         </div>
 
-        {/* =========================
-            ORDER CARD
-        ========================== */}
+        {/* ORDER CARD */}
 
         <div className="orderCard">
-          {/* Stock Header */}
+
+          {/* STOCK HEADER */}
 
           <div className="orderStockHeader">
-            <div>
-              <h2>{selectedStock.symbol}</h2>
 
-              <p>{selectedStock.company}</p>
+            <div>
+              <h2>
+                {selectedStock.symbol}
+              </h2>
+
+              <p>
+                {selectedStock.company}
+              </p>
             </div>
 
             <div className="currentPrice">
-              ₹{selectedStock.currentPrice.toLocaleString("en-IN")}
+              ₹
+              {Number(
+                selectedStock.currentPrice || 0
+              ).toLocaleString("en-IN")}
             </div>
+
           </div>
 
-          {/* =========================
-              BUY / SELL
-          ========================== */}
+          {/* BUY / SELL */}
 
           <div className="orderTabs">
+
             <button
-              className={orderType === "BUY" ? "buyActive" : ""}
-              onClick={() => handleOrderTypeChange("BUY")}
+              type="button"
+              className={
+                orderType === "BUY"
+                  ? "buyActive"
+                  : ""
+              }
+              onClick={() =>
+                handleOrderTypeChange("BUY")
+              }
             >
               BUY
             </button>
 
             <button
-              className={orderType === "SELL" ? "sellActive" : ""}
-              onClick={() => handleOrderTypeChange("SELL")}
+              type="button"
+              className={
+                orderType === "SELL"
+                  ? "sellActive"
+                  : ""
+              }
+              onClick={() =>
+                handleOrderTypeChange("SELL")
+              }
             >
               SELL
             </button>
+
           </div>
 
-          {/* =========================
-              PRODUCT
-          ========================== */}
+          {/* PRODUCT */}
 
           <div className="orderField">
-            <label>Product</label>
+
+            <label>
+              Product
+            </label>
 
             <div className="productButtons">
+
               <button
-                className={productType === "CNC" ? "selectedProduct" : ""}
-                onClick={() => setProductType("CNC")}
+                type="button"
+                className={
+                  productType === "CNC"
+                    ? "selectedProduct"
+                    : ""
+                }
+                onClick={() =>
+                  setProductType("CNC")
+                }
               >
                 CNC
               </button>
 
               <button
-                className={productType === "MIS" ? "selectedProduct" : ""}
-                onClick={() => setProductType("MIS")}
+                type="button"
+                className={
+                  productType === "MIS"
+                    ? "selectedProduct"
+                    : ""
+                }
+                onClick={() =>
+                  setProductType("MIS")
+                }
               >
                 MIS
               </button>
+
             </div>
           </div>
 
-          {/* =========================
-              QUANTITY
-          ========================== */}
+          {/* QUANTITY */}
 
           <div className="orderField">
-            <label>Quantity</label>
+
+            <label>
+              Quantity
+            </label>
 
             <input
               type="number"
               min="1"
               value={quantity}
               onChange={(e) => {
-                const value = Number(e.target.value);
+                const value =
+                  Number(e.target.value);
 
-                setQuantity(value < 1 ? 1 : value);
+                setQuantity(
+                  value < 1 ? 1 : value
+                );
 
                 setOrderStatus("");
               }}
             />
+
           </div>
 
-          {/* =========================
-              PRICE
-          ========================== */}
+          {/* PRICE */}
 
           <div className="orderField">
-            <label>Price</label>
+
+            <label>
+              Price
+            </label>
 
             <input
               type="number"
               min="0"
+              step="0.01"
               value={price}
               onChange={(e) => {
-                setPrice(Number(e.target.value));
+                setPrice(
+                  Number(e.target.value)
+                );
 
                 setOrderStatus("");
               }}
             />
+
           </div>
 
-          {/* =========================
-              ORDER TYPE
-          ========================== */}
+          {/* ORDER TYPE */}
 
           <div className="orderField">
-            <label>Order Type</label>
 
-            <select>
-              <option>MARKET</option>
+            <label>
+              Order Type
+            </label>
 
-              <option>LIMIT</option>
+            <select
+              value={selectedOrderType}
+              onChange={(e) => {
+                setSelectedOrderType(
+                  e.target.value
+                );
 
-              <option>SL</option>
+                setOrderStatus("");
+              }}
+            >
+              <option value="MARKET">
+                MARKET
+              </option>
 
-              <option>SL-M</option>
+              <option value="LIMIT">
+                LIMIT
+              </option>
+
+              <option value="SL">
+                SL
+              </option>
+
+              <option value="SL-M">
+                SL-M
+              </option>
             </select>
+
           </div>
 
-          {/* =========================
-              ORDER SUMMARY
-          ========================== */}
+          {/* ORDER SUMMARY */}
 
           <div className="orderSummary">
-            <div>
-              <span>Order</span>
 
-              <strong>{orderType}</strong>
+            <div>
+              <span>
+                Order
+              </span>
+
+              <strong>
+                {orderType}
+              </strong>
             </div>
 
             <div>
-              <span>Product</span>
+              <span>
+                Product
+              </span>
 
-              <strong>{productType}</strong>
+              <strong>
+                {productType}
+              </strong>
             </div>
 
             <div>
-              <span>Quantity</span>
+              <span>
+                Quantity
+              </span>
 
-              <strong>{quantity}</strong>
+              <strong>
+                {quantity}
+              </strong>
             </div>
 
             <div>
-              <span>Price</span>
-
-              <strong>₹{price.toLocaleString("en-IN")}</strong>
-            </div>
-
-            <div className="totalRow">
-              <span>Total Amount</span>
+              <span>
+                Price
+              </span>
 
               <strong>
                 ₹
-                {totalAmount.toLocaleString("en-IN", {
-                  maximumFractionDigits: 2,
-                })}
+                {Number(price).toLocaleString(
+                  "en-IN",
+                  {
+                    maximumFractionDigits: 2,
+                  }
+                )}
               </strong>
             </div>
+
+            <div className="totalRow">
+
+              <span>
+                Total Amount
+              </span>
+
+              <strong>
+                ₹
+                {totalAmount.toLocaleString(
+                  "en-IN",
+                  {
+                    maximumFractionDigits: 2,
+                  }
+                )}
+              </strong>
+
+            </div>
+
           </div>
 
-          {/* =========================
-              SUCCESS MESSAGE
-          ========================== */}
+          {/* STATUS */}
 
-          {orderStatus && <div className="orderSuccess">✓ {orderStatus}</div>}
+          {orderStatus && (
+            <div
+              className={
+                orderStatus.startsWith("❌")
+                  ? "orderError"
+                  : "orderSuccess"
+              }
+            >
+              {orderStatus}
+            </div>
+          )}
 
-          {/* =========================
-              PLACE ORDER
-          ========================== */}
+          {/* PLACE ORDER */}
 
           <button
+            type="button"
+            disabled={loading}
             className={
-              orderType === "BUY" ?
-                "placeOrder buyOrder"
-              : "placeOrder sellOrder"
+              orderType === "BUY"
+                ? "placeOrder buyOrder"
+                : "placeOrder sellOrder"
             }
             onClick={handlePlaceOrder}
           >
-            {orderType === "BUY" ? "Place Buy Order" : "Place Sell Order"}
+            {loading
+              ? "Placing Order..."
+              : orderType === "BUY"
+                ? "Place Buy Order"
+                : "Place Sell Order"}
           </button>
+
         </div>
       </div>
     </section>

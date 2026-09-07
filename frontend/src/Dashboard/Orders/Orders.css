@@ -356,3 +356,29 @@
     gap: 10px;
   }
 }
+.orderError {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fff1f1;
+  color: #d93025;
+  border: 1px solid #ffd5d5;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.orderSuccess {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #ecfdf3;
+  color: #16834b;
+  border: 1px solid #ccefdc;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.placeOrder:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}

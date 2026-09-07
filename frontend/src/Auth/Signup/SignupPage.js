@@ -6,6 +6,8 @@ import {
   FaGoogle,
   FaEye,
   FaEyeSlash,
+  FaArrowRight,
+  FaCheckCircle,
 } from "react-icons/fa";
 
 import { useState } from "react";
@@ -32,6 +34,10 @@ function SignupPage() {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
+  /* =====================================================
+     HANDLE INPUT
+  ===================================================== */
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -44,6 +50,10 @@ function SignupPage() {
     setSuccess("");
   };
 
+  /* =====================================================
+     PASSWORD STRENGTH
+  ===================================================== */
+
   const getPasswordStrength = () => {
     const password = form.password;
 
@@ -51,13 +61,15 @@ function SignupPage() {
       return {
         text: "",
         className: "",
+        width: "0%",
       };
     }
 
     if (password.length < 6) {
       return {
-        text: "Weak Password",
+        text: "Weak password",
         className: "weak",
+        width: "30%",
       };
     }
 
@@ -67,18 +79,24 @@ function SignupPage() {
       /[0-9]/.test(password)
     ) {
       return {
-        text: "Strong Password",
+        text: "Strong password",
         className: "strong",
+        width: "100%",
       };
     }
 
     return {
-      text: "Medium Password",
+      text: "Medium password",
       className: "medium",
+      width: "65%",
     };
   };
 
   const strength = getPasswordStrength();
+
+  /* =====================================================
+     VALIDATION
+  ===================================================== */
 
   const validateForm = () => {
     if (!form.firstName.trim()) {
@@ -92,11 +110,13 @@ function SignupPage() {
     }
 
     if (!form.email.trim()) {
-      setError("Email is required.");
+      setError("Email address is required.");
       return false;
     }
 
-    if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(form.email)) {
+    if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(form.email)
+    ) {
       setError("Please enter a valid email address.");
       return false;
     }
@@ -124,6 +144,10 @@ function SignupPage() {
     return true;
   };
 
+  /* =====================================================
+     SIGNUP
+  ===================================================== */
+
   const handleSignup = async (e) => {
     e.preventDefault();
 
@@ -137,21 +161,24 @@ function SignupPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/signup", {
-        method: "POST",
+      const response = await fetch(
+        "http://localhost:5000/api/auth/signup",
+        {
+          method: "POST",
 
-        headers: {
-          "Content-Type": "application/json",
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            firstName: form.firstName.trim(),
+            lastName: form.lastName.trim(),
+            email: form.email.trim(),
+            password: form.password,
+            phone: form.phone.trim(),
+          }),
         },
-
-        body: JSON.stringify({
-          firstName: form.firstName.trim(),
-          lastName: form.lastName.trim(),
-          email: form.email.trim(),
-          password: form.password,
-          phone: form.phone.trim(),
-        }),
-      });
+      );
 
       const data = await response.json();
 
@@ -160,27 +187,26 @@ function SignupPage() {
         return;
       }
 
-      /*
-       * =========================
-       * SAVE AUTH DATA
-       * =========================
-       */
+      /* =================================================
+         SAVE AUTH DATA
+      ================================================= */
 
       localStorage.setItem("tradenest_token", data.token);
 
-      localStorage.setItem("tradenest_user", JSON.stringify(data.user));
+      localStorage.setItem(
+        "tradenest_user",
+        JSON.stringify(data.user),
+      );
 
       setSuccess("Account created successfully!");
 
-      /*
-       * =========================
-       * REDIRECT
-       * =========================
-       */
+      /* =================================================
+         REDIRECT
+      ================================================= */
 
       setTimeout(() => {
         navigate("/dashboard");
-      }, 800);
+      }, 1000);
     } catch (error) {
       console.error("Signup error:", error);
 
@@ -192,234 +218,306 @@ function SignupPage() {
     }
   };
 
+  /* =====================================================
+     UI
+  ===================================================== */
+
   return (
-    <section className="signupPage">
-      <div className="signupContainer">
-        {/* ================= LEFT ================= */}
+    <main className="signupPage">
 
-        <div className="leftSide">
-          <div className="leftContent">
-            <span className="welcomeText">Welcome to</span>
+      {/* Animated Background */}
 
+      <div className="signupGlow signupGlowOne"></div>
+      <div className="signupGlow signupGlowTwo"></div>
+      <div className="signupGlow signupGlowThree"></div>
+
+      <div className="signupCard">
+
+        {/* ================================================
+            BRAND
+        ================================================= */}
+
+        <div className="signupBrand">
+          <div className="brandMark">
+            TN
+          </div>
+
+          <div>
             <h1>TradeNest</h1>
-
-            <h2>
-              Invest.
-              <br />
-              Trade.
-              <br />
-              Grow.
-            </h2>
-
-            <p>
-              Build your financial future with India's modern investment
-              platform.
-            </p>
-
-            <div className="featureList">
-              <div className="featureCard">
-                <span>💳</span>
-
-                <div>
-                  <h4>₹0 Account Opening</h4>
-
-                  <p>No hidden charges to get started.</p>
-                </div>
-              </div>
-
-              <div className="featureCard">
-                <span>🛡️</span>
-
-                <div>
-                  <h4>Bank Grade Security</h4>
-
-                  <p>Your data is encrypted and protected.</p>
-                </div>
-              </div>
-
-              <div className="featureCard">
-                <span>📈</span>
-
-                <div>
-                  <h4>Powerful Trading Platform</h4>
-
-                  <p>Trade Stocks, IPOs, F&O and Mutual Funds.</p>
-                </div>
-              </div>
-            </div>
+            <span>Trade • Invest • Grow</span>
           </div>
         </div>
 
-        {/* ================= RIGHT ================= */}
+        {/* ================================================
+            HEADING
+        ================================================= */}
 
-        <div className="rightSide">
-          <div className="signupCard">
-            <h2>Create Account</h2>
+        <div className="signupHeading">
+          <h2>Create your account</h2>
 
-            <p>Create your TradeNest account.</p>
+          <p>
+            Start your investment journey with TradeNest.
+          </p>
+        </div>
 
-            <form onSubmit={handleSignup}>
-              {/* FIRST NAME */}
+        {/* ================================================
+            FORM
+        ================================================= */}
 
-              <div className="inputBox">
-                <FaUser />
+        <form onSubmit={handleSignup}>
 
-                <input
-                  type="text"
-                  name="firstName"
-                  placeholder="First Name"
-                  value={form.firstName}
-                  onChange={handleChange}
-                />
-              </div>
+          {/* NAME ROW */}
 
-              {/* LAST NAME */}
+          <div className="nameRow">
 
-              <div className="inputBox">
-                <FaUser />
+            <div className="modernInput">
+              <FaUser />
 
-                <input
-                  type="text"
-                  name="lastName"
-                  placeholder="Last Name"
-                  value={form.lastName}
-                  onChange={handleChange}
-                />
-              </div>
-
-              {/* EMAIL */}
-
-              <div className="inputBox">
-                <FaEnvelope />
-
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email Address"
-                  value={form.email}
-                  onChange={handleChange}
-                />
-              </div>
-
-              {/* PHONE */}
-
-              <div className="inputBox">
-                <FaPhoneAlt />
-
-                <input
-                  type="tel"
-                  name="phone"
-                  placeholder="Mobile Number"
-                  maxLength={10}
-                  value={form.phone}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, "");
-
-                    setForm((prev) => ({
-                      ...prev,
-                      phone: value,
-                    }));
-
-                    setError("");
-                    setSuccess("");
-                  }}
-                />
-              </div>
-
-              {/* PASSWORD */}
-
-              <div className="inputBox">
-                <FaLock />
-
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Password"
-                  value={form.password}
-                  onChange={handleChange}
-                />
-
-                <span
-                  className="eyeIcon"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ?
-                    <FaEyeSlash />
-                  : <FaEye />}
-                </span>
-              </div>
-
-              {/* PASSWORD STRENGTH */}
-
-              {form.password && (
-                <div className="strengthWrapper">
-                  <div className={`strengthBar ${strength.className}`}></div>
-
-                  <small className={strength.className}>{strength.text}</small>
-                </div>
-              )}
-
-              {/* CONFIRM PASSWORD */}
-
-              <div className="inputBox">
-                <FaLock />
-
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  name="confirmPassword"
-                  placeholder="Confirm Password"
-                  value={form.confirmPassword}
-                  onChange={handleChange}
-                />
-
-                <span
-                  className="eyeIcon"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ?
-                    <FaEyeSlash />
-                  : <FaEye />}
-                </span>
-              </div>
-
-              {/* ERROR */}
-
-              {error && <div className="signupError">{error}</div>}
-
-              {/* SUCCESS */}
-
-              {success && <div className="signupSuccess">{success}</div>}
-
-              {/* CREATE ACCOUNT */}
-
-              <button type="submit" className="createBtn" disabled={loading}>
-                {loading ? "Creating Account..." : "Create Account"}
-              </button>
-            </form>
-
-            {/* DIVIDER */}
-
-            <div className="divider">
-              <span>OR</span>
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First name"
+                value={form.firstName}
+                onChange={handleChange}
+                autoComplete="given-name"
+              />
             </div>
 
-            {/* GOOGLE */}
+            <div className="modernInput">
+              <FaUser />
 
-            <button className="googleBtn" type="button">
-              <FaGoogle />
-              Continue with Google
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last name"
+                value={form.lastName}
+                onChange={handleChange}
+                autoComplete="family-name"
+              />
+            </div>
+
+          </div>
+
+          {/* EMAIL */}
+
+          <div className="modernInput">
+            <FaEnvelope />
+
+            <input
+              type="email"
+              name="email"
+              placeholder="Email address"
+              value={form.email}
+              onChange={handleChange}
+              autoComplete="email"
+            />
+          </div>
+
+          {/* PHONE */}
+
+          <div className="modernInput">
+
+            <FaPhoneAlt />
+
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Mobile number (optional)"
+              maxLength={10}
+              value={form.phone}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, "");
+
+                setForm((prev) => ({
+                  ...prev,
+                  phone: value,
+                }));
+
+                setError("");
+                setSuccess("");
+              }}
+              autoComplete="tel"
+            />
+
+          </div>
+
+          {/* PASSWORD */}
+
+          <div className="modernInput">
+
+            <FaLock />
+
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={handleChange}
+              autoComplete="new-password"
+            />
+
+            <button
+              type="button"
+              className="passwordToggle"
+              onClick={() =>
+                setShowPassword(!showPassword)
+              }
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
 
-            {/* LOGIN */}
-
-            <p className="bottomText">
-              Already have an account?
-              <Link to="/login">Login</Link>
-            </p>
           </div>
+
+          {/* PASSWORD STRENGTH */}
+
+          {form.password && (
+            <div className="passwordStrength">
+
+              <div className="strengthTrack">
+                <div
+                  className={`strengthProgress ${strength.className}`}
+                  style={{
+                    width: strength.width,
+                  }}
+                ></div>
+              </div>
+
+              <span className={strength.className}>
+                {strength.text}
+              </span>
+
+            </div>
+          )}
+
+          {/* CONFIRM PASSWORD */}
+
+          <div className="modernInput">
+
+            <FaLock />
+
+            <input
+              type={
+                showConfirmPassword
+                  ? "text"
+                  : "password"
+              }
+              name="confirmPassword"
+              placeholder="Confirm password"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              autoComplete="new-password"
+            />
+
+            <button
+              type="button"
+              className="passwordToggle"
+              onClick={() =>
+                setShowConfirmPassword(
+                  !showConfirmPassword,
+                )
+              }
+            >
+              {showConfirmPassword ? (
+                <FaEyeSlash />
+              ) : (
+                <FaEye />
+              )}
+            </button>
+
+          </div>
+
+          {/* PASSWORD MATCH */}
+
+          {form.confirmPassword &&
+            form.password === form.confirmPassword && (
+              <div className="passwordMatch">
+                <FaCheckCircle />
+                Passwords match
+              </div>
+            )}
+
+          {/* ERROR */}
+
+          {error && (
+            <div className="formMessage errorMessage">
+              {error}
+            </div>
+          )}
+
+          {/* SUCCESS */}
+
+          {success && (
+            <div className="formMessage successMessage">
+              <FaCheckCircle />
+              {success}
+            </div>
+          )}
+
+          {/* SUBMIT */}
+
+          <button
+            type="submit"
+            className="signupSubmit"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <span className="loader"></span>
+                Creating account...
+              </>
+            ) : (
+              <>
+                Create account
+                <FaArrowRight />
+              </>
+            )}
+          </button>
+
+        </form>
+
+        {/* ================================================
+            DIVIDER
+        ================================================= */}
+
+        <div className="signupDivider">
+          <span>OR</span>
         </div>
+
+        {/* ================================================
+            GOOGLE
+        ================================================= */}
+
+        <button
+          type="button"
+          className="googleSignup"
+        >
+          <FaGoogle />
+          Continue with Google
+        </button>
+
+        {/* ================================================
+            LOGIN
+        ================================================= */}
+
+        <p className="loginText">
+          Already have an account?
+          <Link to="/login">
+            Login
+          </Link>
+        </p>
+
+        {/* ================================================
+            FOOTER
+        ================================================= */}
+
+        <div className="signupFooter">
+          By creating an account, you agree to our{" "}
+          <span>Terms</span> and <span>Privacy Policy</span>.
+        </div>
+
       </div>
-    </section>
+
+    </main>
   );
 }
 

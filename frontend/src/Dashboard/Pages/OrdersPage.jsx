@@ -1,56 +1,211 @@
 import { useEffect, useState } from "react";
 
-import { getTradeData } from "../../data/tradeStore";
-
 import "./OrdersPage.css";
 
 function OrdersPage() {
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const loadOrders = () => {
-    const data = getTradeData();
+  /* =====================================================
+     LOAD ORDERS FROM MONGODB
+  ===================================================== */
 
-    setOrders(data.orders || []);
+  const loadOrders = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const token =
+        localStorage.getItem("tradenest_token") ||
+        sessionStorage.getItem("tradenest_token");
+
+      if (!token) {
+        setError("Please login again.");
+        setLoading(false);
+        return;
+      }
+
+      console.log("📤 Fetching orders from MongoDB...");
+
+      const response = await fetch(
+        "http://localhost:5000/api/trades/orders",
+        {
+          method: "GET",
+
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      console.log("📥 ORDERS FROM BACKEND:", data);
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Unable to fetch orders."
+        );
+      }
+
+      setOrders(data.orders || []);
+    } catch (error) {
+      console.error(
+        "❌ LOAD ORDERS ERROR:",
+        error
+      );
+
+      setError(error.message);
+      setOrders([]);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  /* =====================================================
+     INITIAL LOAD
+  ===================================================== */
 
   useEffect(() => {
     loadOrders();
 
+    const refreshOrders = () => {
+      loadOrders();
+    };
+
     window.addEventListener(
       "tradenest-update",
-      loadOrders,
+      refreshOrders
     );
 
     return () => {
       window.removeEventListener(
         "tradenest-update",
-        loadOrders,
+        refreshOrders
       );
     };
   }, []);
+
+  /* =====================================================
+     MONEY
+  ===================================================== */
 
   const formatMoney = (value) =>
     `₹${Number(value || 0).toLocaleString(
       "en-IN",
       {
         maximumFractionDigits: 2,
-      },
+      }
     )}`;
 
+  /* =====================================================
+     DATE
+  ===================================================== */
+
   const formatDate = (date) => {
+    if (!date) return "-";
+
     return new Date(date).toLocaleString(
       "en-IN",
       {
         dateStyle: "medium",
         timeStyle: "short",
-      },
+      }
     );
   };
+
+  /* =====================================================
+     LOADING
+  ===================================================== */
+
+  if (loading) {
+    return (
+      <section className="ordersPage">
+        <div className="ordersHeader">
+          <div>
+            <h1>Orders</h1>
+            <p>
+              View and track all your trading orders.
+            </p>
+          </div>
+
+          <div className="orderCount">
+            Loading...
+          </div>
+        </div>
+
+        <div className="ordersCard">
+          <div className="emptyOrders">
+            <div className="emptyOrderIcon">
+              ⏳
+            </div>
+
+            <h2>Loading orders...</h2>
+
+            <p>
+              Fetching your orders from MongoDB.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  /* =====================================================
+     ERROR
+  ===================================================== */
+
+  if (error) {
+    return (
+      <section className="ordersPage">
+        <div className="ordersHeader">
+          <div>
+            <h1>Orders</h1>
+
+            <p>
+              View and track all your trading orders.
+            </p>
+          </div>
+        </div>
+
+        <div className="ordersCard">
+          <div className="emptyOrders">
+            <div className="emptyOrderIcon">
+              ⚠️
+            </div>
+
+            <h2>Unable to load orders</h2>
+
+            <p>{error}</p>
+
+            <button
+              type="button"
+              onClick={loadOrders}
+              style={{
+                marginTop: "15px",
+                padding: "10px 20px",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+              }}
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  /* =====================================================
+     PAGE
+  ===================================================== */
 
   return (
     <section className="ordersPage">
 
-      {/* Header */}
+      {/* HEADER */}
 
       <div className="ordersHeader">
 
@@ -68,11 +223,12 @@ function OrdersPage() {
 
       </div>
 
-      {/* Table */}
+      {/* TABLE */}
 
       <div className="ordersCard">
 
         {orders.length === 0 ? (
+
           <div className="emptyOrders">
 
             <div className="emptyOrderIcon">
@@ -87,6 +243,7 @@ function OrdersPage() {
             </p>
 
           </div>
+
         ) : (
 
           <div className="ordersTableWrapper">
@@ -112,11 +269,16 @@ function OrdersPage() {
 
                 {orders.map((order) => (
 
-                  <tr key={order.id}>
+                  <tr
+                    key={order._id || order.id}
+                  >
 
                     <td>
                       <strong>
-                        {order.id}
+                        {String(
+                          order._id ||
+                          order.id
+                        ).slice(-8)}
                       </strong>
                     </td>
 
@@ -156,13 +318,13 @@ function OrdersPage() {
 
                     <td>
                       {formatMoney(
-                        order.price,
+                        order.price
                       )}
                     </td>
 
                     <td>
                       {formatMoney(
-                        order.total,
+                        order.totalAmount
                       )}
                     </td>
 
@@ -176,7 +338,7 @@ function OrdersPage() {
 
                     <td>
                       {formatDate(
-                        order.createdAt,
+                        order.createdAt
                       )}
                     </td>
 

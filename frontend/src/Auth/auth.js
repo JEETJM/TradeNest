@@ -126,21 +126,47 @@ export const logout = () => {
 // UPDATE PROFILE
 // =====================================================
 
-export const updateProfile = async (userData) => {
+export const updateProfile = async ({
+  firstName,
+  lastName,
+  phone,
+  profileImage,
+}) => {
   const token = getToken();
 
   if (!token) {
     throw new Error("You are not logged in.");
   }
 
+  // ===================================================
+  // FORM DATA
+  // ===================================================
+
+  const formData = new FormData();
+
+  formData.append("firstName", firstName || "");
+  formData.append("lastName", lastName || "");
+  formData.append("phone", phone || "");
+
+  // Add image only if user selected a new image
+  if (profileImage instanceof File) {
+    formData.append("profileImage", profileImage);
+  }
+
+  // ===================================================
+  // API REQUEST
+  // ===================================================
+
   const response = await fetch(
     `${API_URL}/auth/profile`,
     {
       method: "PUT",
 
-      headers: authHeaders(),
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
 
-      body: JSON.stringify(userData),
+      body: formData,
     }
   );
 
@@ -152,9 +178,15 @@ export const updateProfile = async (userData) => {
     );
   }
 
+  // ===================================================
+  // SAVE UPDATED USER
+  // ===================================================
+
   if (data.user) {
     saveUser(data.user);
   }
 
-  return data;
+  // Return USER directly
+  // so ProfilePage can use updatedUser.profileImage
+  return data.user;
 };

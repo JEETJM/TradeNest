@@ -1,3 +1,7 @@
+/* =========================================================
+   SIDEBAR — PREMIUM FINTECH
+========================================================= */
+
 .sidebar {
   position: fixed;
 
@@ -7,57 +11,84 @@
   width: 250px;
   height: 100vh;
 
+  display: flex;
+  flex-direction: column;
+
+  padding: 25px 14px 16px;
+
   background: var(--card);
 
   border-right: 1px solid var(--border);
 
-  display: flex;
-  flex-direction: column;
-
-  padding: 28px 16px 18px;
-
   z-index: 1000;
 
   transition:
-    background 0.3s ease,
-    border-color 0.3s ease;
+    width 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease;
+
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-/* LOGO */
+
+/* Scrollbar */
+
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
 
 .sidebarLogo {
-  padding: 0 12px 30px;
+  padding: 2px 12px 29px;
 }
 
 .sidebarLogo h2 {
   margin: 0;
 
-  font-size: 27px;
+  font-size: 26px;
+  line-height: 1;
+
   font-weight: 800;
 
-  color: #2878d7;
-
   letter-spacing: -1px;
+
+  color: #2878d7;
 }
 
 .sidebarLogo h2 span {
   color: var(--text);
 }
 
-/* LABEL */
+
+/* =========================================================
+   LABEL
+========================================================= */
 
 .sidebarLabel {
-  margin: 0 12px 10px;
-
-  font-size: 10px;
-  font-weight: 700;
+  margin: 0 11px 9px;
 
   color: var(--muted);
 
-  letter-spacing: 1px;
+  font-size: 9px;
+  font-weight: 750;
+
+  letter-spacing: 1.15px;
 }
 
-/* MENU */
+
+/* =========================================================
+   MENU
+========================================================= */
 
 .sidebarMenu {
   list-style: none;
@@ -67,12 +98,14 @@
 }
 
 .sidebarMenu li {
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 
 .menuLink {
+  position: relative;
+
   width: 100%;
-  min-height: 46px;
+  min-height: 45px;
 
   display: flex;
   align-items: center;
@@ -87,51 +120,91 @@
 
   text-decoration: none;
 
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 550;
 
-  transition: 0.2s ease;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
 }
 
 .menuLink:hover {
   background: var(--hover);
   color: #2878d7;
+
+  transform: translateX(2px);
 }
 
 .menuLink.active {
   background: #2878d7;
 
-  color: white;
+  color: #ffffff;
 
   box-shadow:
-    0 6px 16px rgba(40, 120, 215, 0.2);
+    0 7px 17px rgba(40, 120, 215, 0.20);
 }
+
+.menuLink.active::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 10px;
+
+  width: 3px;
+  height: 25px;
+
+  border-radius: 0 4px 4px 0;
+
+  background: #ffffff;
+}
+
+
+/* =========================================================
+   ICON
+========================================================= */
 
 .menuIcon {
   width: 20px;
 
   display: flex;
+  align-items: center;
   justify-content: center;
 
-  font-size: 15px;
+  font-size: 14px;
+
+  flex-shrink: 0;
 }
 
-/* ACCOUNT */
+
+/* =========================================================
+   ACCOUNT
+========================================================= */
 
 .accountSection {
-  margin-top: 28px;
+  margin-top: 27px;
 }
 
 .accountSection .menuLink {
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 
-/* USER CARD */
+
+/* =========================================================
+   USER CARD
+========================================================= */
 
 .sidebarUserCard {
   margin-top: auto;
 
-  padding: 12px;
+  padding: 10px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
 
   background: var(--surface);
 
@@ -139,17 +212,24 @@
 
   border-radius: 14px;
 
-  display: flex;
-
-  align-items: center;
-
-  gap: 10px;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
+
+.sidebarUserCard:hover {
+  border-color: rgba(40, 120, 215, 0.25);
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
 
 .userAvatar,
 .userAvatarImage {
-  width: 38px;
-  height: 38px;
+  width: 37px;
+  height: 37px;
 
   flex-shrink: 0;
 
@@ -158,24 +238,35 @@
 
 .userAvatar {
   display: flex;
-
   align-items: center;
   justify-content: center;
 
-  background: #2878d7;
+  background: linear-gradient(
+    135deg,
+    #2878d7,
+    #1769c2
+  );
 
-  color: white;
+  color: #ffffff;
 
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 750;
 }
 
 .userAvatarImage {
+  display: block;
+
   object-fit: cover;
 }
 
+
+/* =========================================================
+   USER INFO
+========================================================= */
+
 .sidebarUserInfo {
   min-width: 0;
+
   flex: 1;
 
   display: flex;
@@ -183,36 +274,44 @@
 }
 
 .sidebarUserInfo strong {
-  font-size: 13px;
-
   color: var(--text);
 
+  font-size: 11.5px;
+  font-weight: 700;
+
   white-space: nowrap;
-
   overflow: hidden;
-
   text-overflow: ellipsis;
 }
 
 .sidebarUserInfo span {
   margin-top: 2px;
 
-  font-size: 10px;
-
   color: var(--muted);
 
+  font-size: 9px;
+
   white-space: nowrap;
-
   overflow: hidden;
-
   text-overflow: ellipsis;
 }
+
+
+/* =========================================================
+   EDIT PROFILE
+========================================================= */
 
 .editProfileBtn {
   width: 30px;
   height: 30px;
 
-  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border: 1px solid transparent;
 
   border-radius: 8px;
 
@@ -222,26 +321,76 @@
 
   cursor: pointer;
 
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  transition: 0.2s;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .editProfileBtn:hover {
   background: #2878d7;
-  color: white;
+  color: #ffffff;
+
+  border-color: #2878d7;
 }
 
-/* MOBILE */
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+.sidebarLogoutBtn {
+  width: 100%;
+
+  min-height: 42px;
+
+  margin-top: 9px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  border: 1px solid var(--border);
+  border-radius: 10px;
+
+  background: var(--surface);
+
+  color: var(--text-secondary);
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.sidebarLogoutBtn:hover {
+  background: rgba(239, 68, 68, 0.07);
+
+  border-color: rgba(239, 68, 68, 0.2);
+
+  color: #ef4444;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
 
 @media (max-width: 991px) {
-  .sidebar {
-    width: 78px;
 
-    padding: 20px 10px;
+  .sidebar {
+    width: 76px;
+
+    padding: 20px 9px 14px;
   }
 
   .sidebarLogo {
@@ -258,10 +407,7 @@
     display: none;
   }
 
-  .sidebarLabel,
-  .menuLink > span:last-child,
-  .sidebarUserInfo,
-  .editProfileBtn {
+  .sidebarLabel {
     display: none;
   }
 
@@ -269,11 +415,39 @@
     justify-content: center;
 
     padding: 0;
+
+    gap: 0;
+  }
+
+  .menuLink > span:last-child {
+    display: none;
+  }
+
+  .menuIcon {
+    width: auto;
   }
 
   .sidebarUserCard {
     justify-content: center;
 
-    padding: 8px;
+    padding: 7px;
+  }
+
+  .sidebarUserInfo,
+  .editProfileBtn {
+    display: none;
+  }
+
+  .sidebarLogoutBtn {
+    width: 42px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    padding: 0;
+  }
+
+  .sidebarLogoutBtn span {
+    display: none;
   }
 }

@@ -4,10 +4,11 @@ import {
   FaEnvelope,
   FaLock,
   FaEye,
-  FaGoogle,
   FaEyeSlash,
+  FaGoogle,
 } from "react-icons/fa";
 import { useState } from "react";
+import { saveToken, saveUser } from "../auth";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -27,14 +28,19 @@ function LoginPage() {
 
     if (!email.trim()) {
       newErrors.email = "Email is required";
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
+        email.trim()
+      )
+    ) {
       newErrors.email = "Enter a valid email address";
     }
 
     if (!password) {
       newErrors.password = "Password is required";
     } else if (password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+      newErrors.password =
+        "Password must be at least 6 characters";
     }
 
     setErrors(newErrors);
@@ -54,47 +60,47 @@ function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email.trim(),
-          password,
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:5000/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email.trim(),
+            password,
+          }),
+        }
+      );
 
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        setServerError(data.message || "Login failed.");
+        setServerError(
+          data.message || "Invalid email or password."
+        );
         return;
       }
 
       /*
-       * =========================
-       * SAVE AUTH DATA
-       * =========================
+       * IMPORTANT
+       * Your existing auth.js exports:
+       * saveToken()
+       * saveUser()
        */
 
-      const storage = rememberMe ? localStorage : sessionStorage;
+      saveToken(data.token, rememberMe);
+      saveUser(data.user);
 
-      storage.setItem("tradenest_token", data.token);
-      storage.setItem("tradenest_user", JSON.stringify(data.user));
-
-      /*
-       * =========================
-       * REDIRECT
-       * =========================
-       */
-
-      navigate("/dashboard");
+      navigate("/dashboard", {
+        replace: true,
+      });
     } catch (error) {
       console.error("Login error:", error);
 
       setServerError(
-        "Unable to connect to server. Please make sure backend is running.",
+        "Unable to connect to server. Please make sure backend is running."
       );
     } finally {
       setLoading(false);
@@ -102,138 +108,282 @@ function LoginPage() {
   };
 
   return (
-    <section className="loginPage">
-      <div className="loginContainer">
-        {/* ================= LEFT ================= */}
+    <main className="loginPage">
 
-        <div className="loginLeft">
-          <div className="loginLeftContent">
-            <span>Welcome Back</span>
+      {/* Background Glow */}
+      <div className="loginGlow loginGlowOne"></div>
+      <div className="loginGlow loginGlowTwo"></div>
 
-            <h1>TradeNest</h1>
+      <div className="loginCard">
 
-            <h2>
-              Invest.
-              <br />
-              Trade.
-              <br />
-              Grow.
-            </h2>
+        {/* ================= BRAND ================= */}
 
-            <p>
-              Securely access your investments and continue your financial
-              journey.
-            </p>
+        <div className="loginBrand">
+          <div className="brandIcon">T</div>
+
+          <div className="brandText">
+            <h1>
+              Trade<span>Nest</span>
+            </h1>
+
+            <p>Trade smarter</p>
           </div>
         </div>
 
-        {/* ================= RIGHT ================= */}
+        {/* ================= HEADING ================= */}
 
-        <div className="loginRight">
-          <div className="loginCard">
-            <h2>Welcome Back</h2>
+        <div className="loginHeading">
+          <h2>Welcome back</h2>
 
-            <p>Login to your TradeNest account.</p>
+          <p>
+            Sign in to continue to your account
+          </p>
+        </div>
 
-            <form onSubmit={handleLogin}>
-              {/* EMAIL */}
+        {/* ================= FORM ================= */}
 
-              <div className="inputBox">
-                <FaEnvelope />
+        <form onSubmit={handleLogin}>
 
-                <input
-                  type="email"
-                  placeholder="Email Address"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setServerError("");
-                  }}
-                />
-              </div>
+          {/* EMAIL */}
 
-              {errors.email && (
-                <small className="errorText">{errors.email}</small>
-              )}
+          <div className="fieldGroup">
 
-              {/* PASSWORD */}
+            <label htmlFor="email">
+              Email address
+            </label>
 
-              <div className="inputBox">
-                <FaLock />
+            <div
+              className={`loginInput ${
+                errors.email ? "inputError" : ""
+              }`}
+            >
 
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setServerError("");
-                  }}
-                />
+              <FaEnvelope />
 
-                <span
-                  className="eyeIcon"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ?
-                    <FaEyeSlash />
-                  : <FaEye />}
-                </span>
-              </div>
+              <input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                autoComplete="email"
+                onChange={(e) => {
+                  setEmail(e.target.value);
 
-              {errors.password && (
-                <small className="errorText">{errors.password}</small>
-              )}
+                  if (errors.email) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      email: "",
+                    }));
+                  }
+                }}
+              />
 
-              {/* SERVER ERROR */}
+            </div>
 
-              {serverError && <div className="serverError">{serverError}</div>}
+            {errors.email && (
+              <span className="errorText">
+                {errors.email}
+              </span>
+            )}
 
-              {/* OPTIONS */}
+          </div>
 
-              <div className="loginOptions">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                  />
-                  Remember me
-                </label>
+          {/* PASSWORD */}
 
-                <Link to="/forgot-password">Forgot Password?</Link>
-              </div>
+          <div className="fieldGroup">
 
-              {/* LOGIN */}
+            <div className="passwordLabel">
 
-              <button type="submit" className="loginBtn" disabled={loading}>
-                {loading ? "Logging in..." : "Login"}
+              <label htmlFor="password">
+                Password
+              </label>
+
+              <Link to="/forgot-password">
+                Forgot password?
+              </Link>
+
+            </div>
+
+            <div
+              className={`loginInput ${
+                errors.password ? "inputError" : ""
+              }`}
+            >
+
+              <FaLock />
+
+              <input
+                id="password"
+                type={
+                  showPassword
+                    ? "text"
+                    : "password"
+                }
+                placeholder="Enter your password"
+                value={password}
+                autoComplete="current-password"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+
+                  if (errors.password) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      password: "",
+                    }));
+                  }
+                }}
+              />
+
+              <button
+                type="button"
+                className="eyeButton"
+                aria-label={
+                  showPassword
+                    ? "Hide password"
+                    : "Show password"
+                }
+                onClick={() =>
+                  setShowPassword(
+                    (prev) => !prev
+                  )
+                }
+              >
+                {showPassword ? (
+                  <FaEyeSlash />
+                ) : (
+                  <FaEye />
+                )}
               </button>
-            </form>
 
-            {/* DIVIDER */}
-
-            <div className="divider">
-              <span>OR</span>
             </div>
 
-            {/* GOOGLE */}
+            {errors.password && (
+              <span className="errorText">
+                {errors.password}
+              </span>
+            )}
 
-            <button className="googleBtn" type="button">
-              <FaGoogle />
-              Continue with Google
-            </button>
-
-            {/* SIGNUP */}
-
-            <div className="signupLink">
-              Don't have an account?
-              <Link to="/signup">Create Account</Link>
-            </div>
           </div>
+
+          {/* REMEMBER ME */}
+
+          <div className="rememberRow">
+
+            <label className="rememberCheck">
+
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) =>
+                  setRememberMe(
+                    e.target.checked
+                  )
+                }
+              />
+
+              <span className="customCheck"></span>
+
+              <span>
+                Remember me
+              </span>
+
+            </label>
+
+          </div>
+
+          {/* SERVER ERROR */}
+
+          {serverError && (
+            <div className="serverError">
+              {serverError}
+            </div>
+          )}
+
+          {/* LOGIN BUTTON */}
+
+          <button
+            type="submit"
+            className="loginButton"
+            disabled={loading}
+          >
+
+            {loading ? (
+              <>
+                <span className="loader"></span>
+                Signing in...
+              </>
+            ) : (
+              <>
+                <span>Sign in</span>
+                <strong>→</strong>
+              </>
+            )}
+
+          </button>
+
+        </form>
+
+        {/* ================= DIVIDER ================= */}
+
+        <div className="orDivider">
+
+          <span></span>
+
+          <p>OR</p>
+
+          <span></span>
+
         </div>
+
+        {/* ================= GOOGLE ================= */}
+
+        <button
+          type="button"
+          className="googleButton"
+          onClick={() => {
+            console.log(
+              "Google login will be connected later."
+            );
+          }}
+        >
+
+          <FaGoogle />
+
+          <span>
+            Continue with Google
+          </span>
+
+        </button>
+
+        {/* ================= SIGNUP ================= */}
+
+        <div className="createAccount">
+
+          <span>
+            Don't have an account?
+          </span>
+
+          <Link to="/signup">
+            Create account
+          </Link>
+
+        </div>
+
+        {/* ================= SECURITY ================= */}
+
+        <div className="secureText">
+
+          <span className="secureDot">
+            ●
+          </span>
+
+          Secure & encrypted connection
+
+        </div>
+
       </div>
-    </section>
+
+    </main>
   );
 }
 

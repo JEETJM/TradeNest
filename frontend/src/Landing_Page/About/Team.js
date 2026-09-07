@@ -82,21 +82,27 @@ function Team() {
         <div className="contactItem">
           <i className="fa-solid fa-envelope"></i>
 
-          <a href="mailto:jm382118@gmail.com">jm382118@gmail.com</a>
+          <b>
+            <a href="mailto:jm382118@gmail.com">jm382118@gmail.com</a>
+          </b>
         </div>
 
         <div className="contactItem">
           <i className="fa-solid fa-phone"></i>
+          <i className="fa-brands fa-whatsapp"></i>
 
-          <span>+91 6296601904</span>
-          <br></br>
-          <span>+91 8293538236</span>
+          <b>
+            {" "}
+            <span>+91 6296601904</span>
+            <br></br>
+            <span>+91 8293538236</span>
+          </b>
         </div>
 
         <div className="contactItem">
           <i className="fa-solid fa-location-dot"></i>
 
-          <span>Kandi, West Bengal, India</span>
+         <b> <span>Kolkata, West Bengal, India</span></b>
         </div>
       </div>
 

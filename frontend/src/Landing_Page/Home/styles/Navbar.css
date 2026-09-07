@@ -1,130 +1,194 @@
-/* ==========================
-          NAVBAR
-========================== */
+/* =====================================================
+   TRADENEST NAVBAR
+===================================================== */
 
 .navbar {
-  height: 72px;
-  border-bottom: 1px solid #f0f0f0;
-  background: #fff !important;
-  transition: 0.3s;
+  height: 76px;
+  padding: 0;
+  z-index: 1000;
+  background: #ffffff !important;
+  border-bottom: 1px solid #eef1f5;
 }
 
-.logo {
-  width: 170px;
-}
+/* =====================================================
+   CONTAINER
+===================================================== */
 
-.navbar-nav {
+.navbar .container {
+  height: 100%;
+  display: flex;
   align-items: center;
 }
 
-.nav-item {
-  margin-left: 18px;
+/* =====================================================
+   LOGO
+===================================================== */
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar-brand .logo {
+  width: 190px;
+  height: auto;
+  max-height: 62px;
+  object-fit: contain;
+  display: block;
+}
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+.navbar-nav {
+  gap: 8px;
 }
 
 .nav-link {
+  position: relative;
+
+  padding: 26px 16px !important;
+
   color: #424242 !important;
+
   font-size: 15px;
   font-weight: 500;
-  transition: 0.3s;
+
+  transition:
+    color 0.25s ease,
+    background 0.25s ease;
+}
+
+/* Hover underline */
+
+.nav-link::after {
+  content: "";
+
+  position: absolute;
+
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+
+  height: 2px;
+
+  background: #387ed1;
+
+  transform: scaleX(0);
+
+  transform-origin: center;
+
+  transition: transform 0.25s ease;
 }
 
 .nav-link:hover {
   color: #387ed1 !important;
 }
 
-/* Hamburger */
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* =====================================================
+   MENU BUTTON
+===================================================== */
+
+.menu-btn {
+  width: 42px;
+  height: 42px;
+
+  margin-left: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e5e7eb;
+
+  background: #ffffff;
+
+  border-radius: 10px;
+
+  color: #424242;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.menu-btn:hover {
+  color: #387ed1;
+  border-color: #387ed1;
+  background: #f7fbff;
+}
+
+.menu-btn i {
+  font-size: 18px;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
 
 .navbar-toggler {
-  border: none;
+  border: none !important;
   box-shadow: none !important;
+  padding: 8px;
 }
 
 .navbar-toggler:focus {
-  box-shadow: none;
+  box-shadow: none !important;
 }
-
-/* Mobile */
 
 @media (max-width: 991px) {
+
+  .navbar {
+    height: auto;
+    min-height: 70px;
+    padding: 8px 0;
+  }
+
+  .navbar-brand .logo {
+    width: 165px;
+    max-height: 55px;
+  }
+
   .navbar-collapse {
-    background: #fff;
-    padding: 20px;
-    margin-top: 15px;
-    border-radius: 8px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    margin-top: 10px;
+
+    padding: 12px 0 18px;
+
+    border-top: 1px solid #eef1f5;
   }
 
-  .nav-item {
-    margin: 10px 0;
-    text-align: center;
+  .navbar-nav {
+    gap: 0;
+    align-items: stretch !important;
   }
 
-  .logo {
-    width: 155px;
+  .nav-link {
+    padding: 13px 10px !important;
+  }
+
+  .nav-link::after {
+    display: none;
+  }
+
+  .menu-btn {
+    margin: 10px 0 0 10px;
   }
 }
 
-.dropdown-menu {
-  min-width: 240px;
-  border: none;
-  border-radius: 12px;
-  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
-  padding: 12px 0;
-}
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
 
-.dropdown-item {
-  padding: 12px 20px;
-  font-size: 15px;
-  color: #424242;
-  transition: 0.3s;
-}
+@media (max-width: 480px) {
 
-.dropdown-item:hover {
-  background: #f5f7fb;
-  color: #387ed1;
-}
-
-.fa-bars {
-  font-size: 22px; 
-  color: #424242;
-}
-
-.fa-bars:hover {
-  color: #387ed1;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.menu-btn{
-
-    border:none;
-    background:transparent;
-    margin-left:15px;
-    padding:0;
-
-}
-
-.menu-btn i{
-
-    font-size:22px;
-    color:#424242;
-    transition:.3s;
-
-}
-
-.menu-btn:hover i{
-
-    color:#387ed1;
-
+  .navbar-brand .logo {
+    width: 145px;
+  }
 }
