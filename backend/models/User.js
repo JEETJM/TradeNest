@@ -53,6 +53,22 @@ const userSchema = new mongoose.Schema(
     },
 
     /* =========================
+       TRADING FUNDS
+    ========================= */
+
+    availableBalance: {
+      type: Number,
+      default: 25000,
+      min: 0,
+    },
+
+    usedMargin: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+
+    /* =========================
        PASSWORD RESET
     ========================= */
 

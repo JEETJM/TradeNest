@@ -1,83 +1,223 @@
+/* =========================================================
+   ORDERS PAGE
+========================================================= */
+
 .ordersPage {
-  padding: 30px;
-  background: #f8f9fb;
+  width: 100%;
   min-height: calc(100vh - 70px);
+  padding: 5px 0 40px;
+  box-sizing: border-box;
+  background: transparent;
+  color: var(--text);
 }
+
+/* =========================================================
+   HEADER
+========================================================= */
 
 .ordersHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
   margin-bottom: 25px;
 }
 
 .ordersHeader h1 {
   margin: 0;
   font-size: 30px;
-  color: #222;
+  font-weight: 700;
+  color: var(--text);
 }
 
 .ordersHeader p {
   margin: 7px 0 0;
-  color: #777;
+  color: var(--text-secondary);
+  font-size: 14px;
 }
+
+/* =========================================================
+   HEADER ACTIONS
+========================================================= */
+
+.ordersHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* =========================================================
+   ORDER COUNT
+========================================================= */
 
 .orderCount {
   padding: 9px 15px;
   border-radius: 8px;
 
-  background: #edf5ff;
-  color: #387ed1;
+  background: rgba(56, 126, 209, 0.1);
+  color: var(--primary);
+
+  border: 1px solid rgba(56, 126, 209, 0.15);
 
   font-size: 13px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
-.ordersCard {
-  background: white;
-  border: 1px solid #eee;
-  border-radius: 14px;
-  overflow: hidden;
+/* =========================================================
+   REFRESH BUTTON
+========================================================= */
+
+.refreshOrdersBtn,
+.retryOrdersBtn {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+
+  padding: 9px 14px;
+  border-radius: 8px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
+
+.refreshOrdersBtn:hover,
+.retryOrdersBtn:hover {
+  background: var(--hover-bg);
+  border-color: var(--primary);
+}
+
+.refreshOrdersBtn:active,
+.retryOrdersBtn:active {
+  transform: scale(0.97);
+}
+
+.refreshOrdersBtn:disabled,
+.retryOrdersBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   ORDERS CARD
+========================================================= */
+
+.ordersCard {
+  width: 100%;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  box-shadow: var(--shadow);
+
+  color: var(--text);
+}
+
+/* =========================================================
+   TABLE WRAPPER
+========================================================= */
 
 .ordersTableWrapper {
   width: 100%;
   overflow-x: auto;
 }
 
+/* =========================================================
+   TABLE
+========================================================= */
+
 .ordersTable {
   width: 100%;
   min-width: 1000px;
+
   border-collapse: collapse;
+
+  background: var(--surface);
 }
+
+/* =========================================================
+   TABLE HEADER
+========================================================= */
 
 .ordersTable th {
   text-align: left;
 
   padding: 16px 18px;
 
-  background: #fafafa;
+  background: var(--surface-2);
 
-  color: #777;
+  color: var(--text-secondary);
+
+  border-bottom: 1px solid var(--border);
 
   font-size: 12px;
-
   font-weight: 600;
+
+  white-space: nowrap;
 }
+
+/* =========================================================
+   TABLE BODY
+========================================================= */
 
 .ordersTable td {
   padding: 17px 18px;
 
-  border-top: 1px solid #f1f1f1;
+  border-top: 1px solid var(--border);
 
   font-size: 13px;
 
-  color: #333;
+  color: var(--text-secondary);
+
+  background: var(--surface);
+
+  white-space: nowrap;
 }
+
+.ordersTable tbody tr {
+  background: var(--surface);
+
+  transition: background 0.2s ease;
+}
+
+.ordersTable tbody tr:hover td {
+  background: var(--hover-bg);
+}
+
+/* =========================================================
+   ORDER ID
+========================================================= */
+
+.orderId {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+/* =========================================================
+   STOCK
+========================================================= */
 
 .orderStock strong {
   display: block;
+
   font-size: 14px;
+
+  color: var(--text);
+
+  font-weight: 700;
 }
 
 .orderStock small {
@@ -85,14 +225,18 @@
 
   margin-top: 4px;
 
-  color: #888;
+  color: var(--text-muted);
 
   font-size: 11px;
 }
 
+/* =========================================================
+   BUY / SELL / UNKNOWN
+========================================================= */
+
 .buyType,
 .sellType,
-.completedStatus {
+.unknownType {
   display: inline-block;
 
   padding: 5px 9px;
@@ -100,37 +244,97 @@
   border-radius: 6px;
 
   font-size: 11px;
-
   font-weight: 600;
 }
 
 .buyType {
-  background: #e9f8ef;
+  background: rgba(20, 148, 71, 0.1);
   color: #149447;
 }
 
 .sellType {
-  background: #fff0f0;
+  background: rgba(229, 57, 53, 0.1);
   color: #e53935;
 }
 
+.unknownType {
+  background: rgba(120, 120, 120, 0.1);
+  color: var(--text-secondary);
+}
+
+/* =========================================================
+   PRODUCT TYPE
+========================================================= */
+
+.productType {
+  display: inline-block;
+
+  padding: 5px 9px;
+
+  border-radius: 6px;
+
+  background: rgba(56, 126, 209, 0.08);
+
+  color: var(--primary);
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.completedStatus,
+.cancelledStatus,
+.pendingStatus {
+  display: inline-block;
+
+  padding: 5px 9px;
+
+  border-radius: 6px;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
 .completedStatus {
-  background: #e9f8ef;
+  background: rgba(20, 148, 71, 0.1);
   color: #149447;
 }
+
+.cancelledStatus {
+  background: rgba(229, 57, 53, 0.1);
+  color: #e53935;
+}
+
+.pendingStatus {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
 
 .emptyOrders {
   min-height: 400px;
 
   display: flex;
-
   flex-direction: column;
 
   align-items: center;
-
   justify-content: center;
 
   text-align: center;
+
+  padding: 30px;
+
+  box-sizing: border-box;
+
+  background: var(--surface);
+
+  color: var(--text);
 }
 
 .emptyOrderIcon {
@@ -138,13 +342,14 @@
   height: 65px;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
   border-radius: 50%;
 
-  background: #edf5ff;
+  background: rgba(56, 126, 209, 0.1);
+
+  color: var(--primary);
 
   font-size: 28px;
 
@@ -155,26 +360,76 @@
   margin: 0;
 
   font-size: 20px;
+
+  color: var(--text);
 }
 
 .emptyOrders p {
-  margin-top: 8px;
+  margin: 8px 0 18px;
 
-  color: #888;
+  color: var(--text-secondary);
 
   font-size: 13px;
+
+  max-width: 450px;
 }
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark .ordersCard,
+body.dark .ordersTable,
+body.dark .ordersTable td,
+body.dark .ordersTable tbody tr,
+body.dark .emptyOrders {
+  background: var(--surface);
+}
+
+body.dark .ordersTable th {
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+body.dark .ordersTable td {
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+body.dark .ordersTable tbody tr:hover td {
+  background: var(--hover-bg);
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media (max-width: 650px) {
   .ordersPage {
-    padding: 20px 15px;
+    padding: 0 0 30px;
   }
 
   .ordersHeader {
     align-items: flex-start;
-
     flex-direction: column;
-
     gap: 15px;
+  }
+
+  .ordersHeader h1 {
+    font-size: 25px;
+  }
+
+  .ordersHeaderActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .orderCount {
+    align-self: flex-start;
+  }
+
+  .refreshOrdersBtn {
+    margin-left: auto;
   }
 }

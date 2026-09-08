@@ -14,19 +14,14 @@ import "./ProfilePage.css";
 
 function ProfilePage() {
   const [user, setUser] = useState(null);
-
   const [loading, setLoading] = useState(true);
-
   const [saving, setSaving] = useState(false);
-
   const [editing, setEditing] = useState(false);
 
   const [success, setSuccess] = useState("");
-
   const [error, setError] = useState("");
 
   const [imageFile, setImageFile] = useState(null);
-
   const [preview, setPreview] = useState("");
 
   const [form, setForm] = useState({
@@ -64,6 +59,18 @@ function ProfilePage() {
   }, []);
 
   /* =========================
+     CLEAN PREVIEW URL
+  ========================= */
+
+  useEffect(() => {
+    return () => {
+      if (preview?.startsWith("blob:")) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
+
+  /* =========================
      INPUT
   ========================= */
 
@@ -74,6 +81,9 @@ function ProfilePage() {
       ...previous,
       [name]: value,
     }));
+
+    setSuccess("");
+    setError("");
   };
 
   /* =========================
@@ -87,21 +97,25 @@ function ProfilePage() {
 
     if (!file.type.startsWith("image/")) {
       setError("Please select a valid image.");
-
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
       setError("Image must be smaller than 5MB.");
-
       return;
     }
 
     setError("");
+    setSuccess("");
+
+    if (preview?.startsWith("blob:")) {
+      URL.revokeObjectURL(preview);
+    }
+
+    const objectUrl = URL.createObjectURL(file);
 
     setImageFile(file);
-
-    setPreview(URL.createObjectURL(file));
+    setPreview(objectUrl);
   };
 
   /* =========================
@@ -114,14 +128,19 @@ function ProfilePage() {
 
     if (!form.firstName.trim()) {
       setError("First name is required.");
-
       return;
     }
 
     if (!form.lastName.trim()) {
       setError("Last name is required.");
-
       return;
+    }
+
+    if (form.phone.trim()) {
+      if (!/^[0-9]{10}$/.test(form.phone.trim())) {
+        setError("Please enter a valid 10-digit phone number.");
+        return;
+      }
     }
 
     try {
@@ -129,11 +148,8 @@ function ProfilePage() {
 
       const updatedUser = await updateProfile({
         firstName: form.firstName.trim(),
-
         lastName: form.lastName.trim(),
-
         phone: form.phone.trim(),
-
         profileImage: imageFile,
       });
 
@@ -141,15 +157,12 @@ function ProfilePage() {
 
       setForm({
         firstName: updatedUser.firstName || "",
-
         lastName: updatedUser.lastName || "",
-
         phone: updatedUser.phone || "",
       });
 
-      setPreview(updatedUser.profileImage || "");
-
       setImageFile(null);
+      setPreview(updatedUser.profileImage || "");
 
       localStorage.setItem("tradenest_user", JSON.stringify(updatedUser));
 
@@ -158,6 +171,8 @@ function ProfilePage() {
       setEditing(false);
 
       setSuccess("Profile updated successfully.");
+
+      window.dispatchEvent(new Event("tradenest-profile-update"));
     } catch (err) {
       setError(err.message || "Unable to update profile.");
     } finally {
@@ -170,6 +185,10 @@ function ProfilePage() {
   ========================= */
 
   const handleCancel = () => {
+    if (preview?.startsWith("blob:")) {
+      URL.revokeObjectURL(preview);
+    }
+
     setForm({
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
@@ -177,21 +196,32 @@ function ProfilePage() {
     });
 
     setPreview(user?.profileImage || "");
-
     setImageFile(null);
 
     setError("");
+    setSuccess("");
 
     setEditing(false);
   };
 
+  /* =========================
+     LOADING
+  ========================= */
+
   if (loading) {
     return (
       <section className="profilePage">
-        <div className="profileLoading">Loading profile...</div>
+        <div className="profileLoading">
+          <div className="profileLoader"></div>
+          <span>Loading profile...</span>
+        </div>
       </section>
     );
   }
+
+  /* =========================
+     USER DATA
+  ========================= */
 
   const fullName = `${user?.firstName || ""} ${user?.lastName || ""}`.trim();
 
@@ -199,7 +229,7 @@ function ProfilePage() {
 
   return (
     <section className="profilePage">
-      {/* HEADER */}
+      {/* ================= HEADER ================= */}
 
       <div className="profileHeader">
         <div>
@@ -211,7 +241,11 @@ function ProfilePage() {
         {!editing ?
           <button
             className="editProfileMainBtn"
-            onClick={() => setEditing(true)}
+            onClick={() => {
+              setEditing(true);
+              setSuccess("");
+              setError("");
+            }}
           >
             Edit Profile
           </button>
@@ -235,24 +269,24 @@ function ProfilePage() {
         }
       </div>
 
-      {/* MESSAGES */}
+      {/* ================= MESSAGES ================= */}
 
       {success && (
         <div className="profileSuccess">
           <FaCheckCircle />
-          {success}
+          <span>{success}</span>
         </div>
       )}
 
       {error && <div className="profileError">{error}</div>}
 
-      {/* PROFILE HERO */}
+      {/* ================= PROFILE HERO ================= */}
 
       <div className="profileHero">
         <div className="profileHeroLeft">
           <div className="largeProfileAvatar">
             {preview ?
-              <img src={preview} alt={fullName} />
+              <img src={preview} alt={fullName || "Profile"} />
             : avatarLetter}
 
             {editing && (
@@ -268,7 +302,7 @@ function ProfilePage() {
                 <input
                   id="profileImage"
                   type="file"
-                  accept="image/*"
+                  accept="image/png,image/jpeg,image/jpg,image/webp"
                   onChange={handleImageChange}
                   hidden
                 />
@@ -276,10 +310,10 @@ function ProfilePage() {
             )}
           </div>
 
-          <div>
-            <h2>{fullName}</h2>
+          <div className="profileHeroInfo">
+            <h2>{fullName || "TradeNest User"}</h2>
 
-            <p>{user?.email}</p>
+            <p>{user?.email || "-"}</p>
 
             <span className="profileVerified">
               <FaCheckCircle />
@@ -289,7 +323,7 @@ function ProfilePage() {
         </div>
       </div>
 
-      {/* GRID */}
+      {/* ================= GRID ================= */}
 
       <div className="profileGrid">
         {/* PERSONAL INFORMATION */}
@@ -311,10 +345,13 @@ function ProfilePage() {
                 <label>First Name</label>
 
                 <input
+                  type="text"
                   name="firstName"
                   value={form.firstName}
                   onChange={handleChange}
                   disabled={!editing}
+                  placeholder="First name"
+                  maxLength={50}
                 />
               </div>
 
@@ -322,10 +359,13 @@ function ProfilePage() {
                 <label>Last Name</label>
 
                 <input
+                  type="text"
                   name="lastName"
                   value={form.lastName}
                   onChange={handleChange}
                   disabled={!editing}
+                  placeholder="Last name"
+                  maxLength={50}
                 />
               </div>
             </div>
@@ -336,7 +376,7 @@ function ProfilePage() {
               <div className="inputWithIcon">
                 <FaEnvelope />
 
-                <input value={user?.email || ""} disabled />
+                <input type="email" value={user?.email || ""} disabled />
               </div>
 
               <small>Email address cannot be changed.</small>
@@ -346,17 +386,21 @@ function ProfilePage() {
               <label>Phone Number</label>
 
               <input
+                type="tel"
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
                 disabled={!editing}
-                placeholder="Enter phone number"
+                placeholder="Enter 10-digit phone number"
+                maxLength={10}
               />
+
+              <small>Enter your 10-digit mobile number.</small>
             </div>
           </div>
         </div>
 
-        {/* ACCOUNT */}
+        {/* ACCOUNT INFORMATION */}
 
         <div className="profileCard">
           <div className="profileCardHeader">
@@ -387,7 +431,11 @@ function ProfilePage() {
 
               <strong>
                 {user?.createdAt ?
-                  new Date(user.createdAt).toLocaleDateString("en-IN")
+                  new Date(user.createdAt).toLocaleDateString("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })
                 : "-"}
               </strong>
             </div>
@@ -395,7 +443,9 @@ function ProfilePage() {
             <div className="accountRow">
               <span>Account ID</span>
 
-              <strong>{user?.id || user?._id || "-"}</strong>
+              <strong title={user?.id || user?._id || "-"}>
+                {user?.id || user?._id || "-"}
+              </strong>
             </div>
           </div>
         </div>

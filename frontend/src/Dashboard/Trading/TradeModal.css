@@ -170,3 +170,149 @@
 
   cursor: not-allowed;
 }
+
+
+
+.tradeBalance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.tradeBalance span {
+  color: #777;
+  font-size: 13px;
+}
+
+.tradeBalance strong {
+  font-size: 15px;
+  color: #222;
+}
+
+.livePriceStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #149447;
+}
+
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #149447;
+  display: inline-block;
+  animation: tradeLivePulse 1.5s infinite;
+}
+
+@keyframes tradeLivePulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.tradeWarning {
+  margin: 15px 0;
+  padding: 12px 14px;
+  background: #fff4e5;
+  border: 1px solid #ffd8a8;
+  border-radius: 8px;
+  color: #9a5a00;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.tradeError {
+  margin: 15px 0;
+  padding: 11px 14px;
+  background: #fff0f0;
+  border: 1px solid #ffcaca;
+  border-radius: 8px;
+  color: #d32f2f;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.tradeBalance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.tradeBalance span {
+  color: #777;
+  font-size: 13px;
+}
+
+.tradeBalance strong {
+  font-size: 15px;
+  color: #222;
+}
+
+.livePriceStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #149447;
+}
+
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #149447;
+  display: inline-block;
+  animation: tradeLivePulse 1.5s infinite;
+}
+
+@keyframes tradeLivePulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.tradeWarning {
+  margin: 15px 0;
+  padding: 12px 14px;
+  background: #fff4e5;
+  border: 1px solid #ffd8a8;
+  border-radius: 8px;
+  color: #9a5a00;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.tradeError {
+  margin: 15px 0;
+  padding: 11px 14px;
+  background: #fff0f0;
+  border: 1px solid #ffcaca;
+  border-radius: 8px;
+  color: #d32f2f;
+  font-size: 13px;
+  line-height: 1.4;
+}

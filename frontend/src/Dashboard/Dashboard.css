@@ -1,5 +1,97 @@
 /* =========================================================
-   DASHBOARD LAYOUT
+   TRADENEST GLOBAL THEME
+========================================================= */
+
+:root {
+  --bg: #f5f7fb;
+
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --card: #ffffff;
+
+  --border: #e5e7eb;
+  --border-light: #edf0f4;
+
+  --text: #111827;
+  --text-secondary: #667085;
+  --text-muted: #98a2b3;
+  --muted: #98a2b3;
+
+  --input-bg: #ffffff;
+
+  --hover-bg: #f3f6fa;
+  --hover: #f3f6fa;
+
+  --shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+
+  --primary: #387ed1;
+  --primary-dark: #2563eb;
+
+  --success: #00875a;
+  --danger: #dc2626;
+}
+
+/* =========================================================
+   DARK THEME
+========================================================= */
+
+html.dark,
+body.dark {
+  --bg: #0f172a;
+
+  --surface: #172033;
+  --surface-2: #1e293b;
+  --card: #172033;
+
+  --border: #334155;
+  --border-light: #293548;
+
+  --text: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --muted: #94a3b8;
+
+  --input-bg: #1e293b;
+
+  --hover-bg: #263449;
+  --hover: #263449;
+
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+  --primary: #3b82f6;
+  --primary-dark: #2563eb;
+
+  --success: #22c55e;
+  --danger: #f87171;
+}
+
+/* =========================================================
+   ROOT
+========================================================= */
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+/* =========================================================
+   DASHBOARD
 ========================================================= */
 
 .dashboard {
@@ -10,66 +102,296 @@
 
   background: var(--bg);
   color: var(--text);
-
-  transition:
-    background 0.25s ease,
-    color 0.25s ease;
 }
 
+/* =========================================================
+   MAIN
+========================================================= */
 
 .dashboardMain {
   flex: 1;
 
   width: calc(100% - 250px);
+
   min-height: 100vh;
 
   margin-left: 250px;
 
   padding: 26px 28px 40px;
 
+  box-sizing: border-box;
+
   background: var(--bg);
+  color: var(--text);
 
   transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
     margin-left 0.25s ease,
-    width 0.25s ease,
-    padding 0.25s ease;
+    width 0.25s ease;
 }
-
 
 /* =========================================================
-   CONTENT SECTIONS
+   GLOBAL TEXT
 ========================================================= */
 
-.dashboardMain > * {
-  max-width: 100%;
+.dashboardMain h1,
+.dashboardMain h2,
+.dashboardMain h3,
+.dashboardMain h4,
+.dashboardMain h5,
+.dashboardMain h6 {
+  color: var(--text);
 }
 
+.dashboardMain p {
+  color: var(--text-secondary);
+}
+
+/* =========================================================
+   COMMON CARDS
+========================================================= */
+
+.card,
+.dashboard-card,
+.dashboardCard,
+.stat-card,
+.statCard,
+.summary-card,
+.summaryCard,
+.settingsCard,
+.profileCard,
+.fundsCard,
+.holdingsCard,
+.watchlistCard,
+.ordersCard,
+.analyticsCard,
+.portfolioCard {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.dashboardMain table {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.dashboardMain thead {
+  background: var(--surface-2);
+}
+
+.dashboardMain th {
+  color: var(--text-secondary);
+  background: var(--surface-2);
+  border-color: var(--border);
+}
+
+.dashboardMain td {
+  color: var(--text-secondary);
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.dashboardMain tbody tr {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.dashboardMain tbody tr:hover {
+  background: var(--hover-bg);
+}
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+.dashboardMain input,
+.dashboardMain textarea,
+.dashboardMain select {
+  background: var(--input-bg);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.dashboardMain input::placeholder,
+.dashboardMain textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   COMMON BUTTONS
+========================================================= */
+
+.secondary-btn,
+.outline-btn,
+.refresh-btn,
+.secondaryButton,
+.outlineButton {
+  background: var(--surface-2);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+.modal,
+.modal-content,
+.modalContent,
+.modal-box,
+.trade-modal,
+.tradeModal {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+/* =========================================================
+   DROPDOWN
+========================================================= */
+
+.dropdown,
+.dropdown-menu,
+.dropdownMenu,
+.profile-dropdown,
+.profileDropdown {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar {
+  background: var(--card);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.sidebar a {
+  color: var(--text-secondary);
+}
+
+.sidebar a:hover {
+  background: var(--hover);
+  color: var(--primary);
+}
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.topbar,
+.topBar,
+.dashboardHeader,
+.top-header,
+.header {
+  background: var(--card);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+/* =========================================================
+   LINKS
+========================================================= */
+
+a {
+  color: inherit;
+}
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+hr {
+  border-color: var(--border);
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* =========================================================
+   TRANSITIONS
+========================================================= */
+
+.dashboard,
+.dashboardMain,
+.card,
+.dashboard-card,
+.dashboardCard,
+.stat-card,
+.statCard,
+.settingsCard,
+.profileCard,
+.fundsCard,
+.holdingsCard,
+.watchlistCard,
+.ordersCard,
+.analyticsCard,
+.portfolioCard,
+table,
+thead,
+tbody,
+tr,
+td,
+th,
+input,
+textarea,
+select,
+button {
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
 
 /* =========================================================
    TABLET
 ========================================================= */
 
 @media (max-width: 991px) {
-
   .dashboardMain {
     width: calc(100% - 76px);
-
     margin-left: 76px;
-
     padding: 20px 18px 35px;
   }
 }
-
 
 /* =========================================================
    MOBILE
 ========================================================= */
 
 @media (max-width: 650px) {
-
   .dashboardMain {
     width: calc(100% - 76px);
-
+    margin-left: 76px;
     padding: 14px 12px 28px;
   }
 }

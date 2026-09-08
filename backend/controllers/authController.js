@@ -869,6 +869,112 @@ const resetPassword = async (req, res) => {
    UPDATE PROFILE
 ===================================================== */
 
+/* =====================================================
+   CHANGE PASSWORD
+   Logged-in user only
+===================================================== */
+
+const changePassword = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const {
+      currentPassword,
+      newPassword,
+    } = req.body;
+
+    /* ================================
+       VALIDATION
+    ================================= */
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Current password and new password are required.",
+      });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "New password must be at least 6 characters.",
+      });
+    }
+
+    if (currentPassword === newPassword) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "New password must be different from current password.",
+      });
+    }
+
+    /* ================================
+       FIND USER
+    ================================= */
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    /* ================================
+       CHECK CURRENT PASSWORD
+    ================================= */
+
+    const passwordMatch = await bcrypt.compare(
+      currentPassword,
+      user.password
+    );
+
+    if (!passwordMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Current password is incorrect.",
+      });
+    }
+
+    /* ================================
+       HASH NEW PASSWORD
+    ================================= */
+
+    user.password = await bcrypt.hash(
+      newPassword,
+      12
+    );
+
+    await user.save();
+
+    console.log(
+      "🔐 Password changed successfully:",
+      user.email
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Password changed successfully.",
+    });
+
+  } catch (error) {
+    console.error(
+      "❌ CHANGE PASSWORD ERROR:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message:
+        "Unable to change password.",
+    });
+  }
+};
+
 const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -989,4 +1095,5 @@ module.exports = {
   verifyResetOTP,
   resetPassword,
   updateProfile,
+  changePassword,
 };

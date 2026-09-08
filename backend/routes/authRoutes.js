@@ -8,10 +8,10 @@ const {
   verifyResetOTP,
   resetPassword,
   updateProfile,
+  changePassword,
 } = require("../controllers/authController");
 
 const protect = require("../middleware/authMiddleware");
-
 const upload = require("../middleware/uploadMiddleware");
 
 const router = express.Router();
@@ -20,21 +20,47 @@ const router = express.Router();
    PUBLIC ROUTES
 ===================================================== */
 
-router.post("/signup", signup);
+// Signup
+router.post(
+  "/signup",
+  signup
+);
 
-router.post("/login", login);
+// Login
+router.post(
+  "/login",
+  login
+);
 
-router.post("/forgot-password", forgotPassword);
+// Forgot Password → Send OTP
+router.post(
+  "/forgot-password",
+  forgotPassword
+);
 
-router.post("/verify-reset-otp", verifyResetOTP);
+// Verify Reset OTP
+router.post(
+  "/verify-reset-otp",
+  verifyResetOTP
+);
 
-router.post("/reset-password", resetPassword);
+// Reset Password
+router.post(
+  "/reset-password",
+  resetPassword
+);
 
 /* =====================================================
    PROTECTED ROUTES
+   JWT authentication required
 ===================================================== */
 
-router.get("/me", protect, getMe);
+// Get current logged-in user
+router.get(
+  "/me",
+  protect,
+  getMe
+);
 
 /* =====================================================
    UPDATE PROFILE
@@ -44,7 +70,21 @@ router.put(
   "/profile",
   protect,
   upload.single("profileImage"),
-  updateProfile,
+  updateProfile
 );
+
+/* =====================================================
+   CHANGE PASSWORD
+===================================================== */
+
+router.put(
+  "/change-password",
+  protect,
+  changePassword
+);
+
+/* =====================================================
+   EXPORT ROUTER
+===================================================== */
 
 module.exports = router;

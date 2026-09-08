@@ -1,90 +1,104 @@
 .portfolioPage {
+  width: 100%;
   color: var(--text);
 }
 
+/* ================= HEADER ================= */
+
 .portfolioHeader {
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   margin-bottom: 25px;
 }
 
 .portfolioHeader h1 {
   margin: 0;
-
   color: var(--text);
-
   font-size: 30px;
 }
 
 .portfolioHeader p {
   margin: 6px 0 0;
-
   color: var(--text-secondary);
-
   font-size: 14px;
 }
 
-.portfolioReportBtn {
-  border: none;
+.portfolioHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-  background: #2878d7;
-
-  color: white;
-
-  padding: 11px 18px;
-
-  border-radius: 9px;
-
-  cursor: pointer;
-
+.portfolioLiveStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 12px;
   font-weight: 600;
 }
 
+.portfolioLiveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #12b76a;
+  box-shadow: 0 0 0 4px rgba(18, 183, 106, 0.12);
+}
+
+.refreshPortfolioBtn,
+.retryPortfolioBtn {
+  border: none;
+  background: #387ed1;
+  color: white;
+  padding: 9px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.refreshPortfolioBtn:hover,
+.retryPortfolioBtn:hover {
+  background: #2f6fb8;
+}
+
+.refreshPortfolioBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ================= STATS ================= */
+
 .portfolioStats {
   display: grid;
-
-  grid-template-columns:
-    repeat(4, minmax(0, 1fr));
-
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
-
   margin-bottom: 25px;
 }
 
 .portfolioStatCard {
   background: var(--card);
-
   border: 1px solid var(--border);
-
   border-radius: 16px;
-
   padding: 22px;
-
-  box-shadow:
-    0 5px 20px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
 }
 
 .portfolioStatCard span {
   color: var(--text-secondary);
-
   font-size: 13px;
 }
 
 .portfolioStatCard h2 {
   margin: 10px 0 5px;
-
   color: var(--text);
-
   font-size: 24px;
 }
 
 .portfolioStatCard small {
   color: var(--muted);
-
   font-size: 11px;
 }
 
@@ -93,137 +107,271 @@
   color: #12b76a !important;
 }
 
+.lossText,
 .negative {
   color: #f04438 !important;
 }
 
+/* ================= SECTION ================= */
+
 .portfolioSection {
   background: var(--card);
-
   border: 1px solid var(--border);
-
   border-radius: 16px;
-
   padding: 22px;
-
   margin-bottom: 22px;
 }
 
 .portfolioSectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 18px;
 }
 
 .portfolioSectionHeader h2 {
   margin: 0;
-
   color: var(--text);
-
   font-size: 19px;
 }
 
 .portfolioSectionHeader p {
   margin: 5px 0 0;
-
   color: var(--text-secondary);
-
   font-size: 12px;
 }
 
+.portfolioHoldingCount {
+  padding: 7px 11px;
+  border-radius: 7px;
+  background: rgba(56, 126, 209, 0.1);
+  color: #387ed1;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ================= TABLE ================= */
+
 .portfolioTableWrapper {
   width: 100%;
-
   overflow-x: auto;
 }
 
 .portfolioTable {
   width: 100%;
-
+  min-width: 850px;
   border-collapse: collapse;
-
-  min-width: 750px;
 }
 
 .portfolioTable th {
   text-align: left;
-
   padding: 13px;
-
   color: var(--text-secondary);
-
   font-size: 11px;
-
+  font-weight: 600;
   border-bottom: 1px solid var(--border);
+  white-space: nowrap;
 }
 
 .portfolioTable td {
   padding: 17px 13px;
-
   color: var(--text);
-
   font-size: 12px;
-
   border-bottom: 1px solid var(--border);
+  white-space: nowrap;
 }
+
+.portfolioTable tbody tr:hover {
+  background: rgba(56, 126, 209, 0.025);
+}
+
+/* ================= STOCK ================= */
 
 .portfolioStock {
   display: flex;
-
   flex-direction: column;
+  gap: 3px;
+  min-width: 130px;
 }
 
 .portfolioStock strong {
   color: var(--text);
+  font-size: 13px;
 }
 
 .portfolioStock small {
-  margin-top: 3px;
-
   color: var(--muted);
+  font-size: 10px;
 }
 
-.emptyPortfolio {
-  text-align: center;
+/* ================= LTP ================= */
 
-  padding: 40px !important;
-
-  color: var(--muted) !important;
-}
-
-.performancePlaceholder {
-  padding: 40px;
-
-  border: 1px dashed var(--border);
-
-  border-radius: 12px;
-
-  text-align: center;
-}
-
-.performancePlaceholder h3 {
+.portfolioLtp {
+  font-weight: 600;
   color: var(--text);
 }
 
-.performancePlaceholder p {
-  color: var(--text-secondary);
+/* ================= PNL ================= */
+
+.pnlPercentage {
+  display: block;
+  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 600;
 }
 
-@media (max-width: 1000px) {
-  .portfolioStats {
-    grid-template-columns:
-      repeat(2, 1fr);
+/* ================= EMPTY ================= */
+
+.emptyPortfolio {
+  text-align: center;
+  padding: 55px 20px !important;
+  color: var(--muted) !important;
+}
+
+.emptyPortfolioIcon {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.emptyPortfolio strong {
+  display: block;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.emptyPortfolio p {
+  margin: 7px 0 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* ================= PERFORMANCE ================= */
+
+.performancePlaceholder {
+  padding: 40px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.performanceIcon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.performancePlaceholder h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 17px;
+}
+
+.performancePlaceholder p {
+  margin: 8px 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.performancePlaceholder small {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+/* ================= LOADING ================= */
+
+.portfolioLoading {
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.portfolioLoading h3 {
+  margin: 15px 0 5px;
+  color: var(--text);
+}
+
+.portfolioLoading p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.portfolioLoader {
+  width: 38px;
+  height: 38px;
+  border: 3px solid var(--border);
+  border-top-color: #387ed1;
+  border-radius: 50%;
+  animation: portfolioSpin 0.8s linear infinite;
+}
+
+@keyframes portfolioSpin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-@media (max-width: 600px) {
+/* ================= ERROR ================= */
+
+.portfolioError {
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.portfolioErrorIcon {
+  font-size: 35px;
+  margin-bottom: 10px;
+}
+
+.portfolioError h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 20px;
+}
+
+.portfolioError p {
+  max-width: 450px;
+  margin: 8px 0 18px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1000px) {
+  .portfolioStats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .portfolioHeader {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .portfolioHeaderActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .portfolioStats {
     grid-template-columns: 1fr;
   }
 
-  .portfolioHeader {
+  .portfolioSection {
+    padding: 16px;
+  }
+
+  .portfolioSectionHeader {
     align-items: flex-start;
-
-    flex-direction: column;
-
-    gap: 15px;
+    gap: 10px;
   }
 }

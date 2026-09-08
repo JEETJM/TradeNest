@@ -1,312 +1,289 @@
 .profilePage {
   min-height: calc(100vh - 100px);
-
   color: var(--text);
 }
 
-/* LOADING */
+/* =========================
+   LOADING
+========================= */
 
 .profileLoading {
-  min-height: 300px;
-
+  min-height: 350px;
   display: flex;
-
   align-items: center;
   justify-content: center;
-
+  gap: 12px;
   color: var(--text-secondary);
+  font-size: 14px;
 }
 
-/* HEADER */
+.profileLoader {
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--border);
+  border-top-color: #2878d7;
+  border-radius: 50%;
+  animation: profileSpin 0.8s linear infinite;
+}
+
+@keyframes profileSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================
+   HEADER
+========================= */
 
 .profileHeader {
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   gap: 20px;
-
   margin-bottom: 22px;
 }
 
 .profileHeader h1 {
   margin: 0;
-
   color: var(--text);
-
   font-size: 30px;
+  font-weight: 700;
 }
 
 .profileHeader p {
   margin: 7px 0 0;
-
   color: var(--text-secondary);
-
   font-size: 14px;
 }
 
-/* BUTTONS */
+/* =========================
+   BUTTONS
+========================= */
 
 .profileActions {
   display: flex;
-
   gap: 10px;
 }
 
 .editProfileMainBtn,
 .saveProfileBtn,
 .cancelProfileBtn {
-  border: none;
-
+  min-height: 42px;
   border-radius: 9px;
-
-  padding: 11px 18px;
-
+  padding: 10px 18px;
+  font-size: 13px;
   font-weight: 600;
-
   cursor: pointer;
+  transition: 0.2s ease;
 }
 
 .editProfileMainBtn,
 .saveProfileBtn {
+  border: none;
   background: #2878d7;
-
-  color: white;
+  color: #fff;
 }
 
 .editProfileMainBtn:hover,
 .saveProfileBtn:hover {
   background: #1769c2;
+  transform: translateY(-1px);
 }
 
 .cancelProfileBtn {
   background: var(--surface);
-
   color: var(--text-secondary);
-
   border: 1px solid var(--border);
+}
+
+.cancelProfileBtn:hover {
+  background: var(--border);
 }
 
 .profileActions button:disabled {
   opacity: 0.6;
-
   cursor: not-allowed;
+  transform: none;
 }
 
-/* MESSAGES */
+/* =========================
+   MESSAGES
+========================= */
 
 .profileSuccess,
 .profileError {
   padding: 12px 15px;
-
   border-radius: 10px;
-
   margin-bottom: 18px;
-
   font-size: 13px;
 }
 
 .profileSuccess {
   background: #ecfdf3;
-
   color: #087443;
-
   border: 1px solid #abefc6;
-
   display: flex;
-
   align-items: center;
-
   gap: 8px;
 }
 
 .profileError {
   background: #fef3f2;
-
   color: #b42318;
-
   border: 1px solid #fecdca;
 }
 
-/* HERO */
+/* =========================
+   HERO
+========================= */
 
 .profileHero {
   background: var(--card);
-
   border: 1px solid var(--border);
-
   border-radius: 17px;
-
   padding: 25px;
-
   margin-bottom: 22px;
-
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
 }
 
 .profileHeroLeft {
   display: flex;
-
   align-items: center;
-
   gap: 18px;
 }
 
 .largeProfileAvatar {
   width: 88px;
   height: 88px;
-
+  flex: 0 0 88px;
   border-radius: 50%;
-
   background: #2878d7;
-
-  color: white;
-
+  color: #fff;
   font-size: 32px;
-
   font-weight: 700;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   position: relative;
-
   overflow: visible;
 }
 
 .largeProfileAvatar img {
   width: 100%;
   height: 100%;
-
   border-radius: 50%;
-
   object-fit: cover;
+}
+
+.profileHeroInfo {
+  min-width: 0;
 }
 
 .profileHero h2 {
   margin: 0;
-
   color: var(--text);
-
   font-size: 21px;
+  font-weight: 700;
 }
 
 .profileHero p {
   margin: 5px 0;
-
   color: var(--text-secondary);
-
   font-size: 13px;
+  word-break: break-word;
 }
 
 .profileVerified {
   display: inline-flex;
-
   align-items: center;
-
   gap: 5px;
-
   color: #12b76a;
-
   font-size: 12px;
-
   font-weight: 600;
 }
 
-/* CAMERA */
+/* =========================
+   CAMERA
+========================= */
 
 .cameraButton {
   position: absolute;
-
   right: -3px;
   bottom: -3px;
-
   width: 30px;
   height: 30px;
-
   border-radius: 50%;
-
   background: #2878d7;
-
   border: 3px solid var(--card);
-
-  color: white;
-
+  color: #fff;
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   cursor: pointer;
-
   font-size: 12px;
+  transition: 0.2s ease;
 }
 
-/* GRID */
+.cameraButton:hover {
+  background: #1769c2;
+  transform: scale(1.08);
+}
+
+/* =========================
+   GRID
+========================= */
 
 .profileGrid {
   display: grid;
-
   grid-template-columns:
     minmax(0, 1.4fr)
     minmax(0, 1fr);
-
   gap: 22px;
 }
 
-/* CARD */
+/* =========================
+   CARD
+========================= */
 
 .profileCard {
   background: var(--card);
-
   border: 1px solid var(--border);
-
   border-radius: 16px;
-
   overflow: hidden;
-
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
 }
 
 .profileCardHeader {
   padding: 20px 22px;
-
   border-bottom: 1px solid var(--border);
-
   display: flex;
-
   justify-content: space-between;
-
   align-items: center;
+  gap: 15px;
 }
 
 .profileCardHeader h2 {
   margin: 0;
-
   color: var(--text);
-
   font-size: 18px;
 }
 
 .profileCardHeader p {
   margin: 5px 0 0;
-
   color: var(--text-secondary);
-
   font-size: 12px;
 }
 
 .profileCardHeader > svg {
+  flex-shrink: 0;
   color: #2878d7;
-
   font-size: 18px;
 }
 
-/* FORM */
+/* =========================
+   FORM
+========================= */
 
 .profileForm {
   padding: 22px;
@@ -314,9 +291,7 @@
 
 .profileFormGrid {
   display: grid;
-
   grid-template-columns: 1fr 1fr;
-
   gap: 15px;
 }
 
@@ -324,61 +299,56 @@
   margin-bottom: 18px;
 }
 
+.profileField:last-child {
+  margin-bottom: 0;
+}
+
 .profileField label {
   display: block;
-
   margin-bottom: 7px;
-
   color: var(--text-secondary);
-
   font-size: 12px;
-
   font-weight: 600;
 }
 
 .profileField input {
   width: 100%;
-
   height: 44px;
-
+  box-sizing: border-box;
   padding: 0 12px;
-
   border: 1px solid var(--border);
-
   border-radius: 9px;
-
   outline: none;
-
   background: var(--surface);
-
   color: var(--text);
-
   font-size: 13px;
+  transition: 0.2s ease;
+}
 
-  transition: 0.2s;
+.profileField input::placeholder {
+  color: var(--muted);
 }
 
 .profileField input:focus:not(:disabled) {
   border-color: #2878d7;
-
   box-shadow: 0 0 0 3px rgba(40, 120, 215, 0.1);
 }
 
 .profileField input:disabled {
   cursor: not-allowed;
-
   opacity: 0.85;
 }
 
 .profileField small {
   display: block;
-
   margin-top: 6px;
-
   color: var(--muted);
-
   font-size: 10px;
 }
+
+/* =========================
+   EMAIL INPUT
+========================= */
 
 .inputWithIcon {
   position: relative;
@@ -386,23 +356,21 @@
 
 .inputWithIcon svg {
   position: absolute;
-
   left: 13px;
-
   top: 50%;
-
   transform: translateY(-50%);
-
   color: var(--muted);
-
   font-size: 13px;
+  z-index: 1;
 }
 
 .inputWithIcon input {
   padding-left: 38px;
 }
 
-/* ACCOUNT */
+/* =========================
+   ACCOUNT
+========================= */
 
 .accountInfo {
   padding: 5px 22px;
@@ -410,15 +378,10 @@
 
 .accountRow {
   min-height: 65px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   gap: 15px;
-
   border-bottom: 1px solid var(--border);
 }
 
@@ -428,22 +391,17 @@
 
 .accountRow span {
   color: var(--text-secondary);
-
   font-size: 12px;
 }
 
 .accountRow strong {
   color: var(--text);
-
   font-size: 12px;
-
   text-align: right;
-
   max-width: 220px;
-
   overflow: hidden;
-
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .activeStatus,
@@ -451,7 +409,9 @@
   color: #12b76a !important;
 }
 
-/* RESPONSIVE */
+/* =========================
+   RESPONSIVE
+========================= */
 
 @media (max-width: 950px) {
   .profileGrid {
@@ -462,19 +422,71 @@
 @media (max-width: 650px) {
   .profileHeader {
     align-items: flex-start;
-
     flex-direction: column;
+  }
+
+  .profileHeader h1 {
+    font-size: 25px;
+  }
+
+  .profileActions {
+    width: 100%;
+  }
+
+  .profileActions button {
+    flex: 1;
   }
 
   .profileFormGrid {
     grid-template-columns: 1fr;
   }
 
+  .profileHero {
+    padding: 18px;
+  }
+
   .profileHeroLeft {
     align-items: flex-start;
   }
 
-  .profileHero {
+  .largeProfileAvatar {
+    width: 72px;
+    height: 72px;
+    flex-basis: 72px;
+    font-size: 27px;
+  }
+
+  .profileHero h2 {
+    font-size: 18px;
+  }
+
+  .profileCardHeader {
     padding: 18px;
+  }
+
+  .profileForm {
+    padding: 18px;
+  }
+
+  .accountInfo {
+    padding: 5px 18px;
+  }
+}
+
+@media (max-width: 430px) {
+  .profileActions {
+    flex-direction: column;
+  }
+
+  .profileHeroLeft {
+    gap: 13px;
+  }
+
+  .accountRow {
+    min-height: 58px;
+  }
+
+  .accountRow strong {
+    max-width: 150px;
   }
 }

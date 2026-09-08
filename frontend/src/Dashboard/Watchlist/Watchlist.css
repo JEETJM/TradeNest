@@ -464,3 +464,17 @@
 .sellBtn:hover {
   background: #c92f2b;
 }
+.watchStock {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.watchStock strong {
+  font-weight: 700;
+}
+
+.watchStock small {
+  color: #555;
+  font-size: 13px;
+}

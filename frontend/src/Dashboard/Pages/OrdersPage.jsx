@@ -1,118 +1,145 @@
-import { useEffect, useState } from "react";
-
+import { useCallback, useEffect, useState } from "react";
 import "./OrdersPage.css";
+
+const API_URL = "http://localhost:5000";
+
+/* =====================================================
+   GET TOKEN
+===================================================== */
+
+const getToken = () => {
+  return (
+    localStorage.getItem("tradenest_token") ||
+    localStorage.getItem("token") ||
+    sessionStorage.getItem("tradenest_token") ||
+    sessionStorage.getItem("token")
+  );
+};
+
+/* =====================================================
+   ORDERS PAGE
+===================================================== */
 
 function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
 
   /* =====================================================
-     LOAD ORDERS FROM MONGODB
+     LOAD ORDERS
   ===================================================== */
 
-  const loadOrders = async () => {
+  const loadOrders = useCallback(async (showRefreshLoader = false) => {
     try {
-      setLoading(true);
+      if (showRefreshLoader) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
+
       setError("");
 
-      const token =
-        localStorage.getItem("tradenest_token") ||
-        sessionStorage.getItem("tradenest_token");
+      const token = getToken();
 
       if (!token) {
-        setError("Please login again.");
-        setLoading(false);
-        return;
+        throw new Error("Authentication token not found. Please login again.");
       }
 
       console.log("📤 Fetching orders from MongoDB...");
 
-      const response = await fetch(
-        "http://localhost:5000/api/trades/orders",
-        {
-          method: "GET",
+      const response = await fetch(`${API_URL}/api/trades/orders`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const responseText = await response.text();
 
-      const data = await response.json();
+      let data;
+
+      try {
+        data = JSON.parse(responseText);
+      } catch (parseError) {
+        console.error("❌ INVALID ORDERS RESPONSE:", responseText);
+
+        throw new Error(
+          "Server returned an invalid response. Please check the backend.",
+        );
+      }
 
       console.log("📥 ORDERS FROM BACKEND:", data);
 
       if (!response.ok) {
-        throw new Error(
-          data.message || "Unable to fetch orders."
-        );
+        throw new Error(data.message || "Unable to fetch orders.");
       }
 
-      setOrders(data.orders || []);
-    } catch (error) {
-      console.error(
-        "❌ LOAD ORDERS ERROR:",
-        error
-      );
+      if (!data.success) {
+        throw new Error(data.message || "Unable to fetch orders.");
+      }
 
-      setError(error.message);
+      setOrders(Array.isArray(data.orders) ? data.orders : []);
+    } catch (error) {
+      console.error("❌ LOAD ORDERS ERROR:", error);
+
+      setError(error.message || "Unable to load orders.");
       setOrders([]);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
-  };
+  }, []);
 
   /* =====================================================
-     INITIAL LOAD
+     INITIAL LOAD + AUTO REFRESH
   ===================================================== */
 
   useEffect(() => {
     loadOrders();
 
     const refreshOrders = () => {
-      loadOrders();
+      console.log("🔄 TradeNest update detected. Refreshing orders...");
+      loadOrders(true);
     };
 
-    window.addEventListener(
-      "tradenest-update",
-      refreshOrders
-    );
+    window.addEventListener("tradenest-update", refreshOrders);
 
     return () => {
-      window.removeEventListener(
-        "tradenest-update",
-        refreshOrders
-      );
+      window.removeEventListener("tradenest-update", refreshOrders);
     };
-  }, []);
+  }, [loadOrders]);
 
   /* =====================================================
-     MONEY
+     MONEY FORMAT
   ===================================================== */
 
-  const formatMoney = (value) =>
-    `₹${Number(value || 0).toLocaleString(
-      "en-IN",
-      {
-        maximumFractionDigits: 2,
-      }
-    )}`;
+  const formatMoney = (value) => {
+    return `₹${Number(value || 0).toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`;
+  };
 
   /* =====================================================
-     DATE
+     DATE FORMAT
   ===================================================== */
 
   const formatDate = (date) => {
-    if (!date) return "-";
+    if (!date) {
+      return "-";
+    }
 
-    return new Date(date).toLocaleString(
-      "en-IN",
-      {
-        dateStyle: "medium",
-        timeStyle: "short",
-      }
-    );
+    const parsedDate = new Date(date);
+
+    if (Number.isNaN(parsedDate.getTime())) {
+      return "-";
+    }
+
+    return parsedDate.toLocaleString("en-IN", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
   };
 
   /* =====================================================
@@ -125,27 +152,19 @@ function OrdersPage() {
         <div className="ordersHeader">
           <div>
             <h1>Orders</h1>
-            <p>
-              View and track all your trading orders.
-            </p>
+            <p>View and track all your trading orders.</p>
           </div>
 
-          <div className="orderCount">
-            Loading...
-          </div>
+          <div className="orderCount">Loading...</div>
         </div>
 
         <div className="ordersCard">
           <div className="emptyOrders">
-            <div className="emptyOrderIcon">
-              ⏳
-            </div>
+            <div className="emptyOrderIcon">⏳</div>
 
             <h2>Loading orders...</h2>
 
-            <p>
-              Fetching your orders from MongoDB.
-            </p>
+            <p>Fetching your orders from MongoDB.</p>
           </div>
         </div>
       </section>
@@ -162,18 +181,13 @@ function OrdersPage() {
         <div className="ordersHeader">
           <div>
             <h1>Orders</h1>
-
-            <p>
-              View and track all your trading orders.
-            </p>
+            <p>View and track all your trading orders.</p>
           </div>
         </div>
 
         <div className="ordersCard">
           <div className="emptyOrders">
-            <div className="emptyOrderIcon">
-              ⚠️
-            </div>
+            <div className="emptyOrderIcon">⚠️</div>
 
             <h2>Unable to load orders</h2>
 
@@ -181,16 +195,11 @@ function OrdersPage() {
 
             <button
               type="button"
-              onClick={loadOrders}
-              style={{
-                marginTop: "15px",
-                padding: "10px 20px",
-                border: "none",
-                borderRadius: "8px",
-                cursor: "pointer",
-              }}
+              className="retryOrdersBtn"
+              onClick={() => loadOrders(true)}
+              disabled={refreshing}
             >
-              Try Again
+              {refreshing ? "Refreshing..." : "Try Again"}
             </button>
           </div>
         </div>
@@ -204,54 +213,45 @@ function OrdersPage() {
 
   return (
     <section className="ordersPage">
-
-      {/* HEADER */}
-
       <div className="ordersHeader">
-
         <div>
           <h1>Orders</h1>
 
-          <p>
-            View and track all your trading orders.
-          </p>
+          <p>View and track all your trading orders.</p>
         </div>
 
-        <div className="orderCount">
-          {orders.length} Orders
-        </div>
+        <div className="ordersHeaderActions">
+          <div className="orderCount">
+            {orders.length}{" "}
+            {orders.length === 1 ? "Order" : "Orders"}
+          </div>
 
+          <button
+            type="button"
+            className="refreshOrdersBtn"
+            onClick={() => loadOrders(true)}
+            disabled={refreshing}
+          >
+            {refreshing ? "Refreshing..." : "↻ Refresh"}
+          </button>
+        </div>
       </div>
 
-      {/* TABLE */}
-
       <div className="ordersCard">
-
         {orders.length === 0 ? (
-
           <div className="emptyOrders">
-
-            <div className="emptyOrderIcon">
-              📋
-            </div>
+            <div className="emptyOrderIcon">📋</div>
 
             <h2>No orders yet</h2>
 
             <p>
-              Your completed Buy and Sell orders
-              will appear here.
+              Your completed Buy and Sell orders will appear here.
             </p>
-
           </div>
-
         ) : (
-
           <div className="ordersTableWrapper">
-
             <table className="ordersTable">
-
               <thead>
-
                 <tr>
                   <th>Order ID</th>
                   <th>Stock</th>
@@ -259,103 +259,111 @@ function OrdersPage() {
                   <th>Quantity</th>
                   <th>Price</th>
                   <th>Total</th>
+                  <th>Product</th>
                   <th>Status</th>
                   <th>Date</th>
                 </tr>
-
               </thead>
 
               <tbody>
+                {orders.map((order) => {
+                  const orderId = order._id || order.id || "";
 
-                {orders.map((order) => (
+                  const side = String(
+                    order.side || "",
+                  ).toUpperCase();
 
-                  <tr
-                    key={order._id || order.id}
-                  >
+                  const status = String(
+                    order.status || "UNKNOWN",
+                  ).toUpperCase();
 
-                    <td>
-                      <strong>
-                        {String(
-                          order._id ||
-                          order.id
-                        ).slice(-8)}
-                      </strong>
-                    </td>
+                  const productType =
+                    order.productType || "CNC";
 
-                    <td>
-
-                      <div className="orderStock">
-
-                        <strong>
-                          {order.symbol}
+                  return (
+                    <tr key={orderId}>
+                      {/* ORDER ID */}
+                      <td>
+                        <strong className="orderId">
+                          {String(orderId).slice(-8)}
                         </strong>
+                      </td>
 
-                        <small>
-                          {order.company}
-                        </small>
+                      {/* STOCK */}
+                      <td>
+                        <div className="orderStock">
+                          <strong>{order.symbol || "-"}</strong>
 
-                      </div>
+                          <small>
+                            {order.company || "-"}
+                          </small>
+                        </div>
+                      </td>
 
-                    </td>
+                      {/* BUY / SELL */}
+                      <td>
+                        <span
+                          className={
+                            side === "BUY"
+                              ? "buyType"
+                              : side === "SELL"
+                                ? "sellType"
+                                : "unknownType"
+                          }
+                        >
+                          {side || "-"}
+                        </span>
+                      </td>
 
-                    <td>
+                      {/* QUANTITY */}
+                      <td>
+                        {Number(
+                          order.quantity || 0,
+                        ).toLocaleString("en-IN")}
+                      </td>
 
-                      <span
-                        className={
-                          order.side === "BUY"
-                            ? "buyType"
-                            : "sellType"
-                        }
-                      >
-                        {order.side}
-                      </span>
+                      {/* PRICE */}
+                      <td>{formatMoney(order.price)}</td>
 
-                    </td>
+                      {/* TOTAL */}
+                      <td>
+                        <strong>
+                          {formatMoney(order.totalAmount)}
+                        </strong>
+                      </td>
 
-                    <td>
-                      {order.quantity}
-                    </td>
+                      {/* PRODUCT */}
+                      <td>
+                        <span className="productType">
+                          {productType}
+                        </span>
+                      </td>
 
-                    <td>
-                      {formatMoney(
-                        order.price
-                      )}
-                    </td>
+                      {/* STATUS */}
+                      <td>
+                        <span
+                          className={
+                            status === "COMPLETED"
+                              ? "completedStatus"
+                              : status === "CANCELLED"
+                                ? "cancelledStatus"
+                                : "pendingStatus"
+                          }
+                        >
+                          {status}
+                        </span>
+                      </td>
 
-                    <td>
-                      {formatMoney(
-                        order.totalAmount
-                      )}
-                    </td>
-
-                    <td>
-
-                      <span className="completedStatus">
-                        {order.status}
-                      </span>
-
-                    </td>
-
-                    <td>
-                      {formatDate(
-                        order.createdAt
-                      )}
-                    </td>
-
-                  </tr>
-
-                ))}
-
+                      {/* DATE */}
+                      <td>{formatDate(order.createdAt)}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
-
             </table>
-
           </div>
-
         )}
-
       </div>
-
     </section>
   );
 }

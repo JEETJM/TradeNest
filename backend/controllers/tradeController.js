@@ -1,11 +1,15 @@
+const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const Holding = require("../models/Holding");
+const User = require("../models/User");
 
 /* =====================================================
    PLACE BUY / SELL ORDER
 ===================================================== */
 
 const placeOrder = async (req, res) => {
+  const session = await mongoose.startSession();
+
   try {
     console.log("=================================");
     console.log("📥 PLACE ORDER API CALLED");
@@ -32,9 +36,9 @@ const placeOrder = async (req, res) => {
       orderType = "MARKET",
     } = req.body;
 
-    /* =========================
+    /* =====================================================
        VALIDATION
-    ========================= */
+    ===================================================== */
 
     if (
       !symbol ||
@@ -63,233 +67,320 @@ const placeOrder = async (req, res) => {
       });
     }
 
-    if (
-      !Number.isFinite(cleanQuantity) ||
-      cleanQuantity <= 0
-    ) {
+    if (!Number.isFinite(cleanQuantity) || cleanQuantity <= 0) {
       return res.status(400).json({
         success: false,
         message: "Quantity must be greater than 0.",
       });
     }
 
-    if (
-      !Number.isFinite(cleanPrice) ||
-      cleanPrice <= 0
-    ) {
+    if (!Number.isFinite(cleanPrice) || cleanPrice <= 0) {
       return res.status(400).json({
         success: false,
         message: "Price must be greater than 0.",
       });
     }
 
-    const totalAmount =
-      cleanQuantity * cleanPrice;
+    const totalAmount = cleanQuantity * cleanPrice;
 
-    /* =========================
-       SELL VALIDATION
-    ========================= */
+    /* =====================================================
+       START TRANSACTION
+    ===================================================== */
+
+    session.startTransaction();
+
+    /* =====================================================
+       FIND USER
+    ===================================================== */
+
+    const user = await User.findById(userId).session(session);
+
+    if (!user) {
+      throw new Error("User not found.");
+    }
+
+    /* =====================================================
+       INITIALIZE OLD USER BALANCE
+    ===================================================== */
+
+    if (user.availableBalance === undefined) {
+      user.availableBalance = 25000;
+    }
+
+    if (user.usedMargin === undefined) {
+      user.usedMargin = 0;
+    }
 
     let existingHolding = null;
+
+    /* =====================================================
+       SELL → FIND HOLDING
+    ===================================================== */
 
     if (cleanSide === "SELL") {
       existingHolding = await Holding.findOne({
         user: userId,
         symbol: cleanSymbol,
-      });
+      }).session(session);
 
       if (!existingHolding) {
-        return res.status(400).json({
-          success: false,
-          message: `You do not own ${cleanSymbol}.`,
-        });
+        throw new Error(`You do not own ${cleanSymbol}.`);
       }
 
-      if (
-        Number(existingHolding.quantity) <
-        cleanQuantity
-      ) {
-        return res.status(400).json({
-          success: false,
-          message: `Insufficient quantity. You own ${existingHolding.quantity} ${cleanSymbol} shares.`,
-        });
+      if (Number(existingHolding.quantity) < cleanQuantity) {
+        throw new Error(
+          `Insufficient quantity. You own ${existingHolding.quantity} ${cleanSymbol} shares.`,
+        );
       }
     }
 
-    /* =========================
-       CREATE ORDER
-    ========================= */
+    /* =====================================================
+       BUY → CHECK FUNDS
+    ===================================================== */
 
-    const order = await Order.create({
+    if (cleanSide === "BUY") {
+      const availableBalance = Number(user.availableBalance || 0);
+
+      if (availableBalance < totalAmount) {
+        throw new Error(
+          `Insufficient funds. Available balance is ₹${availableBalance.toLocaleString(
+            "en-IN",
+          )}.`,
+        );
+      }
+
+      /* -----------------------------------------------
+         AVAILABLE → USED MARGIN
+      ------------------------------------------------ */
+
+      user.availableBalance = availableBalance - totalAmount;
+
+      user.usedMargin = Number(user.usedMargin || 0) + totalAmount;
+
+      console.log("💰 BUY BALANCE UPDATED");
+      console.log("Available:", user.availableBalance);
+      console.log("Used Margin:", user.usedMargin);
+    }
+
+    /* =====================================================
+       SELL → UPDATE FUNDS
+    ===================================================== */
+
+    if (cleanSide === "SELL") {
+      const averagePrice = Number(existingHolding.averagePrice);
+
+      /* Original investment cost of sold shares */
+      const investedCost = cleanQuantity * averagePrice;
+
+      /* Actual sale amount */
+      const saleAmount = totalAmount;
+
+      /* Add money received from selling */
+      user.availableBalance = Number(user.availableBalance || 0) + saleAmount;
+
+      /* Release original invested amount */
+      user.usedMargin = Math.max(
+        0,
+        Number(user.usedMargin || 0) - investedCost,
+      );
+
+      console.log("💰 SELL BALANCE UPDATED");
+      console.log("Available:", user.availableBalance);
+      console.log("Used Margin:", user.usedMargin);
+    }
+
+    /* =====================================================
+       SAVE USER
+    ===================================================== */
+
+    await user.save({ session });
+
+    /* =====================================================
+       CREATE ORDER
+    ===================================================== */
+
+    const orderData = {
       user: userId,
       symbol: cleanSymbol,
       company: cleanCompany,
       side: cleanSide,
       quantity: cleanQuantity,
       price: cleanPrice,
-      productType:
-        productType === "MIS" ? "MIS" : "CNC",
-      orderType: [
-        "MARKET",
-        "LIMIT",
-        "SL",
-        "SL-M",
-      ].includes(orderType)
-        ? orderType
-        : "MARKET",
+
+      productType: productType === "MIS" ? "MIS" : "CNC",
+
+      orderType:
+        ["MARKET", "LIMIT", "SL", "SL-M"].includes(orderType) ? orderType : (
+          "MARKET"
+        ),
+
       totalAmount,
       status: "COMPLETED",
-    });
+    };
 
-    console.log(
-      "✅ ORDER SAVED:",
-      order._id.toString()
-    );
+    const [order] = await Order.create([orderData], { session });
 
-    /* =================================================
-       BUY
-    ================================================= */
+    console.log("✅ ORDER CREATED:", order._id.toString());
+
+    /* =====================================================
+       BUY → CREATE / UPDATE HOLDING
+    ===================================================== */
 
     if (cleanSide === "BUY") {
       let holding = await Holding.findOne({
         user: userId,
         symbol: cleanSymbol,
-      });
+      }).session(session);
 
-      /* =========================
-         FIRST BUY
-      ========================= */
+      /* -----------------------------------------------
+         CREATE NEW HOLDING
+      ------------------------------------------------ */
 
       if (!holding) {
-        holding = await Holding.create({
+        holding = new Holding({
           user: userId,
           symbol: cleanSymbol,
           company: cleanCompany,
+
           quantity: cleanQuantity,
+
           averagePrice: cleanPrice,
+
           currentPrice: cleanPrice,
+
           investedAmount: totalAmount,
         });
 
-        console.log(
-          "✅ NEW HOLDING CREATED:",
-          holding._id.toString()
-        );
-      }
+        await holding.save({ session });
 
-      /* =========================
-         ADD TO EXISTING HOLDING
-      ========================= */
+        console.log("✅ NEW HOLDING CREATED:", holding._id.toString());
+      } else {
 
-      else {
-        const oldQuantity =
-          Number(holding.quantity);
+      /* -----------------------------------------------
+         UPDATE EXISTING HOLDING
+      ------------------------------------------------ */
+        const oldQuantity = Number(holding.quantity);
 
-        const oldAveragePrice =
-          Number(holding.averagePrice);
+        const oldAveragePrice = Number(holding.averagePrice);
 
-        const newQuantity =
-          oldQuantity + cleanQuantity;
+        const newQuantity = oldQuantity + cleanQuantity;
 
-        const newInvestedAmount =
-          oldQuantity * oldAveragePrice +
-          totalAmount;
+        const newInvestedAmount = oldQuantity * oldAveragePrice + totalAmount;
 
-        const newAveragePrice =
-          newInvestedAmount / newQuantity;
+        const newAveragePrice = newInvestedAmount / newQuantity;
 
         holding.quantity = newQuantity;
+
         holding.averagePrice = newAveragePrice;
+
         holding.currentPrice = cleanPrice;
-        holding.investedAmount =
-          newInvestedAmount;
+
+        holding.investedAmount = newInvestedAmount;
+
         holding.company = cleanCompany;
 
-        await holding.save();
+        await holding.save({ session });
 
-        console.log(
-          "✅ HOLDING UPDATED:",
-          holding._id.toString()
-        );
+        console.log("✅ HOLDING UPDATED:", holding._id.toString());
       }
     }
 
-    /* =================================================
-       SELL
-    ================================================= */
+    /* =====================================================
+       SELL → UPDATE / DELETE HOLDING
+    ===================================================== */
 
     if (cleanSide === "SELL") {
       const holding = existingHolding;
 
-      const remainingQuantity =
-        Number(holding.quantity) -
-        cleanQuantity;
+      const remainingQuantity = Number(holding.quantity) - cleanQuantity;
 
-      /* =========================
-         SELL EVERYTHING
-      ========================= */
+      /* -----------------------------------------------
+         ALL SHARES SOLD
+      ------------------------------------------------ */
 
       if (remainingQuantity === 0) {
-        await Holding.deleteOne({
-          _id: holding._id,
-        });
-
-        console.log(
-          "✅ HOLDING DELETED - ALL SHARES SOLD"
+        await Holding.deleteOne(
+          {
+            _id: holding._id,
+          },
+          { session },
         );
-      }
 
-      /* =========================
+        console.log("✅ HOLDING DELETED - ALL SHARES SOLD");
+      } else {
+
+      /* -----------------------------------------------
          PARTIAL SELL
-      ========================= */
+      ------------------------------------------------ */
+        holding.quantity = remainingQuantity;
 
-      else {
-        holding.quantity =
-          remainingQuantity;
-
-        holding.currentPrice =
-          cleanPrice;
+        holding.currentPrice = cleanPrice;
 
         holding.investedAmount =
-          remainingQuantity *
-          Number(holding.averagePrice);
+          remainingQuantity * Number(holding.averagePrice);
 
-        await holding.save();
+        await holding.save({ session });
 
-        console.log(
-          "✅ HOLDING UPDATED AFTER SELL:",
-          holding._id.toString()
-        );
+        console.log("✅ HOLDING UPDATED AFTER SELL:", holding._id.toString());
       }
     }
 
-    /* =========================
-       SUCCESS RESPONSE
-    ========================= */
+    /* =====================================================
+       COMMIT TRANSACTION
+    ===================================================== */
+
+    await session.commitTransaction();
+
+    console.log("✅ TRANSACTION COMMITTED SUCCESSFULLY");
+
+    /* =====================================================
+       FINAL FUNDS
+    ===================================================== */
+
+    const availableBalance = Number(user.availableBalance || 0);
+
+    const usedMargin = Number(user.usedMargin || 0);
+
+    const totalBalance = availableBalance + usedMargin;
 
     return res.status(201).json({
       success: true,
-      message:
-        `${cleanSide} order placed successfully.`,
+
+      message: `${cleanSide} order placed successfully.`,
+
       order,
+
+      funds: {
+        totalBalance,
+        availableBalance,
+        usedMargin,
+        withdrawable: availableBalance,
+      },
     });
   } catch (error) {
-    console.error(
-      "❌ PLACE ORDER ERROR:",
-      error
-    );
+    /* =====================================================
+       ROLLBACK
+    ===================================================== */
 
-    return res.status(500).json({
+    try {
+      await session.abortTransaction();
+    } catch (abortError) {
+      console.error("❌ TRANSACTION ABORT ERROR:", abortError);
+    }
+
+    console.error("❌ PLACE ORDER ERROR:", error);
+
+    return res.status(400).json({
       success: false,
-      message:
-        error.message ||
-        "Server error while placing order.",
+      message: error.message || "Unable to place order.",
     });
+  } finally {
+    await session.endSession();
   }
 };
 
 /* =====================================================
-   GET USER ORDERS
+   GET ORDERS
 ===================================================== */
 
 const getOrders = async (req, res) => {
@@ -305,10 +396,7 @@ const getOrders = async (req, res) => {
       orders,
     });
   } catch (error) {
-    console.error(
-      "❌ GET ORDERS ERROR:",
-      error
-    );
+    console.error("❌ GET ORDERS ERROR:", error);
 
     return res.status(500).json({
       success: false,
@@ -318,7 +406,7 @@ const getOrders = async (req, res) => {
 };
 
 /* =====================================================
-   GET USER HOLDINGS
+   GET HOLDINGS
 ===================================================== */
 
 const getHoldings = async (req, res) => {
@@ -337,10 +425,7 @@ const getHoldings = async (req, res) => {
       holdings,
     });
   } catch (error) {
-    console.error(
-      "❌ GET HOLDINGS ERROR:",
-      error
-    );
+    console.error("❌ GET HOLDINGS ERROR:", error);
 
     return res.status(500).json({
       success: false,

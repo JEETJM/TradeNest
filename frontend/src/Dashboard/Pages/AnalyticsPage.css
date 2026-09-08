@@ -1,0 +1,391 @@
+.analyticsPage {
+  width: 100%;
+  color: var(--text);
+}
+
+/* HEADER */
+
+.analyticsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.analyticsHeader h1 {
+  margin: 0;
+  font-size: 30px;
+  color: var(--text);
+}
+
+.analyticsHeader p {
+  margin: 6px 0 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.analyticsLive {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.analyticsLive span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #12b76a;
+  box-shadow: 0 0 0 4px rgba(18, 183, 106, 0.12);
+}
+
+/* SUMMARY */
+
+.analyticsCards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.analyticsCard {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+}
+
+.analyticsCard span {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.analyticsCard h2 {
+  margin: 10px 0 5px;
+  font-size: 23px;
+  color: var(--text);
+}
+
+.analyticsCard small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+/* PROFIT / LOSS */
+
+.analyticsProfit {
+  color: #12b76a !important;
+}
+
+.analyticsLoss {
+  color: #f04438 !important;
+}
+
+/* HIGHLIGHTS */
+
+.analyticsHighlightGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.highlightCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.highlightIcon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(56, 126, 209, 0.1);
+  font-size: 23px;
+}
+
+.highlightCard span {
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.highlightCard h3 {
+  margin: 4px 0;
+  color: var(--text);
+  font-size: 18px;
+}
+
+.highlightCard strong {
+  font-size: 13px;
+}
+
+.bestCard strong {
+  color: #12b76a;
+}
+
+.worstCard strong {
+  color: #f04438;
+}
+
+/* SECTION */
+
+.analyticsSection {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 22px;
+}
+
+.analyticsSectionHeader {
+  margin-bottom: 18px;
+}
+
+.analyticsSectionHeader h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 19px;
+}
+
+.analyticsSectionHeader p {
+  margin: 5px 0 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* TABLE */
+
+.analyticsTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.analyticsTable {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+}
+
+.analyticsTable th {
+  padding: 13px;
+  text-align: left;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+
+.analyticsTable td {
+  padding: 16px 13px;
+  color: var(--text);
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.analyticsTable tbody tr:hover {
+  background: rgba(56, 126, 209, 0.025);
+}
+
+/* STOCK */
+
+.analyticsStock {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.analyticsStock strong {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.analyticsStock small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+/* ALLOCATION */
+
+.allocationList {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.allocationItem {
+  width: 100%;
+}
+
+.allocationTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 7px;
+}
+
+.allocationTop strong {
+  color: var(--text);
+  font-size: 13px;
+}
+
+.allocationTop span {
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.allocationBar {
+  width: 100%;
+  height: 8px;
+  background: var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.allocationFill {
+  height: 100%;
+  background: #387ed1;
+  border-radius: 20px;
+  transition: width 0.4s ease;
+}
+
+.allocationItem small {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+/* EMPTY */
+
+.analyticsEmpty {
+  padding: 50px 20px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.analyticsEmpty div {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.analyticsEmpty h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 16px;
+}
+
+.analyticsEmpty p {
+  margin-top: 7px;
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* LOADING */
+
+.analyticsLoading {
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.analyticsLoading h3 {
+  margin: 15px 0 5px;
+  color: var(--text);
+}
+
+.analyticsLoading p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.analyticsLoader {
+  width: 38px;
+  height: 38px;
+  border: 3px solid var(--border);
+  border-top-color: #387ed1;
+  border-radius: 50%;
+  animation: analyticsSpin 0.8s linear infinite;
+}
+
+@keyframes analyticsSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ERROR */
+
+.analyticsError {
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.analyticsError > div {
+  font-size: 35px;
+}
+
+.analyticsError h2 {
+  margin: 12px 0 5px;
+  color: var(--text);
+}
+
+.analyticsError p {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.analyticsError button {
+  border: none;
+  background: #387ed1;
+  color: white;
+  padding: 9px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1000px) {
+  .analyticsCards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .analyticsHeader {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .analyticsCards {
+    grid-template-columns: 1fr;
+  }
+
+  .analyticsHighlightGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .analyticsSection {
+    padding: 16px;
+  }
+}

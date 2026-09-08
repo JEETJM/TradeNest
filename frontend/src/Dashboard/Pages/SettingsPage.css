@@ -1,12 +1,12 @@
 .settingsPage {
   min-height: calc(100vh - 100px);
-
   padding: 5px 0 40px;
-
   color: var(--text);
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 .settingsHeader {
   margin-bottom: 25px;
@@ -14,60 +14,48 @@
 
 .settingsHeader h1 {
   margin: 0;
-
   color: var(--text);
-
   font-size: 30px;
+  font-weight: 700;
 }
 
 .settingsHeader p {
   margin: 7px 0 0;
-
   color: var(--text-secondary);
-
   font-size: 14px;
 }
 
-/* CARD */
+/* =========================
+   CARD
+========================= */
 
 .settingsCard {
   background: var(--card);
-
   border: 1px solid var(--border);
-
   border-radius: 16px;
-
   margin-bottom: 20px;
-
   overflow: hidden;
-
-  box-shadow:
-    0 5px 20px rgba(0, 0, 0, 0.03);
-
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
   transition:
-    background 0.3s,
-    border-color 0.3s;
+    background 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .settingsCardHeader {
   padding: 22px 24px;
-
   border-bottom: 1px solid var(--border);
 }
 
 .settingsCardHeader h2 {
   margin: 0;
-
   color: var(--text);
-
   font-size: 18px;
+  font-weight: 700;
 }
 
 .settingsCardHeader p {
   margin: 6px 0 0;
-
   color: var(--text-secondary);
-
   font-size: 13px;
 }
 
@@ -75,19 +63,16 @@
   padding: 0 24px;
 }
 
-/* ROW */
+/* =========================
+   ROW
+========================= */
 
 .settingsRow {
   min-height: 76px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   gap: 20px;
-
   border-bottom: 1px solid var(--border);
 }
 
@@ -96,77 +81,60 @@
 }
 
 .settingsRowInfo {
+  min-width: 0;
   display: flex;
-
   align-items: center;
-
   gap: 14px;
 }
 
 .settingsIcon {
   width: 40px;
   height: 40px;
-
   border-radius: 11px;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   background: #edf5ff;
-
   color: #2878d7;
-
   flex-shrink: 0;
 }
 
 .settingsRow strong {
+  display: block;
   color: var(--text);
-
   font-size: 14px;
 }
 
 .settingsRow p {
   margin: 5px 0 0;
-
   color: var(--text-secondary);
-
   font-size: 12px;
+  line-height: 1.4;
 }
 
-/* TOGGLE */
+/* =========================
+   TOGGLE
+========================= */
 
 .toggle {
   width: 48px;
   height: 26px;
-
   border: none;
-
   border-radius: 20px;
-
   background: #64748b;
-
   padding: 3px;
-
   cursor: pointer;
-
-  transition: 0.25s;
-
+  transition: 0.25s ease;
   flex-shrink: 0;
 }
 
 .toggle span {
   display: block;
-
   width: 20px;
   height: 20px;
-
-  background: white;
-
+  background: #fff;
   border-radius: 50%;
-
-  transition: 0.25s;
+  transition: 0.25s ease;
 }
 
 .toggle.active {
@@ -177,39 +145,370 @@
   transform: translateX(22px);
 }
 
-/* ACTION */
+.toggle:hover {
+  opacity: 0.9;
+}
+
+/* =========================
+   ACTION
+========================= */
 
 .settingsAction {
   border: 1px solid #2878d7;
-
   background: transparent;
-
   color: #2878d7;
-
   padding: 9px 17px;
-
   border-radius: 8px;
-
   cursor: pointer;
-
+  font-size: 13px;
   font-weight: 600;
+  transition: 0.2s ease;
+  flex-shrink: 0;
 }
 
 .settingsAction:hover {
   background: #2878d7;
-
-  color: white;
+  color: #fff;
+  transform: translateY(-1px);
 }
 
-/* MOBILE */
+/* =========================
+   PASSWORD MODAL
+========================= */
+
+.passwordModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(15, 23, 42, 0.55);
+
+  backdrop-filter: blur(4px);
+}
+
+.passwordModal {
+  width: min(100%, 470px);
+
+  background: var(--card);
+
+  border: 1px solid var(--border);
+
+  border-radius: 18px;
+
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.18);
+
+  overflow: hidden;
+
+  animation: passwordModalIn 0.2s ease;
+}
+
+@keyframes passwordModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================
+   MODAL HEADER
+========================= */
+
+.passwordModalHeader {
+  padding: 21px 23px;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.passwordModalHeader h2 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 19px;
+}
+
+.passwordModalHeader p {
+  margin: 5px 0 0;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+}
+
+.passwordModalClose {
+  width: 34px;
+  height: 34px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: var(--surface);
+
+  color: var(--text-secondary);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+
+  flex-shrink: 0;
+}
+
+.passwordModalClose:hover {
+  background: var(--border);
+  color: var(--text);
+}
+
+.passwordModalClose:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================
+   PASSWORD FORM
+========================= */
+
+.passwordForm {
+  padding: 23px;
+}
+
+.passwordField {
+  margin-bottom: 18px;
+}
+
+.passwordField label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.passwordInput {
+  position: relative;
+}
+
+.passwordInput input {
+  width: 100%;
+  height: 44px;
+
+  box-sizing: border-box;
+
+  padding: 0 45px 0 12px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 9px;
+
+  outline: none;
+
+  background: var(--surface);
+
+  color: var(--text);
+
+  font-size: 13px;
+
+  transition: 0.2s ease;
+}
+
+.passwordInput input:focus {
+  border-color: #2878d7;
+
+  box-shadow: 0 0 0 3px rgba(40, 120, 215, 0.1);
+}
+
+.passwordInput input::placeholder {
+  color: var(--muted);
+}
+
+.passwordInput button {
+  position: absolute;
+
+  right: 8px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  width: 30px;
+  height: 30px;
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--muted);
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.passwordInput button:hover {
+  color: #2878d7;
+}
+
+.passwordField small {
+  display: block;
+
+  margin-top: 6px;
+
+  color: var(--muted);
+
+  font-size: 10px;
+}
+
+/* =========================
+   PASSWORD MESSAGES
+========================= */
+
+.passwordError,
+.passwordSuccess {
+  margin: 18px 23px 0;
+
+  padding: 11px 13px;
+
+  border-radius: 9px;
+
+  font-size: 12px;
+}
+
+.passwordError {
+  background: #fef3f2;
+
+  border: 1px solid #fecdca;
+
+  color: #b42318;
+}
+
+.passwordSuccess {
+  background: #ecfdf3;
+
+  border: 1px solid #abefc6;
+
+  color: #087443;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+/* =========================
+   MODAL ACTIONS
+========================= */
+
+.passwordModalActions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 5px;
+}
+
+.passwordCancelBtn,
+.passwordSaveBtn {
+  min-height: 42px;
+
+  padding: 10px 17px;
+
+  border-radius: 9px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.passwordCancelBtn {
+  background: var(--surface);
+
+  color: var(--text-secondary);
+
+  border: 1px solid var(--border);
+}
+
+.passwordCancelBtn:hover {
+  background: var(--border);
+}
+
+.passwordSaveBtn {
+  background: #2878d7;
+
+  color: #fff;
+
+  border: none;
+}
+
+.passwordSaveBtn:hover {
+  background: #1769c2;
+}
+
+.passwordCancelBtn:disabled,
+.passwordSaveBtn:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+/* =========================
+   DARK MODE SUPPORT
+========================= */
+
+body.dark .settingsIcon {
+  background: rgba(40, 120, 215, 0.12);
+}
+
+/* =========================
+   MOBILE
+========================= */
 
 @media (max-width: 650px) {
   .settingsPage {
     padding: 0 0 30px;
   }
 
+  .settingsHeader h1 {
+    font-size: 25px;
+  }
+
   .settingsRow {
     min-height: 85px;
+  }
+
+  .settingsRows {
+    padding: 0 18px;
   }
 
   .settingsRowInfo {
@@ -219,5 +518,174 @@
   .settingsIcon {
     width: 35px;
     height: 35px;
+    border-radius: 9px;
   }
+
+  .settingsRow strong {
+    font-size: 13px;
+  }
+
+  .settingsRow p {
+    font-size: 11px;
+  }
+
+  .settingsCardHeader {
+    padding: 19px 18px;
+  }
+
+  .passwordModalOverlay {
+    align-items: flex-end;
+    padding: 10px;
+  }
+
+  .passwordModal {
+    border-radius: 18px 18px 12px 12px;
+  }
+
+  .passwordModalHeader {
+    padding: 18px;
+  }
+
+  .passwordForm {
+    padding: 18px;
+  }
+
+  .passwordError,
+  .passwordSuccess {
+    margin-left: 18px;
+    margin-right: 18px;
+  }
+}
+
+@media (max-width: 430px) {
+  .settingsRow {
+    gap: 10px;
+  }
+
+  .settingsAction {
+    padding: 8px 12px;
+  }
+
+  .toggle {
+    width: 44px;
+  }
+
+  .toggle.active span {
+    transform: translateX(18px);
+  }
+
+  .passwordModalActions {
+    flex-direction: column-reverse;
+  }
+
+  .passwordCancelBtn,
+  .passwordSaveBtn {
+    width: 100%;
+  }
+}
+
+
+
+
+
+/* 33/ */
+
+/* =====================================================
+   SETTINGS DARK MODE
+===================================================== */
+
+html.dark .settingsPage {
+  background: transparent;
+  color: var(--text);
+}
+
+html.dark .settingsHeader h1 {
+  color: var(--text);
+}
+
+html.dark .settingsHeader p {
+  color: var(--text-secondary);
+}
+
+html.dark .settingsCard {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+}
+
+html.dark .settingsCardHeader h2 {
+  color: var(--text);
+}
+
+html.dark .settingsCardHeader p {
+  color: var(--text-secondary);
+}
+
+html.dark .settingsRow {
+  border-color: var(--border);
+}
+
+html.dark .settingsRow strong {
+  color: var(--text);
+}
+
+html.dark .settingsRow p {
+  color: var(--text-secondary);
+}
+
+html.dark .settingsIcon {
+  background: #1e3a5f;
+  color: #60a5fa;
+}
+
+html.dark .settingsAction {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+html.dark .passwordModal {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+html.dark .passwordModalHeader h2 {
+  color: var(--text);
+}
+
+html.dark .passwordModalHeader p {
+  color: var(--text-secondary);
+}
+
+html.dark .passwordModalClose {
+  color: var(--text-secondary);
+}
+
+html.dark .passwordInput {
+  background: var(--input-bg);
+  border-color: var(--border);
+}
+
+html.dark .passwordInput input {
+  background: transparent;
+  color: var(--text);
+}
+
+html.dark .passwordInput button {
+  color: var(--text-secondary);
+}
+
+html.dark .passwordField label {
+  color: var(--text);
+}
+
+html.dark .passwordField small {
+  color: var(--text-muted);
+}
+
+html.dark .passwordCancelBtn {
+  background: var(--surface-2);
+  color: var(--text);
+  border-color: var(--border);
 }

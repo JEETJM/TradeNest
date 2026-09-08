@@ -382,3 +382,43 @@
   opacity: 0.65;
   cursor: not-allowed;
 }
+.livePriceIndicator {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: -15px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  color: #149447;
+  font-weight: 600;
+}
+
+.liveDot {
+  width: 7px;
+  height: 7px;
+  background: #149447;
+  border-radius: 50%;
+  display: inline-block;
+  animation: livePulse 1.5s infinite;
+}
+
+.priceHint {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #888;
+}
+
+@keyframes livePulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
