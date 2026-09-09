@@ -6,12 +6,21 @@ let streamer = null;
 
 const startMarketFeed = (io) => {
   try {
-    const accessToken = process.env.UPSTOX_ACCESS_TOKEN;
+    const accessToken = process.env.UPSTOX_ACCESS_TOKEN?.trim();
+
+    /* =========================
+       TOKEN CHECK
+    ========================= */
 
     if (!accessToken) {
       console.error("❌ UPSTOX_ACCESS_TOKEN is missing in .env");
       return;
     }
+
+    console.log(
+      "🔐 Upstox access token loaded:",
+      `${accessToken.substring(0, 8)}...`,
+    );
 
     /* =========================
        UPSTOX AUTH
@@ -19,9 +28,16 @@ const startMarketFeed = (io) => {
 
     const defaultClient = UpstoxClient.ApiClient.instance;
 
-    const OAUTH2 = defaultClient.authentications["OAUTH2"];
+    const oauth2 = defaultClient.authentications["OAUTH2"];
 
-    OAUTH2.accessToken = accessToken;
+    if (!oauth2) {
+      console.error("❌ Upstox OAUTH2 authentication object not found.");
+      return;
+    }
+
+    oauth2.accessToken = accessToken;
+
+    console.log("✅ Upstox OAuth2 token configured");
 
     /* =========================
        INSTRUMENTS
@@ -29,19 +45,30 @@ const startMarketFeed = (io) => {
 
     const instrumentKeys = Object.values(MARKET_INSTRUMENTS);
 
+    if (!instrumentKeys.length) {
+      console.error("❌ No market instruments found.");
+      return;
+    }
+
     console.log("📊 Instruments:", instrumentKeys);
 
     /* =========================
        CREATE STREAMER
+       Official V3 pattern:
+       instruments + mode
     ========================= */
 
-    streamer = new UpstoxClient.MarketDataStreamerV3();
+    streamer = new UpstoxClient.MarketDataStreamerV3(instrumentKeys, "ltpc");
 
     /* =========================
-       AUTO RECONNECT
+       IMPORTANT
+       Disable SDK reconnect initially.
+
+       We don't want:
+       401 → reconnect → 401 → SDK crash
     ========================= */
 
-    streamer.autoReconnect(true, 10, 5);
+    streamer.autoReconnect(false);
 
     /* =========================
        OPEN
@@ -50,9 +77,9 @@ const startMarketFeed = (io) => {
     streamer.on("open", () => {
       console.log("🟢 Upstox Market WebSocket connected");
 
-      streamer.subscribe(instrumentKeys, "ltpc");
-
-      console.log(`📡 Subscribed to ${instrumentKeys.length} instruments`);
+      console.log(
+        `📡 Market feed ready for ${instrumentKeys.length} instruments`,
+      );
     });
 
     /* =========================
@@ -65,12 +92,11 @@ const startMarketFeed = (io) => {
           return;
         }
 
-        /*
-         * IMPORTANT:
-         * First inspect the SDK payload.
-         */
-
         let feed = data;
+
+        /* =========================
+           BUFFER
+        ========================= */
 
         if (Buffer.isBuffer(data)) {
           const text = data.toString("utf8");
@@ -78,11 +104,15 @@ const startMarketFeed = (io) => {
           try {
             feed = JSON.parse(text);
           } catch {
-            console.log("⚠️ Received binary/non-JSON packet");
+            console.log("⚠️ Received binary protobuf packet.");
 
             return;
           }
         }
+
+        /* =========================
+           STRING
+        ========================= */
 
         if (typeof feed === "string") {
           try {
@@ -102,7 +132,6 @@ const startMarketFeed = (io) => {
 
         if (feed.type === "market_info") {
           console.log("ℹ️ Market status received");
-
           return;
         }
 
@@ -111,64 +140,74 @@ const startMarketFeed = (io) => {
         ========================= */
 
         if (!feed.feeds) {
-          console.log("⚠️ Feed received without feeds:", feed);
-
           return;
         }
 
         Object.entries(feed.feeds).forEach(
           ([instrumentKey, instrumentFeed]) => {
-            let ltpc = instrumentFeed?.ltpc;
+            try {
+              let ltpc = instrumentFeed?.ltpc;
 
-            /*
-             * Full feed fallback
-             */
+              /* =========================
+                 FALLBACK 1
+              ========================= */
 
-            if (!ltpc) {
-              ltpc = instrumentFeed?.firstLevelWithGreeks?.ltpc;
+              if (!ltpc) {
+                ltpc = instrumentFeed?.firstLevelWithGreeks?.ltpc;
+              }
+
+              /* =========================
+                 FALLBACK 2
+              ========================= */
+
+              if (!ltpc) {
+                ltpc = instrumentFeed?.fullFeed?.marketFF?.ltpc;
+              }
+
+              if (!ltpc) {
+                return;
+              }
+
+              /* =========================
+                 PRICE
+              ========================= */
+
+              const ltp = Number(ltpc.ltp);
+
+              const closePrice = Number(ltpc.cp);
+
+              if (!Number.isFinite(ltp)) {
+                return;
+              }
+
+              /* =========================
+                 NORMALIZED DATA
+              ========================= */
+
+              const marketUpdate = {
+                instrumentKey,
+
+                ltp,
+
+                closePrice: Number.isFinite(closePrice) ? closePrice : null,
+
+                lastTradeTime: ltpc.ltt || null,
+
+                lastTradeQuantity: Number(ltpc.ltq || 0),
+
+                timestamp: Number(feed.currentTs || Date.now()),
+              };
+
+              console.log("📈 LIVE:", instrumentKey, "₹", ltp);
+
+              /* =========================
+                 SEND TO REACT
+              ========================= */
+
+              io.emit("market:update", marketUpdate);
+            } catch (error) {
+              console.error("❌ Instrument processing error:", error.message);
             }
-
-            if (!ltpc) {
-              ltpc = instrumentFeed?.fullFeed?.marketFF?.ltpc;
-            }
-
-            if (!ltpc) {
-              return;
-            }
-
-            const ltp = Number(ltpc.ltp);
-
-            const closePrice = Number(ltpc.cp);
-
-            if (!Number.isFinite(ltp)) {
-              return;
-            }
-
-            /* =========================
-               NORMALIZED DATA
-            ========================= */
-
-            const marketUpdate = {
-              instrumentKey,
-
-              ltp,
-
-              closePrice: Number.isFinite(closePrice) ? closePrice : null,
-
-              lastTradeTime: ltpc.ltt || null,
-
-              lastTradeQuantity: Number(ltpc.ltq || 0),
-
-              timestamp: Number(feed.currentTs || Date.now()),
-            };
-
-            console.log("📈 LIVE:", instrumentKey, "₹", ltp);
-
-            /* =========================
-               SEND TO REACT
-            ========================= */
-
-            io.emit("market:update", marketUpdate);
           },
         );
       } catch (error) {
@@ -181,7 +220,7 @@ const startMarketFeed = (io) => {
     ========================= */
 
     streamer.on("error", (error) => {
-      console.error("❌ Upstox WebSocket error:", error);
+      console.error("❌ Upstox WebSocket error:", error?.message || error);
     });
 
     /* =========================
@@ -190,14 +229,16 @@ const startMarketFeed = (io) => {
 
     streamer.on("close", () => {
       console.log("🔴 Upstox Market WebSocket closed");
+
+      console.log("ℹ️ Auto reconnect is currently disabled.");
     });
 
     /* =========================
-       RECONNECT
+       RECONNECT STOPPED
     ========================= */
 
-    streamer.on("reconnecting", () => {
-      console.log("🔄 Reconnecting to Upstox...");
+    streamer.on("autoReconnectStopped", (data) => {
+      console.log("⛔ Upstox auto reconnect stopped:", data);
     });
 
     /* =========================

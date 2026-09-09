@@ -11,11 +11,10 @@ function Topbar() {
   const navigate = useNavigate();
 
   const [user, setUser] = useState(getStoredUser());
-
   const [showMenu, setShowMenu] = useState(false);
 
   /* =====================================================
-     GET CURRENT USER
+     LOAD CURRENT USER
   ===================================================== */
 
   useEffect(() => {
@@ -23,13 +22,40 @@ function Topbar() {
       try {
         const currentUser = await fetchCurrentUser();
 
-        setUser(currentUser);
+        if (currentUser) {
+          setUser(currentUser);
+        }
       } catch (error) {
         console.error("Unable to load current user:", error);
       }
     };
 
     loadUser();
+  }, []);
+
+  /* =====================================================
+     LISTEN FOR PROFILE UPDATE
+  ===================================================== */
+
+  useEffect(() => {
+    const handleProfileUpdate = (event) => {
+      const updatedUser = event?.detail;
+
+      if (updatedUser) {
+        setUser(updatedUser);
+      } else {
+        setUser(getStoredUser());
+      }
+    };
+
+    window.addEventListener("tradenest-profile-update", handleProfileUpdate);
+
+    return () => {
+      window.removeEventListener(
+        "tradenest-profile-update",
+        handleProfileUpdate,
+      );
+    };
   }, []);
 
   /* =====================================================
@@ -45,16 +71,54 @@ function Topbar() {
   };
 
   /* =====================================================
-     USER
+     USER DATA
   ===================================================== */
 
   const firstName = user?.firstName || "User";
 
-  const fullName = user ? `${user.firstName} ${user.lastName}` : "User";
+  const lastName = user?.lastName || "";
+
+  const fullName = `${firstName} ${lastName}`.trim();
 
   const email = user?.email || "";
 
   const initial = firstName.charAt(0).toUpperCase();
+
+  /*
+   * Supports common backend property names.
+   *
+   * If your backend stores the image as
+   * profileImage, it will work directly.
+   */
+
+  const profileImage =
+    user?.profileImage ||
+    user?.profilePicture ||
+    user?.avatar ||
+    user?.photo ||
+    user?.image ||
+    "";
+
+  /* =====================================================
+     PROFILE AVATAR
+  ===================================================== */
+
+  const renderAvatar = () => {
+    if (profileImage) {
+      return (
+        <img
+          src={profileImage}
+          alt={fullName}
+          className="topbarProfileImage"
+          onError={(event) => {
+            event.currentTarget.style.display = "none";
+          }}
+        />
+      );
+    }
+
+    return initial;
+  };
 
   return (
     <header className="topbar">
@@ -75,7 +139,7 @@ function Topbar() {
       ================================================= */}
 
       <div className="topbarRight">
-        {/* Notification */}
+        {/* ================= NOTIFICATION ================= */}
 
         <button type="button" className="iconBtn" title="Notifications">
           <FaBell />
@@ -83,7 +147,7 @@ function Topbar() {
           <span className="notificationDot" />
         </button>
 
-        {/* Profile */}
+        {/* ================= PROFILE ================= */}
 
         <div className="profileDropdown">
           <button
@@ -91,7 +155,11 @@ function Topbar() {
             className="profileBox"
             onClick={() => setShowMenu(!showMenu)}
           >
-            <div className="profileImage">{initial}</div>
+            {/* PROFILE IMAGE */}
+
+            <div className="profileImage">{renderAvatar()}</div>
+
+            {/* USER INFORMATION */}
 
             <div className="profileText">
               <strong>{fullName}</strong>
@@ -99,12 +167,16 @@ function Topbar() {
               <span>{email}</span>
             </div>
 
+            {/* ARROW */}
+
             <FaChevronDown
               className={showMenu ? "profileArrow rotate" : "profileArrow"}
             />
           </button>
 
-          {/* Dropdown */}
+          {/* =================================================
+              DROPDOWN
+          ================================================= */}
 
           {showMenu && (
             <div className="profileMenu">

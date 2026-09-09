@@ -451,3 +451,79 @@
     display: none;
   }
 }
+/* =====================================================
+   SIDEBAR PROFILE IMAGE
+===================================================== */
+
+.userAvatar {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background: var(--primary);
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.sidebarProfileImage {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  display: block;
+}
+/* =====================================================
+   SIDEBAR LOGO → HOME
+===================================================== */
+
+.sidebarLogoLink {
+  display: inline-block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.sidebarLogoLink:hover {
+  text-decoration: none;
+}
+
+/* =====================================================
+   SIDEBAR PROFILE IMAGE
+===================================================== */
+
+.userAvatar {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+
+  border-radius: 50%;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--primary);
+  color: #ffffff;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.sidebarProfileImage {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}

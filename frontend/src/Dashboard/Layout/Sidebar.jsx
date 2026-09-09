@@ -1,4 +1,5 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink, useNavigate, Link } from "react-router-dom";
 
 import "./Sidebar.css";
 
@@ -16,6 +17,10 @@ import {
 } from "react-icons/fa";
 
 import { getStoredUser, logout } from "../../Auth/auth";
+
+/* =====================================================
+   MAIN MENU
+===================================================== */
 
 const mainMenu = [
   {
@@ -50,6 +55,10 @@ const mainMenu = [
   },
 ];
 
+/* =====================================================
+   ACCOUNT MENU
+===================================================== */
+
 const accountMenu = [
   {
     title: "Profile",
@@ -63,12 +72,46 @@ const accountMenu = [
   },
 ];
 
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
 function Sidebar() {
   const navigate = useNavigate();
 
-  const user = getStoredUser();
+  const [user, setUser] = useState(getStoredUser());
+
+  /* ===================================================
+     PROFILE UPDATE LISTENER
+  =================================================== */
+
+  useEffect(() => {
+    const handleProfileUpdate = (event) => {
+      const updatedUser = event?.detail;
+
+      if (updatedUser) {
+        setUser(updatedUser);
+      } else {
+        setUser(getStoredUser());
+      }
+    };
+
+    window.addEventListener("tradenest-profile-update", handleProfileUpdate);
+
+    return () => {
+      window.removeEventListener(
+        "tradenest-profile-update",
+        handleProfileUpdate,
+      );
+    };
+  }, []);
+
+  /* ===================================================
+     USER INFORMATION
+  =================================================== */
 
   const firstName = user?.firstName || "User";
+
   const lastName = user?.lastName || "";
 
   const fullName = `${firstName} ${lastName}`.trim();
@@ -76,6 +119,22 @@ function Sidebar() {
   const email = user?.email || "";
 
   const initial = firstName.charAt(0).toUpperCase();
+
+  /* ===================================================
+     PROFILE IMAGE
+  =================================================== */
+
+  const profileImage =
+    user?.profileImage ||
+    user?.profilePicture ||
+    user?.avatar ||
+    user?.photo ||
+    user?.image ||
+    "";
+
+  /* ===================================================
+     LOGOUT
+  =================================================== */
 
   const handleLogout = () => {
     logout();
@@ -85,16 +144,47 @@ function Sidebar() {
     });
   };
 
+  /* ===================================================
+     AVATAR
+  =================================================== */
+
+  const renderAvatar = () => {
+    if (profileImage) {
+      return (
+        <img
+          src={profileImage}
+          alt={fullName}
+          className="sidebarProfileImage"
+          onError={(event) => {
+            event.currentTarget.style.display = "none";
+          }}
+        />
+      );
+    }
+
+    return initial;
+  };
+
+  /* ===================================================
+     RENDER
+  =================================================== */
+
   return (
     <aside className="sidebar">
       {/* =================================================
-          LOGO
+          LOGO → HOME
       ================================================= */}
 
       <div className="sidebarLogo">
-        <h2>
-          Trade<span>Nest</span>
-        </h2>
+        <Link
+          to="/"
+          className="sidebarLogoLink"
+          aria-label="Go to TradeNest home"
+        >
+          <h2>
+            Trade<span>Nest</span>
+          </h2>
+        </Link>
       </div>
 
       {/* =================================================
@@ -151,7 +241,11 @@ function Sidebar() {
       ================================================= */}
 
       <div className="sidebarUserCard">
-        <div className="userAvatar">{initial}</div>
+        {/* PROFILE AVATAR */}
+
+        <div className="userAvatar">{renderAvatar()}</div>
+
+        {/* USER INFO */}
 
         <div className="sidebarUserInfo">
           <strong>{fullName}</strong>
@@ -159,7 +253,7 @@ function Sidebar() {
           <span>{email}</span>
         </div>
 
-        {/* Edit Profile */}
+        {/* EDIT PROFILE */}
 
         <button
           type="button"
