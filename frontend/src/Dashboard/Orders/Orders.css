@@ -1,8 +1,20 @@
+/* =========================================
+   ORDERS PAGE
+========================================= */
+
 .ordersPage {
   padding: 30px;
-  background: #f8f9fb;
+  background: var(--bg);
+  color: var(--text);
   min-height: calc(100vh - 70px);
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
+
+/* =========================================
+   HEADER
+========================================= */
 
 .ordersHeader {
   margin-bottom: 25px;
@@ -11,13 +23,17 @@
 .ordersHeader h1 {
   margin: 0;
   font-size: 28px;
-  color: #222;
+  color: var(--text);
 }
 
 .ordersHeader p {
   margin-top: 7px;
-  color: #777;
+  color: var(--text-secondary);
 }
+
+/* =========================================
+   MAIN LAYOUT
+========================================= */
 
 .ordersLayout {
   display: grid;
@@ -25,29 +41,42 @@
   gap: 25px;
 }
 
-/* Stock Selector */
+/* =========================================
+   STOCK SELECTOR
+========================================= */
 
 .stockSelector {
-  background: white;
-  border: 1px solid #eee;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 14px;
   overflow: hidden;
+  box-shadow: var(--shadow);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .sectionTitle {
   padding: 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
 }
 
 .sectionTitle h2 {
   margin: 0;
   font-size: 18px;
+  color: var(--text);
 }
+
+/* =========================================
+   STOCK ITEMS
+========================================= */
 
 .stockSelectorItem {
   width: 100%;
   border: none;
-  background: white;
+  background: var(--surface);
+  color: var(--text);
 
   display: flex;
   justify-content: space-between;
@@ -56,80 +85,140 @@
   padding: 17px 20px;
 
   cursor: pointer;
-
   text-align: left;
 
-  border-bottom: 1px solid #f1f1f1;
+  border-bottom: 1px solid var(--border-light);
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .stockSelectorItem:hover {
-  background: #f7faff;
+  background: var(--hover-bg);
 }
 
 .stockSelectorItem.selected {
-  background: #edf5ff;
-  border-left: 4px solid #387ed1;
+  background: var(--hover-bg);
+  border-left: 4px solid var(--primary);
 }
 
 .stockSelectorItem strong {
   display: block;
-  color: #222;
+  color: var(--text);
   font-size: 14px;
 }
 
 .stockSelectorItem small {
   display: block;
-  color: #888;
+  color: var(--text-muted);
   margin-top: 4px;
   font-size: 11px;
 }
 
 .stockSelectorItem span {
   font-weight: 600;
-  color: #222;
+  color: var(--text);
 }
 
-/* Order Card */
+/* =========================================
+   ORDER CARD
+========================================= */
 
 .orderCard {
-  background: white;
-  border: 1px solid #eee;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 14px;
-
   padding: 28px;
-
   max-width: 650px;
+
+  box-shadow: var(--shadow);
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
+
+/* =========================================
+   STOCK HEADER
+========================================= */
 
 .orderStockHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   margin-bottom: 25px;
 }
 
 .orderStockHeader h2 {
   margin: 0;
   font-size: 24px;
+  color: var(--text);
 }
 
 .orderStockHeader p {
   margin: 5px 0 0;
-  color: #777;
+  color: var(--text-secondary);
   font-size: 13px;
 }
 
 .currentPrice {
   font-size: 22px;
   font-weight: 700;
+  color: var(--text);
 }
 
-/* Buy Sell */
+/* =========================================
+   LIVE PRICE
+========================================= */
+
+.livePriceIndicator {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  margin-top: -15px;
+  margin-bottom: 20px;
+
+  font-size: 12px;
+  color: var(--success);
+  font-weight: 600;
+}
+
+.liveDot {
+  width: 7px;
+  height: 7px;
+
+  background: var(--success);
+  border-radius: 50%;
+
+  display: inline-block;
+
+  animation: livePulse 1.5s infinite;
+}
+
+@keyframes livePulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   BUY / SELL TABS
+========================================= */
 
 .orderTabs {
   display: flex;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
   margin-bottom: 25px;
 }
 
@@ -139,27 +228,31 @@
   padding: 13px;
 
   border: none;
-
   background: transparent;
 
-  color: #777;
+  color: var(--text-secondary);
 
   font-weight: 600;
-
   cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .orderTabs .buyActive {
-  color: #149447;
-  border-bottom: 2px solid #149447;
+  color: var(--success);
+  border-bottom: 2px solid var(--success);
 }
 
 .orderTabs .sellActive {
-  color: #e53935;
-  border-bottom: 2px solid #e53935;
+  color: var(--danger);
+  border-bottom: 2px solid var(--danger);
 }
 
-/* Fields */
+/* =========================================
+   FIELDS
+========================================= */
 
 .orderField {
   margin-bottom: 18px;
@@ -170,38 +263,60 @@
 
   margin-bottom: 7px;
 
-  color: #555;
+  color: var(--text-secondary);
 
   font-size: 13px;
-
   font-weight: 500;
 }
 
 .orderField input,
 .orderField select {
   width: 100%;
-
   height: 44px;
 
   box-sizing: border-box;
 
   padding: 0 12px;
 
-  border: 1px solid #ddd;
-
+  border: 1px solid var(--border);
   border-radius: 8px;
 
   outline: none;
 
+  background: var(--input-bg);
+  color: var(--text);
+
   font-size: 14px;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .orderField input:focus,
 .orderField select:focus {
-  border-color: #387ed1;
+  border-color: var(--primary);
 }
 
-/* Product */
+.orderField input:disabled {
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+}
+
+/* =========================================
+   SELECT DROPDOWN
+========================================= */
+
+.orderField select option {
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* =========================================
+   PRODUCT BUTTONS
+========================================= */
 
 .productButtons {
   display: flex;
@@ -213,40 +328,63 @@
 
   height: 40px;
 
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
 
-  background: white;
+  color: var(--text);
 
   border-radius: 7px;
 
   cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.productButtons button:hover {
+  background: var(--hover-bg);
 }
 
 .productButtons .selectedProduct {
-  background: #edf5ff;
-
-  border-color: #387ed1;
-
-  color: #387ed1;
-
+  background: var(--hover-bg);
+  border-color: var(--primary);
+  color: var(--primary);
   font-weight: 600;
 }
 
-/* Summary */
+/* =========================================
+   PRICE HINT
+========================================= */
+
+.priceHint {
+  display: block;
+
+  margin-top: 6px;
+
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* =========================================
+   ORDER SUMMARY
+========================================= */
 
 .orderSummary {
-  background: #f8f9fb;
+  background: var(--surface-2);
 
   padding: 17px;
 
   border-radius: 10px;
 
   margin-top: 20px;
+
+  border: 1px solid var(--border-light);
 }
 
 .orderSummary div {
   display: flex;
-
   justify-content: space-between;
 
   margin-bottom: 10px;
@@ -257,16 +395,16 @@
 }
 
 .orderSummary span {
-  color: #777;
+  color: var(--text-secondary);
   font-size: 13px;
 }
 
 .orderSummary strong {
-  color: #222;
+  color: var(--text);
 }
 
 .totalRow {
-  border-top: 1px solid #ddd;
+  border-top: 1px solid var(--border);
 
   padding-top: 13px;
 
@@ -277,63 +415,136 @@
   font-size: 18px;
 }
 
-/* Success */
+/* =========================================
+   SUCCESS MESSAGE
+========================================= */
 
 .orderSuccess {
-  margin-top: 15px;
+  margin-top: 16px;
 
-  padding: 12px;
+  padding: 12px 14px;
 
-  background: #eaf8ef;
+  border-radius: 10px;
 
-  color: #149447;
+  background: rgba(34, 197, 94, 0.12);
 
-  border-radius: 8px;
+  color: var(--success);
 
-  font-size: 13px;
+  border: 1px solid rgba(34, 197, 94, 0.25);
 
+  font-size: 14px;
   font-weight: 600;
 }
 
-/* Place Order */
+/* =========================================
+   ERROR MESSAGE
+========================================= */
+
+.orderError {
+  margin-top: 16px;
+
+  padding: 12px 14px;
+
+  border-radius: 10px;
+
+  background: rgba(239, 68, 68, 0.1);
+
+  color: var(--danger);
+
+  border: 1px solid rgba(239, 68, 68, 0.25);
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* =========================================
+   PLACE ORDER
+========================================= */
 
 .placeOrder {
   width: 100%;
-
   height: 48px;
 
   border: none;
-
   border-radius: 9px;
 
   margin-top: 18px;
 
-  color: white;
+  color: #ffffff;
 
   font-size: 15px;
-
   font-weight: 600;
 
   cursor: pointer;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.1s ease;
+}
+
+.placeOrder:active {
+  transform: scale(0.99);
 }
 
 .buyOrder {
-  background: #149447;
+  background: var(--success);
 }
 
 .buyOrder:hover {
-  background: #107b3a;
+  opacity: 0.88;
 }
 
 .sellOrder {
-  background: #e53935;
+  background: var(--danger);
 }
 
 .sellOrder:hover {
-  background: #c92e2e;
+  opacity: 0.88;
 }
 
-/* Responsive */
+.placeOrder:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   DARK MODE EXTRA FIX
+========================================= */
+
+html.dark .stockSelectorItem,
+body.dark .stockSelectorItem {
+  background: var(--surface);
+}
+
+html.dark .stockSelectorItem:hover,
+body.dark .stockSelectorItem:hover {
+  background: var(--hover-bg);
+}
+
+html.dark .orderField input,
+html.dark .orderField select,
+body.dark .orderField input,
+body.dark .orderField select {
+  background: var(--input-bg);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+html.dark .productButtons button,
+body.dark .productButtons button {
+  background: var(--surface-2);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+html.dark .orderSummary,
+body.dark .orderSummary {
+  background: var(--surface-2);
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
 
 @media (max-width: 900px) {
   .ordersLayout {
@@ -354,71 +565,5 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
-  }
-}
-.orderError {
-  margin-top: 16px;
-  padding: 12px 14px;
-  border-radius: 10px;
-  background: #fff1f1;
-  color: #d93025;
-  border: 1px solid #ffd5d5;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.orderSuccess {
-  margin-top: 16px;
-  padding: 12px 14px;
-  border-radius: 10px;
-  background: #ecfdf3;
-  color: #16834b;
-  border: 1px solid #ccefdc;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.placeOrder:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-.livePriceIndicator {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: -15px;
-  margin-bottom: 20px;
-  font-size: 12px;
-  color: #149447;
-  font-weight: 600;
-}
-
-.liveDot {
-  width: 7px;
-  height: 7px;
-  background: #149447;
-  border-radius: 50%;
-  display: inline-block;
-  animation: livePulse 1.5s infinite;
-}
-
-.priceHint {
-  display: block;
-  margin-top: 6px;
-  font-size: 11px;
-  color: #888;
-}
-
-@keyframes livePulse {
-  0% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.35;
-  }
-
-  100% {
-    opacity: 1;
   }
 }

@@ -1,24 +1,52 @@
+/* =========================================================
+   TRADENEST ANALYTICS
+========================================================= */
+
 .analyticsSection {
+  width: 100%;
   margin-top: 35px;
+
+  box-sizing: border-box;
+
+  color: var(--text);
+
+  transition:
+    color 0.25s ease,
+    background-color 0.25s ease;
 }
 
+/* =========================================================
+   HEADER
+========================================================= */
+
 .analyticsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   margin-bottom: 25px;
 }
 
 .analyticsHeader h2 {
+  margin: 0 0 8px;
+
   font-size: 30px;
+  font-weight: 700;
 
-  color: #222;
-
-  margin-bottom: 8px;
+  color: var(--text);
 }
 
 .analyticsHeader p {
-  color: #777;
+  margin: 0;
 
   font-size: 15px;
+
+  color: var(--text-secondary);
 }
+
+/* =========================================================
+   GRID
+========================================================= */
 
 .analyticsGrid {
   display: grid;
@@ -26,20 +54,131 @@
   grid-template-columns: 2fr 1fr;
 
   gap: 25px;
+
+  align-items: start;
 }
 
-.analyticsCard {
-  background: #fff;
+/* =========================================================
+   COMMON ANALYTICS CARD
+========================================================= */
+
+.analyticsCard,
+.growthCard,
+.assetCard,
+.sectorCard,
+.performanceCard {
+  background: var(--card);
+
+  color: var(--text);
+
+  border: 1px solid var(--border);
 
   border-radius: 18px;
 
-  padding: 24px;
+  box-sizing: border-box;
 
-  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow);
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+html.dark .analyticsSection,
+body.dark .analyticsSection {
+  color: #f8fafc;
+}
+
+html.dark .analyticsHeader h2,
+body.dark .analyticsHeader h2 {
+  color: #f8fafc !important;
+}
+
+html.dark .analyticsHeader p,
+body.dark .analyticsHeader p {
+  color: #cbd5e1 !important;
+}
+
+/* =========================================================
+   ALL ANALYTICS CARDS DARK
+========================================================= */
+
+html.dark .analyticsCard,
+html.dark .growthCard,
+html.dark .assetCard,
+html.dark .sectorCard,
+html.dark .performanceCard,
+body.dark .analyticsCard,
+body.dark .growthCard,
+body.dark .assetCard,
+body.dark .sectorCard,
+body.dark .performanceCard {
+  background: #172033 !important;
+
+  color: #f8fafc !important;
+
+  border-color: #334155 !important;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* =========================================================
+   ALL HEADINGS DARK
+========================================================= */
+
+html.dark .analyticsSection h1,
+html.dark .analyticsSection h2,
+html.dark .analyticsSection h3,
+body.dark .analyticsSection h1,
+body.dark .analyticsSection h2,
+body.dark .analyticsSection h3 {
+  color: #f8fafc !important;
+}
+
+/* =========================================================
+   ALL TEXT DARK
+========================================================= */
+
+html.dark .analyticsSection p,
+html.dark .analyticsSection span,
+html.dark .analyticsSection small,
+body.dark .analyticsSection p,
+body.dark .analyticsSection span,
+body.dark .analyticsSection small {
+  color: #cbd5e1;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
 @media (max-width: 1100px) {
   .analyticsGrid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 650px) {
+  .analyticsSection {
+    margin-top: 20px;
+  }
+
+  .analyticsHeader h2 {
+    font-size: 24px;
+  }
+
+  .analyticsHeader p {
+    font-size: 13px;
+  }
+
+  .analyticsGrid {
+    gap: 16px;
   }
 }

@@ -725,3 +725,36 @@
     padding: 25px 18px 21px;
   }
 }
+/* =========================================
+   BACK TO HOME
+========================================= */
+
+.authHomeLink {
+  position: absolute;
+  top: 28px;
+  left: 32px;
+  z-index: 20;
+}
+
+.authHomeLink a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  color: #387ed1;
+
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.authHomeLink a:hover {
+  color: #2563eb;
+
+  transform: translateX(-3px);
+}

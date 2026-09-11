@@ -7,7 +7,7 @@ function OpenAccount() {
   const location = useLocation();
 
   const handleSignupClick = () => {
-    // যদি already signup page-এ থাকে
+    
     if (location.pathname === "/signup") {
       window.scrollTo({
         top: 0,
@@ -16,7 +16,7 @@ function OpenAccount() {
       return;
     }
 
-    // অন্য যেকোনো page থেকে signup page
+    
     navigate("/signup");
   };
 

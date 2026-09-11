@@ -4,12 +4,14 @@ import dashboardData from "../../data/dashboard";
 
 function PerformanceCard() {
   const performance = dashboardData.analytics.portfolioPerformance;
+
   const risk = dashboardData.analytics.riskAnalysis;
 
   return (
     <div className="performanceCard">
       <h2>Performance</h2>
 
+      {/* TODAY */}
       <div className="performanceItem">
         <span>Today</span>
 
@@ -20,6 +22,7 @@ function PerformanceCard() {
         <small>{performance.today.percentage}%</small>
       </div>
 
+      {/* WEEK */}
       <div className="performanceItem">
         <span>This Week</span>
 
@@ -30,6 +33,7 @@ function PerformanceCard() {
         <small>{performance.week.percentage}%</small>
       </div>
 
+      {/* MONTH */}
       <div className="performanceItem">
         <span>This Month</span>
 
@@ -40,6 +44,7 @@ function PerformanceCard() {
         <small>{performance.month.percentage}%</small>
       </div>
 
+      {/* YEAR */}
       <div className="performanceItem">
         <span>This Year</span>
 
@@ -52,6 +57,7 @@ function PerformanceCard() {
 
       <hr />
 
+      {/* RISK */}
       <div className="riskBox">
         <h3>Risk Analysis</h3>
 

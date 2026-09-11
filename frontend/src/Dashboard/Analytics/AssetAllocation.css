@@ -1,69 +1,119 @@
-.assetCard{
+/* =========================================================
+   ASSET ALLOCATION
+========================================================= */
 
-background:#fff;
+.assetCard {
+  background: var(--card);
 
-padding:25px;
+  color: var(--text);
 
-border-radius:18px;
+  padding: 25px;
 
-box-shadow:0 5px 18px rgba(0,0,0,.05);
+  border: 1px solid var(--border);
 
+  border-radius: 18px;
+
+  box-shadow: var(--shadow);
+
+  box-sizing: border-box;
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.assetCard h2{
+.assetCard h2 {
+  margin: 0 0 20px;
 
-margin-bottom:20px;
+  color: var(--text);
 
+  font-size: 20px;
 }
 
-.assetContent{
+.assetContent {
+  display: flex;
 
-display:flex;
+  flex-direction: column;
 
-flex-direction:column;
-
-align-items:center;
-
+  align-items: center;
 }
 
-.assetLegend{
+.assetLegend {
+  width: 100%;
 
-width:100%;
-
-margin-top:15px;
-
+  margin-top: 15px;
 }
 
-.legendItem{
+.legendItem {
+  display: flex;
 
-display:flex;
+  align-items: center;
 
-align-items:center;
+  justify-content: space-between;
 
-justify-content:space-between;
+  padding: 10px 0;
 
-padding:10px 0;
+  border-bottom: 1px solid var(--border);
 
+  color: var(--text);
 }
 
-.colorDot{
+.legendItem p {
+  flex: 1;
 
-width:14px;
+  margin: 0 0 0 12px;
 
-height:14px;
+  color: var(--text);
 
-border-radius:50%;
-
-margin-right:12px;
-
+  font-weight: 500;
 }
 
-.legendItem p{
+.legendItem strong {
+  color: var(--text);
+}
 
-flex:1;
+.colorDot {
+  width: 14px;
 
-margin-left:12px;
+  height: 14px;
 
-font-weight:500;
+  flex-shrink: 0;
 
+  border-radius: 50%;
+
+  margin-right: 12px;
+}
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+html.dark .assetCard,
+body.dark .assetCard {
+  background: #172033 !important;
+
+  color: #f8fafc !important;
+
+  border-color: #334155 !important;
+}
+
+html.dark .assetCard h2,
+body.dark .assetCard h2 {
+  color: #f8fafc !important;
+}
+
+html.dark .legendItem,
+body.dark .legendItem {
+  color: #f8fafc;
+
+  border-color: #334155;
+}
+
+html.dark .legendItem p,
+body.dark .legendItem p,
+html.dark .legendItem strong,
+body.dark .legendItem strong {
+  color: #f8fafc !important;
 }

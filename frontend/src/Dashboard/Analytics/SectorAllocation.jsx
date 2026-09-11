@@ -20,18 +20,19 @@ const COLORS = [
 ];
 
 function SectorAllocation() {
-
-  const data = dashboardData.analytics.sectorAllocation;
+  const data =
+    dashboardData.analytics.sectorAllocation;
 
   return (
     <div className="sectorCard">
-
       <h2>Sector Allocation</h2>
 
       <div className="sectorChart">
 
-        <ResponsiveContainer width="100%" height={280}>
-
+        <ResponsiveContainer
+          width="100%"
+          height={280}
+        >
           <PieChart>
 
             <Pie
@@ -42,22 +43,21 @@ function SectorAllocation() {
               innerRadius={45}
               paddingAngle={2}
             >
-
               {data.map((item, index) => (
-
                 <Cell
-                  key={index}
-                  fill={COLORS[index % COLORS.length]}
+                  key={item.sector}
+                  fill={
+                    COLORS[
+                      index % COLORS.length
+                    ]
+                  }
                 />
-
               ))}
-
             </Pie>
 
             <Tooltip />
 
           </PieChart>
-
         </ResponsiveContainer>
 
       </div>
@@ -65,30 +65,34 @@ function SectorAllocation() {
       <div className="sectorList">
 
         {data.map((item, index) => (
-
-          <div className="sectorItem" key={index}>
-
+          <div
+            className="sectorItem"
+            key={item.sector}
+          >
             <div className="sectorLeft">
 
               <span
                 className="sectorDot"
                 style={{
-                  background: COLORS[index],
+                  background:
+                    COLORS[index % COLORS.length],
                 }}
-              ></span>
+              />
 
-              <p>{item.sector}</p>
+              <p>
+                {item.sector}
+              </p>
 
             </div>
 
-            <strong>{item.value}%</strong>
+            <strong>
+              {item.value}%
+            </strong>
 
           </div>
-
         ))}
 
       </div>
-
     </div>
   );
 }

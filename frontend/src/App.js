@@ -29,6 +29,7 @@ import NotFound from "./Landing_Page/NotFound";
 // Authentication protection
 import ProtectedRoute from "./Auth/ProtectedRoute";
 
+
 /* =========================================
    LANDING LAYOUT
 ========================================= */
@@ -45,6 +46,7 @@ function LandingLayout({ children }) {
   );
 }
 
+
 /* =========================================
    APP
 ========================================= */
@@ -52,6 +54,7 @@ function LandingLayout({ children }) {
 function App() {
   return (
     <Routes>
+
       {/* =====================================
           LANDING PAGES
       ===================================== */}
@@ -106,7 +109,10 @@ function App() {
         }
       />
 
-      {/* OPEN ACCOUNT */}
+      {/* =====================================
+          OPEN ACCOUNT INFORMATION PAGE
+      ===================================== */}
+
       <Route
         path="/open-account"
         element={
@@ -129,7 +135,7 @@ function App() {
         }
       />
 
-      {/* Optional: old URL also works */}
+      {/* Old URL also works */}
       <Route
         path="/InvestmentOfferings"
         element={
@@ -143,34 +149,56 @@ function App() {
           AUTHENTICATION
       ===================================== */}
 
-      {/* SIGNUP */}
-      <Route path="/signup" element={<SignupPage />} />
+      {/* ACTUAL SIGNUP PAGE */}
+      <Route
+        path="/signup"
+        element={<SignupPage />}
+      />
 
-      {/* LOGIN */}
-      <Route path="/login" element={<LoginPage />} />
+      {/* LOGIN PAGE */}
+      <Route
+        path="/login"
+        element={<LoginPage />}
+      />
 
       {/* FORGOT PASSWORD */}
-      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route
+        path="/forgot-password"
+        element={<ForgotPasswordPage />}
+      />
 
       {/* OTP */}
-      <Route path="/otp" element={<OTPPage />} />
+      <Route
+        path="/otp"
+        element={<OTPPage />}
+      />
 
       {/* RESET PASSWORD */}
-      <Route path="/reset-password" element={<ResetPasswordPage />} />
+      <Route
+        path="/reset-password"
+        element={<ResetPasswordPage />}
+      />
 
       {/* =====================================
           PROTECTED DASHBOARD
       ===================================== */}
 
       <Route element={<ProtectedRoute />}>
-        <Route path="/dashboard/*" element={<DashboardPage />} />
+        <Route
+          path="/dashboard/*"
+          element={<DashboardPage />}
+        />
       </Route>
 
       {/* =====================================
           404
       ===================================== */}
 
-      <Route path="*" element={<NotFound />} />
+      <Route
+        path="*"
+        element={<NotFound />}
+      />
+
     </Routes>
   );
 }

@@ -1,26 +1,42 @@
+/* =========================================================
+   TRADENEST ANALYTICS PAGE
+========================================================= */
+
 .analyticsPage {
   width: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+
+  background: transparent;
   color: var(--text);
 }
 
-/* HEADER */
+/* =========================================================
+   HEADER
+========================================================= */
 
 .analyticsHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   margin-bottom: 25px;
 }
 
 .analyticsHeader h1 {
   margin: 0;
+
   font-size: 30px;
+  font-weight: 700;
+
   color: var(--text);
 }
 
 .analyticsHeader p {
   margin: 6px 0 0;
+
   color: var(--text-secondary);
+
   font-size: 14px;
 }
 
@@ -28,7 +44,9 @@
   display: flex;
   align-items: center;
   gap: 7px;
+
   color: var(--text-secondary);
+
   font-size: 12px;
   font-weight: 600;
 }
@@ -36,44 +54,75 @@
 .analyticsLive span {
   width: 8px;
   height: 8px;
+  flex-shrink: 0;
+
   border-radius: 50%;
+
   background: #12b76a;
+
   box-shadow: 0 0 0 4px rgba(18, 183, 106, 0.12);
 }
 
-/* SUMMARY */
+/* =========================================================
+   SUMMARY CARDS
+========================================================= */
 
 .analyticsCards {
   display: grid;
+
   grid-template-columns: repeat(4, minmax(0, 1fr));
+
   gap: 18px;
+
   margin-bottom: 22px;
 }
 
 .analyticsCard {
+  box-sizing: border-box;
+
   background: var(--card);
+
   border: 1px solid var(--border);
+
   border-radius: 16px;
+
   padding: 22px;
+
+  box-shadow: var(--shadow);
+
+  color: var(--text);
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.analyticsCard span {
+.analyticsCard > span {
   color: var(--text-secondary);
+
   font-size: 13px;
 }
 
 .analyticsCard h2 {
   margin: 10px 0 5px;
+
   font-size: 23px;
+  font-weight: 700;
+
   color: var(--text);
 }
 
 .analyticsCard small {
-  color: var(--muted);
+  color: var(--text-muted);
+
   font-size: 11px;
 }
 
-/* PROFIT / LOSS */
+/* =========================================================
+   PROFIT / LOSS
+========================================================= */
 
 .analyticsProfit {
   color: #12b76a !important;
@@ -83,44 +132,74 @@
   color: #f04438 !important;
 }
 
-/* HIGHLIGHTS */
+/* =========================================================
+   BEST / WORST
+========================================================= */
 
 .analyticsHighlightGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
   gap: 18px;
+
   margin-bottom: 22px;
 }
 
 .highlightCard {
   display: flex;
   align-items: center;
+
   gap: 16px;
+
+  box-sizing: border-box;
+
   background: var(--card);
+
   border: 1px solid var(--border);
+
   border-radius: 16px;
+
   padding: 20px;
+
+  box-shadow: var(--shadow);
+
+  color: var(--text);
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
 }
 
 .highlightIcon {
   width: 48px;
   height: 48px;
+
+  min-width: 48px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   border-radius: 12px;
+
   background: rgba(56, 126, 209, 0.1);
+
   font-size: 23px;
 }
 
 .highlightCard span {
   color: var(--text-secondary);
+
   font-size: 11px;
 }
 
 .highlightCard h3 {
   margin: 4px 0;
+
   color: var(--text);
+
   font-size: 18px;
 }
 
@@ -136,14 +215,31 @@
   color: #f04438;
 }
 
-/* SECTION */
+/* =========================================================
+   SECTIONS
+========================================================= */
 
 .analyticsSection {
+  box-sizing: border-box;
+
   background: var(--card);
+
   border: 1px solid var(--border);
+
   border-radius: 16px;
+
   padding: 22px;
+
   margin-bottom: 22px;
+
+  box-shadow: var(--shadow);
+
+  color: var(--text);
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease;
 }
 
 .analyticsSectionHeader {
@@ -152,72 +248,123 @@
 
 .analyticsSectionHeader h2 {
   margin: 0;
+
   color: var(--text);
+
   font-size: 19px;
+  font-weight: 700;
 }
 
 .analyticsSectionHeader p {
   margin: 5px 0 0;
+
   color: var(--text-secondary);
+
   font-size: 12px;
 }
 
-/* TABLE */
+/* =========================================================
+   TABLE
+========================================================= */
 
 .analyticsTableWrapper {
   width: 100%;
+
   overflow-x: auto;
 }
 
 .analyticsTable {
   width: 100%;
+
   min-width: 700px;
+
   border-collapse: collapse;
+
+  background: var(--surface);
+
+  color: var(--text);
+}
+
+.analyticsTable thead {
+  background: var(--surface-2);
 }
 
 .analyticsTable th {
   padding: 13px;
+
   text-align: left;
+
   color: var(--text-secondary);
+
+  background: var(--surface-2);
+
   font-size: 11px;
   font-weight: 600;
+
   border-bottom: 1px solid var(--border);
 }
 
 .analyticsTable td {
   padding: 16px 13px;
+
   color: var(--text);
+
+  background: var(--surface);
+
   font-size: 12px;
+
   border-bottom: 1px solid var(--border);
 }
 
-.analyticsTable tbody tr:hover {
-  background: rgba(56, 126, 209, 0.025);
+.analyticsTable tbody tr {
+  background: var(--surface);
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
-/* STOCK */
+.analyticsTable tbody tr:hover {
+  background: var(--hover-bg);
+}
+
+.analyticsTable tbody tr:hover td {
+  background: var(--hover-bg);
+}
+
+/* =========================================================
+   STOCK
+========================================================= */
 
 .analyticsStock {
   display: flex;
+
   flex-direction: column;
+
   gap: 3px;
 }
 
 .analyticsStock strong {
   color: var(--text);
+
   font-size: 13px;
 }
 
 .analyticsStock small {
-  color: var(--muted);
+  color: var(--text-muted);
+
   font-size: 10px;
 }
 
-/* ALLOCATION */
+/* =========================================================
+   ALLOCATION
+========================================================= */
 
 .allocationList {
   display: flex;
+
   flex-direction: column;
+
   gap: 18px;
 }
 
@@ -227,97 +374,133 @@
 
 .allocationTop {
   display: flex;
+
   justify-content: space-between;
   align-items: center;
+
   margin-bottom: 7px;
 }
 
 .allocationTop strong {
   color: var(--text);
+
   font-size: 13px;
 }
 
 .allocationTop span {
   color: var(--text-secondary);
+
   font-size: 12px;
   font-weight: 600;
 }
 
 .allocationBar {
   width: 100%;
+
   height: 8px;
+
   background: var(--border);
+
   border-radius: 20px;
+
   overflow: hidden;
 }
 
 .allocationFill {
   height: 100%;
-  background: #387ed1;
+
+  background: var(--primary);
+
   border-radius: 20px;
+
   transition: width 0.4s ease;
 }
 
 .allocationItem small {
   display: block;
+
   margin-top: 5px;
-  color: var(--muted);
+
+  color: var(--text-muted);
+
   font-size: 10px;
 }
 
-/* EMPTY */
+/* =========================================================
+   EMPTY
+========================================================= */
 
 .analyticsEmpty {
   padding: 50px 20px;
+
   text-align: center;
-  color: var(--muted);
+
+  color: var(--text-muted);
 }
 
 .analyticsEmpty div {
   font-size: 32px;
+
   margin-bottom: 10px;
 }
 
 .analyticsEmpty h3 {
   margin: 0;
+
   color: var(--text);
+
   font-size: 16px;
 }
 
 .analyticsEmpty p {
   margin-top: 7px;
+
   color: var(--text-secondary);
+
   font-size: 12px;
 }
 
-/* LOADING */
+/* =========================================================
+   LOADING
+========================================================= */
 
 .analyticsLoading {
   min-height: 450px;
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
   text-align: center;
 }
 
 .analyticsLoading h3 {
   margin: 15px 0 5px;
+
   color: var(--text);
 }
 
 .analyticsLoading p {
   margin: 0;
+
   color: var(--text-secondary);
+
   font-size: 13px;
 }
 
 .analyticsLoader {
   width: 38px;
   height: 38px;
+
   border: 3px solid var(--border);
-  border-top-color: #387ed1;
+
+  border-top-color: var(--primary);
+
   border-radius: 50%;
+
   animation: analyticsSpin 0.8s linear infinite;
 }
 
@@ -327,14 +510,20 @@
   }
 }
 
-/* ERROR */
+/* =========================================================
+   ERROR
+========================================================= */
 
 .analyticsError {
   min-height: 450px;
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
   justify-content: center;
+
   text-align: center;
 }
 
@@ -344,36 +533,245 @@
 
 .analyticsError h2 {
   margin: 12px 0 5px;
+
   color: var(--text);
 }
 
 .analyticsError p {
   color: var(--text-secondary);
+
   font-size: 13px;
 }
 
 .analyticsError button {
   border: none;
-  background: #387ed1;
-  color: white;
+
+  background: var(--primary);
+
+  color: #ffffff;
+
   padding: 9px 15px;
+
   border-radius: 8px;
+
   cursor: pointer;
+
   font-weight: 600;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
 }
 
-/* RESPONSIVE */
+.analyticsError button:hover {
+  background: var(--primary-dark);
+
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   DARK MODE SAFETY OVERRIDE
+   =========================================================
+   Ei part-ta important.
+   Kono external/global CSS jodi white force kore,
+   tahole Analytics page-er elements dark thakbe.
+========================================================= */
+
+html.dark .analyticsPage,
+body.dark .analyticsPage {
+  background: transparent !important;
+
+  color: #f8fafc !important;
+}
+
+html.dark .analyticsCard,
+body.dark .analyticsCard {
+  background: #172033 !important;
+
+  border-color: #334155 !important;
+
+  color: #f8fafc !important;
+}
+
+html.dark .highlightCard,
+body.dark .highlightCard {
+  background: #172033 !important;
+
+  border-color: #334155 !important;
+
+  color: #f8fafc !important;
+}
+
+html.dark .analyticsSection,
+body.dark .analyticsSection {
+  background: #172033 !important;
+
+  border-color: #334155 !important;
+
+  color: #f8fafc !important;
+}
+
+/* =========================================================
+   DARK TEXT
+========================================================= */
+
+html.dark .analyticsHeader h1,
+body.dark .analyticsHeader h1,
+html.dark .analyticsCard h2,
+body.dark .analyticsCard h2,
+html.dark .highlightCard h3,
+body.dark .highlightCard h3,
+html.dark .analyticsSectionHeader h2,
+body.dark .analyticsSectionHeader h2,
+html.dark .analyticsStock strong,
+body.dark .analyticsStock strong,
+html.dark .allocationTop strong,
+body.dark .allocationTop strong,
+html.dark .analyticsEmpty h3,
+body.dark .analyticsEmpty h3,
+html.dark .analyticsLoading h3,
+body.dark .analyticsLoading h3,
+html.dark .analyticsError h2,
+body.dark .analyticsError h2 {
+  color: #f8fafc !important;
+}
+
+/* =========================================================
+   DARK SECONDARY TEXT
+========================================================= */
+
+html.dark .analyticsHeader p,
+body.dark .analyticsHeader p,
+html.dark .analyticsLive,
+body.dark .analyticsLive,
+html.dark .analyticsCard > span,
+body.dark .analyticsCard > span,
+html.dark .highlightCard span,
+body.dark .highlightCard span,
+html.dark .analyticsSectionHeader p,
+body.dark .analyticsSectionHeader p,
+html.dark .allocationTop span,
+body.dark .allocationTop span,
+html.dark .analyticsLoading p,
+body.dark .analyticsLoading p,
+html.dark .analyticsError p,
+body.dark .analyticsError p,
+html.dark .analyticsEmpty p,
+body.dark .analyticsEmpty p {
+  color: #cbd5e1 !important;
+}
+
+/* =========================================================
+   DARK MUTED
+========================================================= */
+
+html.dark .analyticsCard small,
+body.dark .analyticsCard small,
+html.dark .analyticsStock small,
+body.dark .analyticsStock small,
+html.dark .allocationItem small,
+body.dark .allocationItem small,
+html.dark .analyticsEmpty,
+body.dark .analyticsEmpty {
+  color: #94a3b8 !important;
+}
+
+/* =========================================================
+   DARK TABLE
+========================================================= */
+
+html.dark .analyticsTable,
+body.dark .analyticsTable {
+  background: #172033 !important;
+
+  color: #f8fafc !important;
+}
+
+html.dark .analyticsTable thead,
+body.dark .analyticsTable thead {
+  background: #1e293b !important;
+}
+
+html.dark .analyticsTable th,
+body.dark .analyticsTable th {
+  background: #1e293b !important;
+
+  color: #cbd5e1 !important;
+
+  border-color: #334155 !important;
+}
+
+html.dark .analyticsTable td,
+body.dark .analyticsTable td {
+  background: #172033 !important;
+
+  color: #f8fafc !important;
+
+  border-color: #334155 !important;
+}
+
+html.dark .analyticsTable tbody tr,
+body.dark .analyticsTable tbody tr {
+  background: #172033 !important;
+}
+
+html.dark .analyticsTable tbody tr:hover,
+body.dark .analyticsTable tbody tr:hover,
+html.dark .analyticsTable tbody tr:hover td,
+body.dark .analyticsTable tbody tr:hover td {
+  background: #263449 !important;
+}
+
+/* =========================================================
+   DARK ALLOCATION
+========================================================= */
+
+html.dark .allocationBar,
+body.dark .allocationBar {
+  background: #334155 !important;
+}
+
+html.dark .allocationFill,
+body.dark .allocationFill {
+  background: #3b82f6 !important;
+}
+
+/* =========================================================
+   DARK ICON
+========================================================= */
+
+html.dark .highlightIcon,
+body.dark .highlightIcon {
+  background: rgba(59, 130, 246, 0.14) !important;
+}
+
+/* =========================================================
+   DARK LOADER
+========================================================= */
+
+html.dark .analyticsLoader,
+body.dark .analyticsLoader {
+  border-color: #334155 !important;
+
+  border-top-color: #3b82f6 !important;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
 @media (max-width: 1000px) {
   .analyticsCards {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 650px) {
   .analyticsHeader {
     align-items: flex-start;
+
     flex-direction: column;
+
     gap: 12px;
   }
 

@@ -10,17 +10,11 @@ function OpenAccountPage() {
   return (
     <>
       <SignupHero />
-
       <Investment />
-
       <Steps />
-
       <Benefits />
-
       <AccountTypes />
-
       <FAQ />
-
       <OpenAccount />
     </>
   );

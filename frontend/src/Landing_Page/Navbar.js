@@ -6,6 +6,7 @@ function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
       <div className="container">
+
         {/* ================= LOGO ================= */}
 
         <Link className="navbar-brand" to="/">
@@ -15,6 +16,7 @@ function Navbar() {
             className="logo"
           />
         </Link>
+
 
         {/* ================= MOBILE TOGGLE ================= */}
 
@@ -30,52 +32,78 @@ function Navbar() {
           <span className="navbar-toggler-icon"></span>
         </button>
 
+
         {/* ================= NAVIGATION ================= */}
 
-        <div className="collapse navbar-collapse" id="navbarNav">
+        <div
+          className="collapse navbar-collapse"
+          id="navbarNav"
+        >
+
           <ul className="navbar-nav ms-auto align-items-lg-center">
 
-            {/* SIGNUP */}
+
+            {/* ================= SIGNUP ================= */}
 
             <li className="nav-item">
-              <Link className="nav-link" to="/signup">
+              <Link
+                className="nav-link"
+                to="/signup"
+              >
                 Signup
               </Link>
             </li>
 
-            {/* ABOUT */}
+
+            {/* ================= ABOUT ================= */}
 
             <li className="nav-item">
-              <Link className="nav-link" to="/about">
+              <Link
+                className="nav-link"
+                to="/about"
+              >
                 About
               </Link>
             </li>
 
-            {/* PRODUCTS */}
+
+            {/* ================= PRODUCTS ================= */}
 
             <li className="nav-item">
-              <Link className="nav-link" to="/products">
+              <Link
+                className="nav-link"
+                to="/products"
+              >
                 Products
               </Link>
             </li>
 
-            {/* PRICING */}
+
+            {/* ================= PRICING ================= */}
 
             <li className="nav-item">
-              <Link className="nav-link" to="/pricing">
+              <Link
+                className="nav-link"
+                to="/pricing"
+              >
                 Pricing
               </Link>
             </li>
 
-            {/* SUPPORT */}
+
+            {/* ================= SUPPORT ================= */}
 
             <li className="nav-item">
-              <Link className="nav-link" to="/support">
+              <Link
+                className="nav-link"
+                to="/support"
+              >
                 Support
               </Link>
             </li>
 
-            {/* MENU */}
+
+            {/* ================= MENU ================= */}
 
             <li className="nav-item">
               <button
@@ -87,11 +115,13 @@ function Navbar() {
               </button>
             </li>
 
+
           </ul>
         </div>
+
       </div>
     </nav>
   );
 }
 
-export default Navbar;
+export default Navbar; 

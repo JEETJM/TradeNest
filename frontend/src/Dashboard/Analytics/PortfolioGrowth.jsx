@@ -13,45 +13,80 @@ import {
 } from "recharts";
 
 function PortfolioGrowth() {
-  const { investedAmount, currentValue, overallReturn } = dashboardData.summary;
-const chartData = dashboardData.analytics.portfolioGrowth;
-  // const chartData = dashboardData.analytics.portfolioGrowth;
+  const {
+    investedAmount,
+    currentValue,
+    overallReturn,
+  } = dashboardData.summary;
+
+  const chartData =
+    dashboardData.analytics.portfolioGrowth;
+
   return (
     <div className="growthCard">
+      {/* HEADER */}
       <div className="growthHeader">
         <h2>Portfolio Growth</h2>
 
-        <button>View Report</button>
+        <button className="reportBtn">
+          View Report
+        </button>
       </div>
 
+      {/* STATS */}
       <div className="growthStats">
-        <div>
+
+        <div className="statBox">
           <span>Invested</span>
-          <h3>{investedAmount.formatted}</h3>
+
+          <h3>
+            {investedAmount.formatted}
+          </h3>
         </div>
 
-        <div>
+        <div className="statBox">
           <span>Current Value</span>
-          <h3>{currentValue.formatted}</h3>
+
+          <h3>
+            {currentValue.formatted}
+          </h3>
         </div>
 
-        <div>
+        <div className="statBox">
           <span>Total Return</span>
 
-          <h3 className="profit">{overallReturn.formatted}</h3>
+          <h3 className="profit">
+            {overallReturn.formatted}
+          </h3>
 
-          <small>{overallReturn.percentage}</small>
+          <small>
+            {overallReturn.percentage}
+          </small>
         </div>
+
       </div>
 
+      {/* CHART */}
       <div className="chartBox">
-        <ResponsiveContainer width="100%" height={320}>
+        <ResponsiveContainer
+          width="100%"
+          height={320}
+        >
           <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
 
-            <XAxis dataKey="month" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="var(--border)"
+            />
 
-            <YAxis />
+            <XAxis
+              dataKey="month"
+              stroke="var(--text-secondary)"
+            />
+
+            <YAxis
+              stroke="var(--text-secondary)"
+            />
 
             <Tooltip />
 
@@ -63,6 +98,7 @@ const chartData = dashboardData.analytics.portfolioGrowth;
               dot={{ r: 4 }}
               activeDot={{ r: 7 }}
             />
+
           </LineChart>
         </ResponsiveContainer>
       </div>

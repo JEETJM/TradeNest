@@ -1,79 +1,136 @@
-.performanceCard{
+/* =========================================================
+   PERFORMANCE CARD
+========================================================= */
 
-background:#fff;
+.performanceCard {
+  background: var(--card);
 
-padding:25px;
+  color: var(--text);
 
-border-radius:18px;
+  padding: 25px;
 
-box-shadow:0 5px 18px rgba(0,0,0,.05);
+  border: 1px solid var(--border);
 
+  border-radius: 18px;
+
+  box-shadow: var(--shadow);
+
+  box-sizing: border-box;
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
-.performanceCard h2{
+.performanceCard h2 {
+  margin: 0 0 20px;
 
-margin-bottom:20px;
-
+  color: var(--text);
 }
 
-.performanceItem{
+.performanceItem {
+  display: flex;
 
-display:flex;
+  justify-content: space-between;
 
-justify-content:space-between;
+  align-items: center;
 
-align-items:center;
+  padding: 14px 0;
 
-padding:14px 0;
-
-border-bottom:1px solid #eee;
-
+  border-bottom: 1px solid var(--border);
 }
 
-.performanceItem span{
+.performanceItem span {
+  color: var(--text);
 
-font-weight:500;
-
+  font-weight: 500;
 }
 
-.performanceItem strong{
+.performanceItem strong {
+  color: var(--text);
 
-font-size:18px;
-
+  font-size: 18px;
 }
 
-.performanceItem small{
-
-color:#777;
-
+.performanceItem small {
+  color: var(--text-secondary);
 }
 
-.riskBox{
-
-margin-top:25px;
-
+.riskBox {
+  margin-top: 25px;
 }
 
-.riskBox h3{
+.riskBox h3 {
+  margin-bottom: 15px;
 
-margin-bottom:15px;
-
+  color: var(--text);
 }
 
-.riskBox p{
+.riskBox p {
+  margin: 10px 0;
 
-margin:10px 0;
-
+  color: var(--text);
 }
 
-.profit{
-
-color:#18a558;
-
+.riskBox strong {
+  color: var(--text);
 }
 
-.loss{
+.profit {
+  color: #18a558 !important;
+}
 
-color:#e53935;
+.loss {
+  color: #e53935 !important;
+}
 
+.performanceCard hr {
+  border: 0;
+
+  border-top: 1px solid var(--border);
+}
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+html.dark .performanceCard,
+body.dark .performanceCard {
+  background: #172033 !important;
+
+  color: #f8fafc !important;
+
+  border-color: #334155 !important;
+}
+
+html.dark .performanceCard h2,
+html.dark .performanceCard h3,
+html.dark .performanceItem span,
+html.dark .performanceItem strong,
+html.dark .riskBox p,
+html.dark .riskBox strong,
+body.dark .performanceCard h2,
+body.dark .performanceCard h3,
+body.dark .performanceItem span,
+body.dark .performanceItem strong,
+body.dark .riskBox p,
+body.dark .riskBox strong {
+  color: #f8fafc !important;
+}
+
+html.dark .performanceItem,
+body.dark .performanceItem {
+  border-color: #334155;
+}
+
+html.dark .performanceItem small,
+body.dark .performanceItem small {
+  color: #94a3b8 !important;
+}
+
+html.dark .performanceCard hr,
+body.dark .performanceCard hr {
+  border-top-color: #334155;
 }
