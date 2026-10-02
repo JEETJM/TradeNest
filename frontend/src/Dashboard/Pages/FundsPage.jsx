@@ -203,7 +203,7 @@ function FundsPage() {
         return;
       }
 
-      const response = await fetch(`${API_URL}/api/funds/withdraw`, {
+      const response = await fetch(`${API_URL}/funds/withdraw`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
