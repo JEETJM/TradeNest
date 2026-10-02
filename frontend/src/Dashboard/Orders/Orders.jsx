@@ -28,8 +28,9 @@ const MARKET_INSTRUMENTS = {
   KOTAKBANK: "NSE_EQ|INE237A01036",
 };
 
-const API_URL = "http://localhost:5000";
-
+// const API_URL = "http://localhost:5000";
+const API_URL =
+  process.env.REACT_APP_API_URL || "http://localhost:5000";
 function Orders() {
   const [searchParams] = useSearchParams();
 

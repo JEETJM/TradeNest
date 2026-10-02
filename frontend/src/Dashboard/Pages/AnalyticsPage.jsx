@@ -8,8 +8,9 @@ import {
 
 import "./AnalyticsPage.css";
 
-const API_URL = "http://localhost:5000";
-
+// const API_URL = "http://localhost:5000";
+const API_URL =
+  process.env.REACT_APP_API_URL || "http://localhost:5000";
 const MARKET_INSTRUMENTS = {
   INFY: "NSE_EQ|INE009A01021",
   TCS: "NSE_EQ|INE467B01029",

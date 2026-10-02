@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import "./FundsPage.css";
 
-const API_URL = "http://localhost:5000";
-
+// const API_URL = "http://localhost:5000";
+const API_URL =
+  process.env.REACT_APP_API_URL || "http://localhost:5000";
 function FundsPage() {
   const [funds, setFunds] = useState({
     totalBalance: 0,
