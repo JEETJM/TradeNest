@@ -135,7 +135,7 @@ function FundsPage() {
         return;
       }
 
-      const response = await fetch(`${API_URL}/api/funds/add`, {
+      const response = await fetch(`${API_URL}//funds/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -141,7 +141,7 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
           throw new Error("Authentication token not found.");
         }
 
-        const response = await fetch(`${API_URL}/api/funds`, {
+        const response = await fetch(`${API_URL}/funds`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
