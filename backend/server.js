@@ -30,28 +30,67 @@ connectDB();
 const app = express();
 
 /* =========================
-   MIDDLEWARE
+   CORS
 ========================= */
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "https://project-libraries.dal6m33tjspby.amplifyapp.com",
+];
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: function (origin, callback) {
+      // Allow requests without an Origin header
+      // such as Postman/server-to-server requests
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      console.log("❌ CORS blocked origin:", origin);
+
+      return callback(new Error("Not allowed by CORS"));
+    },
+
     credentials: true,
+
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
+
+/* =========================
+   PREFLIGHT
+========================= */
+
+app.options("*", cors());
+
+/* =========================
+   BODY PARSER
+========================= */
 
 app.use(express.json());
 
 /* =========================
-   ROUTES
+   HEALTH CHECK
 ========================= */
 
 app.get("/", (req, res) => {
-  res.json({
+  res.status(200).json({
     success: true,
     message: "TradeNest API is running 🚀",
   });
 });
+
+/* =========================
+   API ROUTES
+========================= */
 
 app.use("/api/auth", authRoutes);
 
@@ -75,8 +114,10 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
+    origin: allowedOrigins,
+
     methods: ["GET", "POST"],
+
     credentials: true,
   },
 });
@@ -88,8 +129,8 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log("🟢 React client connected:", socket.id);
 
-  socket.on("disconnect", () => {
-    console.log("🔴 React client disconnected:", socket.id);
+  socket.on("disconnect", (reason) => {
+    console.log("🔴 React client disconnected:", socket.id, reason);
   });
 });
 
@@ -111,7 +152,9 @@ app.use((err, req, res, next) => {
 ========================= */
 
 server.listen(PORT, async () => {
-  console.log(`🚀 TradeNest backend running on http://localhost:${PORT}`);
+  console.log(`🚀 TradeNest backend running on port ${PORT}`);
+
+  console.log("🌐 Allowed origins:", allowedOrigins);
 
   console.log("SMTP USER exists:", Boolean(process.env.SMTP_USER));
 
