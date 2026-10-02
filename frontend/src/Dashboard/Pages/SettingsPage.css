@@ -1,691 +1,683 @@
 .settingsPage {
-  min-height: calc(100vh - 100px);
-  padding: 5px 0 40px;
-  color: var(--text);
+  width: 100%;
+  min-height: 100%;
+  padding: 4px 0 35px;
+  color: var(--text-primary);
 }
 
-/* =========================
-   HEADER
-========================= */
+/* HEADER */
 
 .settingsHeader {
-  margin-bottom: 25px;
+  margin-bottom: 24px;
+}
+
+.settingsEyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  color: var(--accent-primary);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
 }
 
 .settingsHeader h1 {
   margin: 0;
-  color: var(--text);
   font-size: 30px;
-  font-weight: 700;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.03em;
 }
 
 .settingsHeader p {
-  margin: 7px 0 0;
+  margin: 9px 0 0;
   color: var(--text-secondary);
   font-size: 14px;
 }
 
-/* =========================
-   CARD
-========================= */
+/* SAVED MESSAGE */
 
-.settingsCard {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  margin-bottom: 20px;
-  overflow: hidden;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
-  transition:
-    background 0.3s ease,
-    border-color 0.3s ease;
-}
-
-.settingsCardHeader {
-  padding: 22px 24px;
-  border-bottom: 1px solid var(--border);
-}
-
-.settingsCardHeader h2 {
-  margin: 0;
-  color: var(--text);
-  font-size: 18px;
+.settingsSavedMessage {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: fit-content;
+  margin-bottom: 18px;
+  padding: 10px 13px;
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  border-radius: 10px;
+  background: rgba(22, 163, 74, 0.08);
+  color: #15803d;
+  font-size: 12px;
   font-weight: 700;
 }
 
-.settingsCardHeader p {
-  margin: 6px 0 0;
-  color: var(--text-secondary);
-  font-size: 13px;
+/* GRID */
+
+.settingsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
 }
 
-.settingsRows {
-  padding: 0 24px;
-}
+/* CARD */
 
-/* =========================
-   ROW
-========================= */
-
-.settingsRow {
-  min-height: 76px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  border-bottom: 1px solid var(--border);
-}
-
-.settingsRow:last-child {
-  border-bottom: none;
-}
-
-.settingsRowInfo {
+.settingsCard {
   min-width: 0;
+  padding: 21px;
+  border: 1px solid var(--border-color);
+  border-radius: 17px;
+  background: var(--bg-card);
+  box-shadow: var(--card-shadow);
+}
+
+.settingsCardHeader {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+  padding-bottom: 17px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .settingsIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 40px;
   width: 40px;
   height: 40px;
   border-radius: 11px;
+  font-size: 15px;
+}
+
+.settingsIcon.blue {
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+}
+
+.settingsIcon.purple {
+  background: rgba(124, 58, 237, 0.1);
+  color: #7c3aed;
+}
+
+.settingsIcon.green {
+  background: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+}
+
+.settingsIcon.orange {
+  background: rgba(234, 88, 12, 0.1);
+  color: #ea580c;
+}
+
+.settingsCardHeader h2 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.settingsCardHeader p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+/* SETTINGS ROWS */
+
+.settingsList {
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.settingsRow:last-child {
+  border-bottom: 0;
+  padding-bottom: 3px;
+}
+
+.settingsRow:first-child {
+  padding-top: 17px;
+}
+
+.settingsRowInfo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.settingsRowIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #edf5ff;
-  color: #2878d7;
-  flex-shrink: 0;
-}
-
-.settingsRow strong {
-  display: block;
-  color: var(--text);
-  font-size: 14px;
-}
-
-.settingsRow p {
-  margin: 5px 0 0;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--bg-secondary);
   color: var(--text-secondary);
   font-size: 12px;
+}
+
+.settingsRowInfo strong,
+.settingsRowInfo span {
+  display: block;
+}
+
+.settingsRowInfo strong {
+  margin-bottom: 4px;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.settingsRowInfo span {
+  color: var(--text-secondary);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+/* TOGGLE */
+
+.settingsToggle {
+  position: relative;
+  flex: 0 0 43px;
+  width: 43px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 30px;
+  background: var(--border-color);
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.settingsToggle span {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: 0.2s ease;
+}
+
+.settingsToggle.active {
+  background: var(--accent-primary);
+}
+
+.settingsToggle.active span {
+  left: 23px;
+}
+
+/* SECURITY */
+
+.settingsSecurityBox {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding-top: 18px;
+}
+
+.settingsSecurityIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+}
+
+.settingsSecurityInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.settingsSecurityInfo strong,
+.settingsSecurityInfo span {
+  display: block;
+}
+
+.settingsSecurityInfo strong {
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.settingsSecurityInfo span {
+  color: var(--text-secondary);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.settingsActionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex-shrink: 0;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 9px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 750;
+  transition: 0.2s ease;
+}
+
+.settingsActionBtn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+/* PROTECTION */
+
+.settingsProtection {
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsProtectionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.settingsProtectionRow:first-child {
+  padding-top: 17px;
+}
+
+.settingsProtectionRow:last-child {
+  padding-bottom: 3px;
+  border-bottom: 0;
+}
+
+.settingsProtectionRow strong,
+.settingsProtectionRow span {
+  display: block;
+}
+
+.settingsProtectionRow strong {
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.settingsProtectionRow span {
+  color: var(--text-secondary);
+  font-size: 10px;
   line-height: 1.4;
 }
 
-/* =========================
-   TOGGLE
-========================= */
-
-.toggle {
-  width: 48px;
-  height: 26px;
-  border: none;
-  border-radius: 20px;
-  background: #64748b;
-  padding: 3px;
-  cursor: pointer;
-  transition: 0.25s ease;
+.settingsProtectionStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   flex-shrink: 0;
+  color: #16a34a;
+  font-size: 10px;
+  font-weight: 750;
 }
 
-.toggle span {
-  display: block;
-  width: 20px;
-  height: 20px;
-  background: #fff;
-  border-radius: 50%;
-  transition: 0.25s ease;
-}
+/* MODAL */
 
-.toggle.active {
-  background: #2878d7;
-}
-
-.toggle.active span {
-  transform: translateX(22px);
-}
-
-.toggle:hover {
-  opacity: 0.9;
-}
-
-/* =========================
-   ACTION
-========================= */
-
-.settingsAction {
-  border: 1px solid #2878d7;
-  background: transparent;
-  color: #2878d7;
-  padding: 9px 17px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-  transition: 0.2s ease;
-  flex-shrink: 0;
-}
-
-.settingsAction:hover {
-  background: #2878d7;
-  color: #fff;
-  transform: translateY(-1px);
-}
-
-/* =========================
-   PASSWORD MODAL
-========================= */
-
-.passwordModalOverlay {
+.settingsModalOverlay {
   position: fixed;
   inset: 0;
   z-index: 9999;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: 20px;
-
-  background: rgba(15, 23, 42, 0.55);
-
+  background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(4px);
 }
 
-.passwordModal {
+.settingsModal {
   width: min(100%, 470px);
-
-  background: var(--card);
-
-  border: 1px solid var(--border);
-
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
   border-radius: 18px;
-
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.18);
-
-  overflow: hidden;
-
-  animation: passwordModalIn 0.2s ease;
+  background: var(--bg-card);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.22);
 }
 
-@keyframes passwordModalIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* =========================
-   MODAL HEADER
-========================= */
-
-.passwordModalHeader {
-  padding: 21px 23px;
-
+.settingsModalHeader {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-
-  gap: 20px;
-
-  border-bottom: 1px solid var(--border);
+  gap: 15px;
+  padding: 21px 22px 17px;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.passwordModalHeader h2 {
-  margin: 0;
-
-  color: var(--text);
-
-  font-size: 19px;
-}
-
-.passwordModalHeader p {
-  margin: 5px 0 0;
-
-  color: var(--text-secondary);
-
-  font-size: 12px;
-}
-
-.passwordModalClose {
-  width: 34px;
-  height: 34px;
-
-  border: none;
-  border-radius: 8px;
-
-  background: var(--surface);
-
-  color: var(--text-secondary);
-
+.settingsModalIcon {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 39px;
+  height: 39px;
+  margin-bottom: 11px;
+  border-radius: 11px;
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--accent-primary);
+}
 
+.settingsModalHeader h2 {
+  margin: 0 0 5px;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.settingsModalHeader p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.settingsModalClose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 31px;
+  width: 31px;
+  height: 31px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
   cursor: pointer;
-
-  transition: 0.2s ease;
-
-  flex-shrink: 0;
 }
 
-.passwordModalClose:hover {
-  background: var(--border);
-  color: var(--text);
+.settingsModalClose:hover:not(:disabled) {
+  color: #dc2626;
 }
 
-.passwordModalClose:disabled {
+.settingsModalClose:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* =========================
-   PASSWORD FORM
-========================= */
+/* PASSWORD MESSAGES */
 
-.passwordForm {
-  padding: 23px;
+.settingsPasswordMessage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 17px 22px 0;
+  padding: 10px 11px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 650;
 }
 
-.passwordField {
-  margin-bottom: 18px;
+.settingsPasswordMessage.error {
+  border: 1px solid rgba(220, 38, 38, 0.18);
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
 }
 
-.passwordField label {
+.settingsPasswordMessage.success {
+  border: 1px solid rgba(22, 163, 74, 0.18);
+  background: rgba(22, 163, 74, 0.08);
+  color: #15803d;
+}
+
+/* FORM */
+
+.settingsPasswordForm {
+  padding: 20px 22px 22px;
+}
+
+.settingsPasswordField {
+  margin-bottom: 16px;
+}
+
+.settingsPasswordField label {
   display: block;
-
   margin-bottom: 7px;
-
-  color: var(--text-secondary);
-
-  font-size: 12px;
-
-  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 11px;
+  font-weight: 750;
 }
 
-.passwordInput {
+.settingsPasswordInput {
   position: relative;
 }
 
-.passwordInput input {
-  width: 100%;
-  height: 44px;
-
-  box-sizing: border-box;
-
-  padding: 0 45px 0 12px;
-
-  border: 1px solid var(--border);
-
-  border-radius: 9px;
-
-  outline: none;
-
-  background: var(--surface);
-
-  color: var(--text);
-
-  font-size: 13px;
-
-  transition: 0.2s ease;
-}
-
-.passwordInput input:focus {
-  border-color: #2878d7;
-
-  box-shadow: 0 0 0 3px rgba(40, 120, 215, 0.1);
-}
-
-.passwordInput input::placeholder {
-  color: var(--muted);
-}
-
-.passwordInput button {
+.settingsPasswordInput > svg {
   position: absolute;
-
-  right: 8px;
   top: 50%;
-
+  left: 12px;
+  color: var(--text-secondary);
+  font-size: 11px;
   transform: translateY(-50%);
-
-  width: 30px;
-  height: 30px;
-
-  border: none;
-
-  background: transparent;
-
-  color: var(--muted);
-
-  cursor: pointer;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.passwordInput button:hover {
-  color: #2878d7;
-}
-
-.passwordField small {
-  display: block;
-
-  margin-top: 6px;
-
-  color: var(--muted);
-
-  font-size: 10px;
-}
-
-/* =========================
-   PASSWORD MESSAGES
-========================= */
-
-.passwordError,
-.passwordSuccess {
-  margin: 18px 23px 0;
-
-  padding: 11px 13px;
-
+.settingsPasswordInput input {
+  width: 100%;
+  height: 42px;
+  box-sizing: border-box;
+  padding: 0 40px 0 34px;
+  border: 1px solid var(--border-color);
   border-radius: 9px;
-
+  outline: none;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: inherit;
   font-size: 12px;
 }
 
-.passwordError {
-  background: #fef3f2;
-
-  border: 1px solid #fecdca;
-
-  color: #b42318;
+.settingsPasswordInput input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
 }
 
-.passwordSuccess {
-  background: #ecfdf3;
+.settingsPasswordInput input:disabled {
+  opacity: 0.65;
+}
 
-  border: 1px solid #abefc6;
-
-  color: #087443;
-
+.settingsPasswordInput > button {
+  position: absolute;
+  top: 50%;
+  right: 10px;
   display: flex;
-
   align-items: center;
-
-  gap: 8px;
-}
-
-/* =========================
-   MODAL ACTIONS
-========================= */
-
-.passwordModalActions {
-  display: flex;
-
-  justify-content: flex-end;
-
-  gap: 10px;
-
-  margin-top: 5px;
-}
-
-.passwordCancelBtn,
-.passwordSaveBtn {
-  min-height: 42px;
-
-  padding: 10px 17px;
-
-  border-radius: 9px;
-
-  font-size: 13px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: 0.2s ease;
-}
-
-.passwordCancelBtn {
-  background: var(--surface);
-
+  justify-content: center;
+  padding: 4px;
+  border: 0;
+  background: transparent;
   color: var(--text-secondary);
-
-  border: 1px solid var(--border);
+  cursor: pointer;
+  transform: translateY(-50%);
 }
 
-.passwordCancelBtn:hover {
-  background: var(--border);
+.settingsPasswordInput > button:hover {
+  color: var(--accent-primary);
 }
 
-.passwordSaveBtn {
-  background: #2878d7;
+.settingsPasswordHint {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 2px;
+  padding: 10px 11px;
+  border-radius: 9px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 10px;
+  line-height: 1.5;
+}
 
+.settingsPasswordHint svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--accent-primary);
+}
+
+/* MODAL ACTIONS */
+
+.settingsModalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 20px;
+}
+
+.settingsModalCancel,
+.settingsModalSubmit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.settingsModalCancel {
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+}
+
+.settingsModalSubmit {
+  border: 1px solid var(--accent-primary);
+  background: var(--accent-primary);
   color: #fff;
-
-  border: none;
 }
 
-.passwordSaveBtn:hover {
-  background: #1769c2;
+.settingsModalCancel:hover:not(:disabled) {
+  border-color: #dc2626;
+  color: #dc2626;
 }
 
-.passwordCancelBtn:disabled,
-.passwordSaveBtn:disabled {
-  opacity: 0.6;
+.settingsModalSubmit:hover:not(:disabled) {
+  filter: brightness(0.95);
+}
 
+.settingsModalCancel:disabled,
+.settingsModalSubmit:disabled {
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
-/* =========================
-   DARK MODE SUPPORT
-========================= */
-
-body.dark .settingsIcon {
-  background: rgba(40, 120, 215, 0.12);
+.settingsSpin {
+  animation: settingsSpin 0.8s linear infinite;
 }
 
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 650px) {
-  .settingsPage {
-    padding: 0 0 30px;
+@keyframes settingsSpin {
+  to {
+    transform: rotate(360deg);
   }
+}
 
+/* DARK MODE */
+
+html.dark .settingsModalOverlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .settingsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
   .settingsHeader h1 {
-    font-size: 25px;
+    font-size: 26px;
   }
 
+  .settingsCard {
+    padding: 18px;
+  }
+
+  .settingsSecurityBox {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .settingsSecurityInfo {
+    min-width: calc(100% - 60px);
+  }
+
+  .settingsActionBtn {
+    width: 100%;
+    margin-top: 5px;
+  }
+}
+
+@media (max-width: 450px) {
   .settingsRow {
-    min-height: 85px;
-  }
-
-  .settingsRows {
-    padding: 0 18px;
+    align-items: flex-start;
   }
 
   .settingsRowInfo {
-    gap: 10px;
+    align-items: flex-start;
   }
 
-  .settingsIcon {
-    width: 35px;
-    height: 35px;
-    border-radius: 9px;
+  .settingsRowIcon {
+    flex-basis: 31px;
+    width: 31px;
+    height: 31px;
   }
 
-  .settingsRow strong {
-    font-size: 13px;
+  .settingsProtectionRow {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
-  .settingsRow p {
-    font-size: 11px;
-  }
-
-  .settingsCardHeader {
-    padding: 19px 18px;
-  }
-
-  .passwordModalOverlay {
-    align-items: flex-end;
+  .settingsModalOverlay {
     padding: 10px;
   }
 
-  .passwordModal {
-    border-radius: 18px 18px 12px 12px;
+  .settingsModal {
+    border-radius: 15px;
   }
 
-  .passwordModalHeader {
-    padding: 18px;
+  .settingsModalHeader,
+  .settingsPasswordForm {
+    padding-left: 17px;
+    padding-right: 17px;
   }
 
-  .passwordForm {
-    padding: 18px;
+  .settingsPasswordMessage {
+    margin-left: 17px;
+    margin-right: 17px;
   }
 
-  .passwordError,
-  .passwordSuccess {
-    margin-left: 18px;
-    margin-right: 18px;
-  }
-}
-
-@media (max-width: 430px) {
-  .settingsRow {
-    gap: 10px;
-  }
-
-  .settingsAction {
-    padding: 8px 12px;
-  }
-
-  .toggle {
-    width: 44px;
-  }
-
-  .toggle.active span {
-    transform: translateX(18px);
-  }
-
-  .passwordModalActions {
+  .settingsModalActions {
     flex-direction: column-reverse;
   }
 
-  .passwordCancelBtn,
-  .passwordSaveBtn {
+  .settingsModalCancel,
+  .settingsModalSubmit {
     width: 100%;
   }
-}
-
-
-
-
-
-/* 33/ */
-
-/* =====================================================
-   SETTINGS DARK MODE
-===================================================== */
-
-html.dark .settingsPage {
-  background: transparent;
-  color: var(--text);
-}
-
-html.dark .settingsHeader h1 {
-  color: var(--text);
-}
-
-html.dark .settingsHeader p {
-  color: var(--text-secondary);
-}
-
-html.dark .settingsCard {
-  background: var(--surface);
-  color: var(--text);
-  border-color: var(--border);
-  box-shadow: var(--shadow);
-}
-
-html.dark .settingsCardHeader h2 {
-  color: var(--text);
-}
-
-html.dark .settingsCardHeader p {
-  color: var(--text-secondary);
-}
-
-html.dark .settingsRow {
-  border-color: var(--border);
-}
-
-html.dark .settingsRow strong {
-  color: var(--text);
-}
-
-html.dark .settingsRow p {
-  color: var(--text-secondary);
-}
-
-html.dark .settingsIcon {
-  background: #1e3a5f;
-  color: #60a5fa;
-}
-
-html.dark .settingsAction {
-  background: var(--primary);
-  color: #ffffff;
-}
-
-html.dark .passwordModal {
-  background: var(--surface);
-  color: var(--text);
-  border-color: var(--border);
-}
-
-html.dark .passwordModalHeader h2 {
-  color: var(--text);
-}
-
-html.dark .passwordModalHeader p {
-  color: var(--text-secondary);
-}
-
-html.dark .passwordModalClose {
-  color: var(--text-secondary);
-}
-
-html.dark .passwordInput {
-  background: var(--input-bg);
-  border-color: var(--border);
-}
-
-html.dark .passwordInput input {
-  background: transparent;
-  color: var(--text);
-}
-
-html.dark .passwordInput button {
-  color: var(--text-secondary);
-}
-
-html.dark .passwordField label {
-  color: var(--text);
-}
-
-html.dark .passwordField small {
-  color: var(--text-muted);
-}
-
-html.dark .passwordCancelBtn {
-  background: var(--surface-2);
-  color: var(--text);
-  border-color: var(--border);
 }

@@ -1,94 +1,153 @@
-import { useEffect, useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import {
   FaUser,
-  FaCamera,
-  FaCheckCircle,
-  FaLock,
   FaEnvelope,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaCamera,
+  FaSave,
+  FaSyncAlt,
+  FaExclamationCircle,
 } from "react-icons/fa";
 
-import { fetchCurrentUser, updateProfile } from "../../Auth/auth";
+import { getStoredUser, getToken } from "../../utils/auth";
 
 import "./ProfilePage.css";
 
-function ProfilePage() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [editing, setEditing] = useState(false);
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
-  const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
-
-  const [imageFile, setImageFile] = useState(null);
-  const [preview, setPreview] = useState("");
-
+const ProfilePage = () => {
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
+    email: "",
     phone: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
   });
 
-  /* =========================
-     LOAD USER
-  ========================= */
+  const [profileImage, setProfileImage] = useState("");
+  const [imageFile, setImageFile] = useState(null);
 
-  useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const data = await fetchCurrentUser();
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
-        setUser(data);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-        setForm({
-          firstName: data.firstName || "",
-          lastName: data.lastName || "",
-          phone: data.phone || "",
-        });
+  /* =========================================
+     UPDATE FORM
+  ========================================= */
 
-        setPreview(data.profileImage || "");
-      } catch (err) {
-        setError(err.message || "Unable to load profile.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadUser();
-  }, []);
-
-  /* =========================
-     CLEAN PREVIEW URL
-  ========================= */
-
-  useEffect(() => {
-    return () => {
-      if (preview?.startsWith("blob:")) {
-        URL.revokeObjectURL(preview);
-      }
-    };
-  }, [preview]);
-
-  /* =========================
-     INPUT
-  ========================= */
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-
-    setForm((previous) => ({
-      ...previous,
-      [name]: value,
+  const updateForm = (field, value) => {
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
     }));
-
-    setSuccess("");
-    setError("");
   };
 
-  /* =========================
-     IMAGE
-  ========================= */
+  /* =========================================
+     LOAD PROFILE
+  ========================================= */
+
+  const loadProfile = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      setSuccess("");
+
+      const token = getToken();
+
+      if (!token) {
+        const storedUser = getStoredUser();
+
+        if (storedUser) {
+          setForm({
+            firstName: storedUser.firstName || "",
+            lastName: storedUser.lastName || "",
+            email: storedUser.email || "",
+            phone: storedUser.phone || "",
+            address: storedUser.address || "",
+            city: storedUser.city || "",
+            state: storedUser.state || "",
+            pincode: storedUser.pincode || "",
+          });
+
+          setProfileImage(
+            storedUser.profileImage ||
+              storedUser.avatar ||
+              storedUser.image ||
+              "",
+          );
+        } else {
+          setError("Please login again.");
+        }
+
+        return;
+      }
+
+      const response = await fetch(`${API_URL}/auth/me`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const text = await response.text();
+
+      let data = {};
+
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        data = {};
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || `Failed to load profile (${response.status})`,
+        );
+      }
+
+      const user = data.user || data.data?.user || data.data || data;
+
+      setForm({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        address: user.address || "",
+        city: user.city || "",
+        state: user.state || "",
+        pincode: user.pincode || "",
+      });
+
+      setProfileImage(user.profileImage || user.avatar || user.image || "");
+
+      try {
+        localStorage.setItem("user", JSON.stringify(user));
+      } catch (storageError) {
+        console.log("User storage update skipped:", storageError);
+      }
+    } catch (err) {
+      console.error("Profile load error:", err);
+
+      setError(err.message || "Unable to load profile.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  /* =========================================
+     IMAGE CHANGE
+  ========================================= */
 
   const handleImageChange = (event) => {
     const file = event.target.files?.[0];
@@ -96,362 +155,426 @@ function ProfilePage() {
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      setError("Please select a valid image.");
+      setError("Please select a valid image file.");
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      setError("Image must be smaller than 5MB.");
+      setError("Image size should be less than 5MB.");
       return;
     }
 
     setError("");
-    setSuccess("");
-
-    if (preview?.startsWith("blob:")) {
-      URL.revokeObjectURL(preview);
-    }
-
-    const objectUrl = URL.createObjectURL(file);
-
     setImageFile(file);
-    setPreview(objectUrl);
+
+    const previewUrl = URL.createObjectURL(file);
+
+    setProfileImage(previewUrl);
   };
 
-  /* =========================
-     SAVE
-  ========================= */
+  /* =========================================
+     SAVE PROFILE
+  ========================================= */
 
-  const handleSave = async () => {
-    setSuccess("");
-    setError("");
-
-    if (!form.firstName.trim()) {
-      setError("First name is required.");
-      return;
-    }
-
-    if (!form.lastName.trim()) {
-      setError("Last name is required.");
-      return;
-    }
-
-    if (form.phone.trim()) {
-      if (!/^[0-9]{10}$/.test(form.phone.trim())) {
-        setError("Please enter a valid 10-digit phone number.");
-        return;
-      }
-    }
+  const handleSave = async (event) => {
+    event.preventDefault();
 
     try {
       setSaving(true);
+      setError("");
+      setSuccess("");
 
-      const updatedUser = await updateProfile({
-        firstName: form.firstName.trim(),
-        lastName: form.lastName.trim(),
-        phone: form.phone.trim(),
-        profileImage: imageFile,
+      const token = getToken();
+
+      if (!token) {
+        setError("Your session has expired. Please login again.");
+        return;
+      }
+
+      const formData = new FormData();
+
+      formData.append("firstName", form.firstName);
+
+      formData.append("lastName", form.lastName);
+
+      formData.append("phone", form.phone);
+
+      formData.append("address", form.address);
+
+      formData.append("city", form.city);
+
+      formData.append("state", form.state);
+
+      formData.append("pincode", form.pincode);
+
+      if (imageFile) {
+        formData.append("profileImage", imageFile);
+      }
+
+      const response = await fetch(`${API_URL}/auth/profile`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
       });
 
-      setUser(updatedUser);
+      const text = await response.text();
 
-      setForm({
-        firstName: updatedUser.firstName || "",
-        lastName: updatedUser.lastName || "",
-        phone: updatedUser.phone || "",
-      });
+      let data = {};
+
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        data = {};
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || `Profile update failed (${response.status})`,
+        );
+      }
+
+      const updatedUser = data.user || data.data?.user || data.data || null;
+
+      if (updatedUser) {
+        setForm({
+          firstName: updatedUser.firstName || "",
+
+          lastName: updatedUser.lastName || "",
+
+          email: updatedUser.email || form.email,
+
+          phone: updatedUser.phone || "",
+
+          address: updatedUser.address || "",
+
+          city: updatedUser.city || "",
+
+          state: updatedUser.state || "",
+
+          pincode: updatedUser.pincode || "",
+        });
+
+        const updatedImage =
+          updatedUser.profileImage ||
+          updatedUser.avatar ||
+          updatedUser.image ||
+          "";
+
+        setProfileImage(updatedImage);
+
+        try {
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+        } catch (storageError) {
+          console.log("User storage update skipped:", storageError);
+        }
+
+        window.dispatchEvent(
+          new CustomEvent("tradenest-profile-update", {
+            detail: updatedUser,
+          }),
+        );
+      }
 
       setImageFile(null);
-      setPreview(updatedUser.profileImage || "");
 
-      localStorage.setItem("tradenest_user", JSON.stringify(updatedUser));
-
-      sessionStorage.setItem("tradenest_user", JSON.stringify(updatedUser));
-
-      setEditing(false);
-
-      setSuccess("Profile updated successfully.");
-
-      window.dispatchEvent(new Event("tradenest-profile-update"));
+      setSuccess(data.message || "Profile updated successfully.");
     } catch (err) {
-      setError(err.message || "Unable to update profile.");
+      console.error("Profile update error:", err);
+
+      setError(err.message || "Unable to update your profile.");
     } finally {
       setSaving(false);
     }
   };
 
-  /* =========================
-     CANCEL
-  ========================= */
+  /* =========================================
+     INITIAL
+  ========================================= */
 
-  const handleCancel = () => {
-    if (preview?.startsWith("blob:")) {
-      URL.revokeObjectURL(preview);
-    }
+  const getInitial = () => {
+    const first = form.firstName?.trim()?.charAt(0) || "";
 
-    setForm({
-      firstName: user?.firstName || "",
-      lastName: user?.lastName || "",
-      phone: user?.phone || "",
-    });
+    const last = form.lastName?.trim()?.charAt(0) || "";
 
-    setPreview(user?.profileImage || "");
-    setImageFile(null);
-
-    setError("");
-    setSuccess("");
-
-    setEditing(false);
+    return `${first}${last}`.toUpperCase() || "U";
   };
 
-  /* =========================
+  const fullName = `${form.firstName} ${form.lastName}`.trim();
+
+  /* =========================================
      LOADING
-  ========================= */
+  ========================================= */
 
   if (loading) {
     return (
-      <section className="profilePage">
-        <div className="profileLoading">
-          <div className="profileLoader"></div>
-          <span>Loading profile...</span>
+      <div className="profile-page">
+        <div className="profile-loading">
+          <FaSyncAlt className="spin" />
+
+          <h3>Loading profile...</h3>
+
+          <p>Please wait.</p>
         </div>
-      </section>
+      </div>
     );
   }
 
-  /* =========================
-     USER DATA
-  ========================= */
-
-  const fullName = `${user?.firstName || ""} ${user?.lastName || ""}`.trim();
-
-  const avatarLetter = user?.firstName?.charAt(0)?.toUpperCase() || "U";
-
   return (
-    <section className="profilePage">
-      {/* ================= HEADER ================= */}
+    <div className="profile-page">
+      {/* HEADER */}
 
-      <div className="profileHeader">
+      <div className="profile-page-header">
+        <div className="profile-header-icon">
+          <FaUser />
+        </div>
+
         <div>
           <h1>My Profile</h1>
 
           <p>Manage your personal information and account details.</p>
         </div>
-
-        {!editing ?
-          <button
-            className="editProfileMainBtn"
-            onClick={() => {
-              setEditing(true);
-              setSuccess("");
-              setError("");
-            }}
-          >
-            Edit Profile
-          </button>
-        : <div className="profileActions">
-            <button
-              className="cancelProfileBtn"
-              onClick={handleCancel}
-              disabled={saving}
-            >
-              Cancel
-            </button>
-
-            <button
-              className="saveProfileBtn"
-              onClick={handleSave}
-              disabled={saving}
-            >
-              {saving ? "Saving..." : "Save Changes"}
-            </button>
-          </div>
-        }
       </div>
 
-      {/* ================= MESSAGES ================= */}
+      {/* ALERTS */}
+
+      {error && (
+        <div className="profile-alert profile-alert-error">
+          <FaExclamationCircle />
+          <span>{error}</span>
+        </div>
+      )}
 
       {success && (
-        <div className="profileSuccess">
-          <FaCheckCircle />
+        <div className="profile-alert profile-alert-success">
+          <FaSave />
           <span>{success}</span>
         </div>
       )}
 
-      {error && <div className="profileError">{error}</div>}
+      <form onSubmit={handleSave}>
+        {/* PROFILE SUMMARY */}
 
-      {/* ================= PROFILE HERO ================= */}
-
-      <div className="profileHero">
-        <div className="profileHeroLeft">
-          <div className="largeProfileAvatar">
-            {preview ?
-              <img src={preview} alt={fullName || "Profile"} />
-            : avatarLetter}
-
-            {editing && (
-              <>
-                <label
-                  htmlFor="profileImage"
-                  className="cameraButton"
-                  title="Change profile photo"
-                >
-                  <FaCamera />
-                </label>
-
-                <input
-                  id="profileImage"
-                  type="file"
-                  accept="image/png,image/jpeg,image/jpg,image/webp"
-                  onChange={handleImageChange}
-                  hidden
+        <div className="profile-summary-card">
+          <div className="profile-summary-left">
+            <div className="profile-avatar-wrapper">
+              {profileImage ?
+                <img
+                  src={profileImage}
+                  alt="Profile"
+                  className="profile-avatar"
                 />
-              </>
-            )}
+              : <div className="profile-avatar profile-avatar-placeholder">
+                  {getInitial()}
+                </div>
+              }
+
+              <label
+                htmlFor="profile-image"
+                className="profile-camera-btn"
+                title="Change profile picture"
+              >
+                <FaCamera />
+              </label>
+
+              <input
+                id="profile-image"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                hidden
+              />
+            </div>
+
+            <div className="profile-summary-info">
+              <h2>{fullName || "TradeNest User"}</h2>
+
+              <p>
+                <FaEnvelope />
+                {form.email || "No email"}
+              </p>
+
+              {form.phone && (
+                <p>
+                  <FaPhone />
+                  {form.phone}
+                </p>
+              )}
+            </div>
           </div>
 
-          <div className="profileHeroInfo">
-            <h2>{fullName || "TradeNest User"}</h2>
-
-            <p>{user?.email || "-"}</p>
-
-            <span className="profileVerified">
-              <FaCheckCircle />
-              Account Active
-            </span>
+          <div className="profile-account-badge">
+            <span className="profile-status-dot"></span>
+            Active Account
           </div>
         </div>
-      </div>
 
-      {/* ================= GRID ================= */}
-
-      <div className="profileGrid">
         {/* PERSONAL INFORMATION */}
 
-        <div className="profileCard">
-          <div className="profileCardHeader">
+        <div className="profile-section-card">
+          <div className="profile-section-heading">
+            <div className="profile-section-icon">
+              <FaUser />
+            </div>
+
             <div>
               <h2>Personal Information</h2>
 
-              <p>Your basic account information.</p>
+              <p>Update your basic account information.</p>
             </div>
-
-            <FaUser />
           </div>
 
-          <div className="profileForm">
-            <div className="profileFormGrid">
-              <div className="profileField">
-                <label>First Name</label>
+          <div className="profile-form-grid">
+            {/* FIRST NAME */}
 
-                <input
-                  type="text"
-                  name="firstName"
-                  value={form.firstName}
-                  onChange={handleChange}
-                  disabled={!editing}
-                  placeholder="First name"
-                  maxLength={50}
-                />
-              </div>
-
-              <div className="profileField">
-                <label>Last Name</label>
-
-                <input
-                  type="text"
-                  name="lastName"
-                  value={form.lastName}
-                  onChange={handleChange}
-                  disabled={!editing}
-                  placeholder="Last name"
-                  maxLength={50}
-                />
-              </div>
-            </div>
-
-            <div className="profileField">
-              <label>Email Address</label>
-
-              <div className="inputWithIcon">
-                <FaEnvelope />
-
-                <input type="email" value={user?.email || ""} disabled />
-              </div>
-
-              <small>Email address cannot be changed.</small>
-            </div>
-
-            <div className="profileField">
-              <label>Phone Number</label>
+            <div className="profile-field">
+              <label>First Name</label>
 
               <input
-                type="tel"
-                name="phone"
-                value={form.phone}
-                onChange={handleChange}
-                disabled={!editing}
-                placeholder="Enter 10-digit phone number"
-                maxLength={10}
+                type="text"
+                value={form.firstName}
+                onChange={(e) => updateForm("firstName", e.target.value)}
+                placeholder="First name"
+                required
               />
+            </div>
 
-              <small>Enter your 10-digit mobile number.</small>
+            {/* LAST NAME */}
+
+            <div className="profile-field">
+              <label>Last Name</label>
+
+              <input
+                type="text"
+                value={form.lastName}
+                onChange={(e) => updateForm("lastName", e.target.value)}
+                placeholder="Last name"
+                required
+              />
+            </div>
+
+            {/* EMAIL */}
+
+            <div className="profile-field">
+              <label>Email Address</label>
+
+              <div className="profile-input-with-icon">
+                <FaEnvelope />
+
+                <input type="email" value={form.email} disabled />
+              </div>
+
+              <small>Email address cannot be changed here.</small>
+            </div>
+
+            {/* PHONE */}
+
+            <div className="profile-field">
+              <label>Phone Number</label>
+
+              <div className="profile-input-with-icon">
+                <FaPhone />
+
+                <input
+                  type="tel"
+                  value={form.phone}
+                  onChange={(e) => updateForm("phone", e.target.value)}
+                  placeholder="Phone number"
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* ACCOUNT INFORMATION */}
+        {/* ADDRESS */}
 
-        <div className="profileCard">
-          <div className="profileCardHeader">
+        <div className="profile-section-card">
+          <div className="profile-section-heading">
+            <div className="profile-section-icon">
+              <FaMapMarkerAlt />
+            </div>
+
             <div>
-              <h2>Account Information</h2>
+              <h2>Address Information</h2>
 
-              <p>Your TradeNest account status.</p>
+              <p>Keep your location details up to date.</p>
             </div>
-
-            <FaLock />
           </div>
 
-          <div className="accountInfo">
-            <div className="accountRow">
-              <span>Account Status</span>
+          <div className="profile-form-grid">
+            <div className="profile-field profile-field-full">
+              <label>Address</label>
 
-              <strong className="activeStatus">Active</strong>
+              <div className="profile-input-with-icon">
+                <FaMapMarkerAlt />
+
+                <input
+                  type="text"
+                  value={form.address}
+                  onChange={(e) => updateForm("address", e.target.value)}
+                  placeholder="House / Street / Area"
+                />
+              </div>
             </div>
 
-            <div className="accountRow">
-              <span>Email Verification</span>
+            <div className="profile-field">
+              <label>City</label>
 
-              <strong className="verifiedStatus">Verified</strong>
+              <input
+                type="text"
+                value={form.city}
+                onChange={(e) => updateForm("city", e.target.value)}
+                placeholder="City"
+              />
             </div>
 
-            <div className="accountRow">
-              <span>Member Since</span>
+            <div className="profile-field">
+              <label>State</label>
 
-              <strong>
-                {user?.createdAt ?
-                  new Date(user.createdAt).toLocaleDateString("en-IN", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })
-                : "-"}
-              </strong>
+              <input
+                type="text"
+                value={form.state}
+                onChange={(e) => updateForm("state", e.target.value)}
+                placeholder="State"
+              />
             </div>
 
-            <div className="accountRow">
-              <span>Account ID</span>
+            <div className="profile-field">
+              <label>PIN Code</label>
 
-              <strong title={user?.id || user?._id || "-"}>
-                {user?.id || user?._id || "-"}
-              </strong>
+              <input
+                type="text"
+                value={form.pincode}
+                onChange={(e) =>
+                  updateForm("pincode", e.target.value.replace(/\D/g, ""))
+                }
+                placeholder="PIN Code"
+                maxLength={6}
+              />
             </div>
           </div>
         </div>
-      </div>
-    </section>
+
+        {/* SAVE */}
+
+        <div className="profile-save-area">
+          <button type="submit" className="profile-save-btn" disabled={saving}>
+            {saving ?
+              <>
+                <FaSyncAlt className="spin" />
+                Saving...
+              </>
+            : <>
+                <FaSave />
+                Save Changes
+              </>
+            }
+          </button>
+        </div>
+      </form>
+    </div>
   );
-}
+};
 
 export default ProfilePage;

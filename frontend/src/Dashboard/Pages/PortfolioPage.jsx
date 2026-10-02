@@ -1,500 +1,573 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import {
-  marketSocket,
-  connectMarketSocket,
-  disconnectMarketSocket,
-} from "../../services/marketSocket";
+  FaUser,
+  FaEnvelope,
+  FaPhone,
+  FaMapMarkerAlt,
+  FaCamera,
+  FaSave,
+  FaSyncAlt,
+  FaExclamationCircle,
+} from "react-icons/fa";
 
-import "./PortfolioPage.css";
+import { getStoredUser, getToken } from "../../utils/auth";
 
-// const API_URL = "http://localhost:5000";
-const API_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:5000/api";
-const MARKET_INSTRUMENTS = {
-  INFY: "NSE_EQ|INE009A01021",
-  TCS: "NSE_EQ|INE467B01029",
-  RELIANCE: "NSE_EQ|INE002A01018",
-  HDFCBANK: "NSE_EQ|INE040A01034",
-  SBIN: "NSE_EQ|INE062A01020",
-  ICICIBANK: "NSE_EQ|INE090A01021",
-  ITC: "NSE_EQ|INE154A01025",
-  WIPRO: "NSE_EQ|INE075A01022",
-  AXISBANK: "NSE_EQ|INE238A01034",
-  KOTAKBANK: "NSE_EQ|INE237A01036",
-};
+import "./ProfilePage.css";
 
-const getToken = () => {
-  return (
-    localStorage.getItem("tradenest_token") ||
-    localStorage.getItem("token") ||
-    sessionStorage.getItem("tradenest_token") ||
-    sessionStorage.getItem("token")
-  );
-};
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
-function PortfolioPage() {
-  const [holdings, setHoldings] = useState([]);
+const ProfilePage = () => {
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
+  });
+
+  const [profileImage, setProfileImage] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const [saving, setSaving] = useState(false);
+
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  // ================= LOAD HOLDINGS =================
+  /* =========================================
+     UPDATE FORM
+  ========================================= */
 
-  const loadHoldings = useCallback(async (showRefresh = false) => {
+  const updateForm = (field, value) => {
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  /* =========================================
+     LOAD PROFILE
+  ========================================= */
+
+  const loadProfile = async () => {
     try {
-      if (showRefresh) {
-        setRefreshing(true);
-      } else {
-        setLoading(true);
-      }
-
+      setLoading(true);
       setError("");
+      setSuccess("");
 
       const token = getToken();
 
       if (!token) {
-        throw new Error("Authentication token not found. Please login again.");
-      }
+        const storedUser = getStoredUser();
 
-      console.log("📤 PORTFOLIO: Fetching holdings from MongoDB...");
+        if (storedUser) {
+          setForm({
+            firstName: storedUser.firstName || "",
+            lastName: storedUser.lastName || "",
+            email: storedUser.email || "",
+            phone: storedUser.phone || "",
+            address: storedUser.address || "",
+            city: storedUser.city || "",
+            state: storedUser.state || "",
+            pincode: storedUser.pincode || "",
+          });
 
-      const response = await fetch(`${API_URL}/trades/holdings`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+          setProfileImage(storedUser.profileImage || "");
+        } else {
+          setError("Please login again.");
+        }
 
-      const responseText = await response.text();
-
-      let data;
-
-      try {
-        data = JSON.parse(responseText);
-      } catch {
-        console.error("❌ INVALID PORTFOLIO RESPONSE:", responseText);
-
-        throw new Error(
-          "Server returned an invalid response. Please check the backend.",
-        );
-      }
-
-      console.log("📥 PORTFOLIO HOLDINGS:", data);
-
-      if (!response.ok) {
-        throw new Error(data?.message || "Unable to load portfolio.");
-      }
-
-      if (!data.success) {
-        throw new Error(data?.message || "Unable to load portfolio.");
-      }
-
-      setHoldings(Array.isArray(data.holdings) ? data.holdings : []);
-    } catch (err) {
-      console.error("❌ PORTFOLIO ERROR:", err);
-
-      setError(err.message || "Unable to load portfolio.");
-      setHoldings([]);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, []);
-
-  // ================= INITIAL LOAD =================
-
-  useEffect(() => {
-    loadHoldings();
-
-    const handleTradeNestUpdate = () => {
-      console.log("🔄 Portfolio update detected...");
-      loadHoldings(true);
-    };
-
-    window.addEventListener("tradenest-update", handleTradeNestUpdate);
-
-    return () => {
-      window.removeEventListener("tradenest-update", handleTradeNestUpdate);
-    };
-  }, [loadHoldings]);
-
-  // ================= LIVE MARKET =================
-
-  useEffect(() => {
-    if (holdings.length === 0) {
-      return undefined;
-    }
-
-    console.log("📡 Portfolio connecting to live market...");
-
-    connectMarketSocket();
-
-    const handleMarketUpdate = (data) => {
-      if (!data?.instrumentKey) return;
-
-      const symbol = Object.keys(MARKET_INSTRUMENTS).find(
-        (stockSymbol) => MARKET_INSTRUMENTS[stockSymbol] === data.instrumentKey,
-      );
-
-      if (!symbol) return;
-
-      const livePrice = Number(data.ltp);
-
-      if (!Number.isFinite(livePrice) || livePrice <= 0) {
         return;
       }
 
-      console.log("🔥 PORTFOLIO LIVE PRICE:", symbol, livePrice);
+      const response = await fetch(`${API_URL}/auth/me`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
-      setHoldings((previousHoldings) =>
-        previousHoldings.map((holding) => {
-          if (holding.symbol?.toUpperCase() !== symbol) {
-            return holding;
-          }
+      const text = await response.text();
 
-          return {
-            ...holding,
-            currentPrice: livePrice,
-          };
-        }),
-      );
-    };
+      let data = {};
 
-    marketSocket.on("market:update", handleMarketUpdate);
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        data = {};
+      }
 
-    return () => {
-      marketSocket.off("market:update", handleMarketUpdate);
+      if (!response.ok) {
+        throw new Error(
+          data.message || `Failed to load profile (${response.status})`,
+        );
+      }
 
-      disconnectMarketSocket();
-    };
-  }, [holdings.length]);
+      const user = data.user || data.data?.user || data.data || data;
 
-  // ================= MONEY FORMAT =================
+      setForm({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        address: user.address || "",
+        city: user.city || "",
+        state: user.state || "",
+        pincode: user.pincode || "",
+      });
 
-  const formatMoney = (value) => {
-    return `₹${Number(value || 0).toLocaleString("en-IN", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })}`;
+      setProfileImage(user.profileImage || "");
+
+      try {
+        localStorage.setItem("user", JSON.stringify(user));
+      } catch (storageError) {
+        console.log("User storage update skipped:", storageError);
+      }
+    } catch (err) {
+      console.error("Profile load error:", err);
+
+      setError(err.message || "Unable to load profile.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const formatNumber = (value) => {
-    return Number(value || 0).toLocaleString("en-IN", {
-      maximumFractionDigits: 4,
-    });
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  /* =========================================
+     IMAGE
+  ========================================= */
+
+  const handleImageChange = (event) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setError("Please select a valid image file.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Image size should be less than 5MB.");
+      return;
+    }
+
+    setError("");
+    setImageFile(file);
+
+    const previewUrl = URL.createObjectURL(file);
+
+    setProfileImage(previewUrl);
   };
 
-  // ================= PORTFOLIO CALCULATION =================
+  /* =========================================
+     SAVE PROFILE
+  ========================================= */
 
-  const portfolioSummary = useMemo(() => {
-    let investedAmount = 0;
-    let currentValue = 0;
-    let totalQuantity = 0;
+  const handleSave = async (event) => {
+    event.preventDefault();
 
-    holdings.forEach((stock) => {
-      const quantity = Number(stock.quantity || 0);
+    try {
+      setSaving(true);
+      setError("");
+      setSuccess("");
 
-      const averagePrice = Number(stock.averagePrice || stock.avgPrice || 0);
+      const token = getToken();
 
-      const currentPrice = Number(
-        stock.currentPrice || stock.ltp || averagePrice,
-      );
+      if (!token) {
+        setError("Your session has expired. Please login again.");
+        return;
+      }
 
-      investedAmount += quantity * averagePrice;
+      const formData = new FormData();
 
-      currentValue += quantity * currentPrice;
+      formData.append("firstName", form.firstName);
 
-      totalQuantity += quantity;
-    });
+      formData.append("lastName", form.lastName);
 
-    const totalReturn = currentValue - investedAmount;
+      formData.append("phone", form.phone);
 
-    const returnPercentage =
-      investedAmount > 0 ? (totalReturn / investedAmount) * 100 : 0;
+      formData.append("address", form.address);
 
-    return {
-      investedAmount,
-      currentValue,
-      totalReturn,
-      returnPercentage,
-      totalQuantity,
-      totalStocks: holdings.length,
-    };
-  }, [holdings]);
+      formData.append("city", form.city);
 
-  const positiveReturn = portfolioSummary.totalReturn >= 0;
+      formData.append("state", form.state);
 
-  // ================= LOADING =================
+      formData.append("pincode", form.pincode);
+
+      if (imageFile) {
+        formData.append("profileImage", imageFile);
+      }
+
+      const response = await fetch(`${API_URL}/auth/profile`, {
+        method: "PUT",
+
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+
+        body: formData,
+      });
+
+      const text = await response.text();
+
+      let data = {};
+
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        data = {};
+      }
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || `Profile update failed (${response.status})`,
+        );
+      }
+
+      const updatedUser = data.user || data.data?.user || data.data || null;
+
+      if (updatedUser) {
+        setForm({
+          firstName: updatedUser.firstName || "",
+
+          lastName: updatedUser.lastName || "",
+
+          email: updatedUser.email || form.email,
+
+          phone: updatedUser.phone || "",
+
+          address: updatedUser.address || "",
+
+          city: updatedUser.city || "",
+
+          state: updatedUser.state || "",
+
+          pincode: updatedUser.pincode || "",
+        });
+
+        setProfileImage(updatedUser.profileImage || "");
+
+        try {
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+        } catch (storageError) {
+          console.log("User storage update skipped:", storageError);
+        }
+
+        window.dispatchEvent(
+          new CustomEvent("tradenest-profile-update", {
+            detail: updatedUser,
+          }),
+        );
+      }
+
+      setImageFile(null);
+
+      setSuccess(data.message || "Profile updated successfully.");
+    } catch (err) {
+      console.error("Profile update error:", err);
+
+      setError(err.message || "Unable to update your profile.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  /* =========================================
+     FULL NAME
+  ========================================= */
+
+  const fullName = `${form.firstName} ${form.lastName}`.trim();
+
+  const getInitial = () => {
+    return form.firstName?.trim()?.charAt(0)?.toUpperCase() || "U";
+  };
+
+  /* =========================================
+     LOADING
+  ========================================= */
 
   if (loading) {
     return (
-      <section className="portfolioPage">
-        <div className="portfolioLoading">
-          <div className="portfolioLoader"></div>
+      <div className="profile-page">
+        <div className="profile-loading">
+          <FaSyncAlt className="spin" />
 
-          <h3>Loading Portfolio...</h3>
+          <h3>Loading profile...</h3>
 
-          <p>Fetching your holdings from MongoDB.</p>
+          <p>Please wait.</p>
         </div>
-      </section>
+      </div>
     );
   }
-
-  // ================= ERROR =================
-
-  if (error) {
-    return (
-      <section className="portfolioPage">
-        <div className="portfolioError">
-          <div className="portfolioErrorIcon">⚠️</div>
-
-          <h2>Unable to load portfolio</h2>
-
-          <p>{error}</p>
-
-          <button className="retryPortfolioBtn" onClick={() => loadHoldings()}>
-            Try Again
-          </button>
-        </div>
-      </section>
-    );
-  }
-
-  // ================= UI =================
 
   return (
-    <section className="portfolioPage">
-      {/* ================= HEADER ================= */}
+    <div className="profile-page">
+      {/* =====================================
+          HEADER
+      ===================================== */}
 
-      <div className="portfolioHeader">
-        <div>
-          <h1>Portfolio</h1>
-
-          <p>Track your investments and portfolio performance.</p>
+      <div className="profile-page-header">
+        <div className="profile-header-icon">
+          <FaUser />
         </div>
 
-        <div className="portfolioHeaderActions">
-          <span className="portfolioLiveStatus">
-            <span className="portfolioLiveDot"></span>
-            Live
-          </span>
+        <div>
+          <h1>My Profile</h1>
 
-          <button
-            className="refreshPortfolioBtn"
-            onClick={() => loadHoldings(true)}
-            disabled={refreshing}
-          >
-            {refreshing ? "Refreshing..." : "Refresh"}
+          <p>Manage your personal information and account details.</p>
+        </div>
+      </div>
+
+      {/* =====================================
+          ALERTS
+      ===================================== */}
+
+      {error && (
+        <div className="profile-alert profile-alert-error">
+          <FaExclamationCircle />
+
+          <span>{error}</span>
+        </div>
+      )}
+
+      {success && (
+        <div className="profile-alert profile-alert-success">
+          <FaSave />
+
+          <span>{success}</span>
+        </div>
+      )}
+
+      <form onSubmit={handleSave}>
+        {/* ===================================
+            PROFILE CARD
+        =================================== */}
+
+        <div className="profile-card profile-main-card">
+          <div className="profile-cover"></div>
+
+          <div className="profile-main-content">
+            <div className="profile-avatar-wrapper">
+              {profileImage ?
+                <img
+                  src={profileImage}
+                  alt="Profile"
+                  className="profile-avatar"
+                />
+              : <div className="profile-avatar profile-avatar-placeholder">
+                  {getInitial()}
+                </div>
+              }
+
+              <label
+                htmlFor="profile-image"
+                className="profile-camera-btn"
+                title="Change profile picture"
+              >
+                <FaCamera />
+              </label>
+
+              <input
+                id="profile-image"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                hidden
+              />
+            </div>
+
+            <div className="profile-main-info">
+              <h2>{fullName || "TradeNest User"}</h2>
+
+              <p>
+                <FaEnvelope />
+
+                {form.email || "No email"}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ===================================
+            PERSONAL INFORMATION
+        =================================== */}
+
+        <div className="profile-card">
+          <div className="profile-card-heading">
+            <div>
+              <h2>Personal Information</h2>
+
+              <p>Update your basic account information.</p>
+            </div>
+          </div>
+
+          <div className="profile-form-grid">
+            {/* FIRST NAME */}
+
+            <div className="profile-field">
+              <label>
+                <FaUser />
+                First Name
+              </label>
+
+              <input
+                type="text"
+                value={form.firstName}
+                onChange={(e) => updateForm("firstName", e.target.value)}
+                placeholder="Enter first name"
+                required
+              />
+            </div>
+
+            {/* LAST NAME */}
+
+            <div className="profile-field">
+              <label>
+                <FaUser />
+                Last Name
+              </label>
+
+              <input
+                type="text"
+                value={form.lastName}
+                onChange={(e) => updateForm("lastName", e.target.value)}
+                placeholder="Enter last name"
+                required
+              />
+            </div>
+
+            {/* EMAIL */}
+
+            <div className="profile-field">
+              <label>
+                <FaEnvelope />
+                Email Address
+              </label>
+
+              <input type="email" value={form.email} disabled />
+
+              <small>Email address cannot be changed here.</small>
+            </div>
+
+            {/* PHONE */}
+
+            <div className="profile-field">
+              <label>
+                <FaPhone />
+                Phone Number
+              </label>
+
+              <input
+                type="tel"
+                value={form.phone}
+                onChange={(e) => updateForm("phone", e.target.value)}
+                placeholder="Enter phone number"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* ===================================
+            ADDRESS
+        =================================== */}
+
+        <div className="profile-card">
+          <div className="profile-card-heading">
+            <div>
+              <h2>Address Information</h2>
+
+              <p>Keep your location details up to date.</p>
+            </div>
+          </div>
+
+          <div className="profile-form-grid">
+            {/* ADDRESS */}
+
+            <div className="profile-field profile-field-full">
+              <label>
+                <FaMapMarkerAlt />
+                Address
+              </label>
+
+              <input
+                type="text"
+                value={form.address}
+                onChange={(e) => updateForm("address", e.target.value)}
+                placeholder="House / Street / Area"
+              />
+            </div>
+
+            {/* CITY */}
+
+            <div className="profile-field">
+              <label>City</label>
+
+              <input
+                type="text"
+                value={form.city}
+                onChange={(e) => updateForm("city", e.target.value)}
+                placeholder="City"
+              />
+            </div>
+
+            {/* STATE */}
+
+            <div className="profile-field">
+              <label>State</label>
+
+              <input
+                type="text"
+                value={form.state}
+                onChange={(e) => updateForm("state", e.target.value)}
+                placeholder="State"
+              />
+            </div>
+
+            {/* PINCODE */}
+
+            <div className="profile-field">
+              <label>PIN Code</label>
+
+              <input
+                type="text"
+                value={form.pincode}
+                onChange={(e) => updateForm("pincode", e.target.value)}
+                placeholder="PIN Code"
+                maxLength="6"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* ===================================
+            SAVE
+        =================================== */}
+
+        <div className="profile-save-area">
+          <button type="submit" className="profile-save-btn" disabled={saving}>
+            {saving ?
+              <>
+                <FaSyncAlt className="spin" />
+                Saving...
+              </>
+            : <>
+                <FaSave />
+                Save Changes
+              </>
+            }
           </button>
         </div>
-      </div>
-
-      {/* ================= SUMMARY ================= */}
-
-      <div className="portfolioStats">
-        {/* INVESTED */}
-
-        <div className="portfolioStatCard">
-          <span>Invested Amount</span>
-
-          <h2>{formatMoney(portfolioSummary.investedAmount)}</h2>
-
-          <small>Total amount invested</small>
-        </div>
-
-        {/* CURRENT VALUE */}
-
-        <div className="portfolioStatCard">
-          <span>Current Value</span>
-
-          <h2>{formatMoney(portfolioSummary.currentValue)}</h2>
-
-          <small>Current market value</small>
-        </div>
-
-        {/* TOTAL RETURN */}
-
-        <div className="portfolioStatCard">
-          <span>Total Return</span>
-
-          <h2 className={positiveReturn ? "profitText" : "lossText"}>
-            {positiveReturn ? "+" : "-"}
-            {formatMoney(Math.abs(portfolioSummary.totalReturn))}
-          </h2>
-
-          <small className={positiveReturn ? "profitText" : "lossText"}>
-            {positiveReturn ? "+" : ""}
-            {portfolioSummary.returnPercentage.toFixed(2)}%
-          </small>
-        </div>
-
-        {/* HOLDINGS */}
-
-        <div className="portfolioStatCard">
-          <span>Holdings</span>
-
-          <h2>{portfolioSummary.totalStocks}</h2>
-
-          <small>
-            {formatNumber(portfolioSummary.totalQuantity)} total shares
-          </small>
-        </div>
-      </div>
-
-      {/* ================= HOLDINGS ================= */}
-
-      <div className="portfolioSection">
-        <div className="portfolioSectionHeader">
-          <div>
-            <h2>Your Holdings</h2>
-
-            <p>Current stocks in your portfolio.</p>
-          </div>
-
-          <span className="portfolioHoldingCount">
-            {portfolioSummary.totalStocks} Stocks
-          </span>
-        </div>
-
-        <div className="portfolioTableWrapper">
-          <table className="portfolioTable">
-            <thead>
-              <tr>
-                <th>Stock</th>
-                <th>Qty</th>
-                <th>Avg. Price</th>
-                <th>LTP</th>
-                <th>Invested</th>
-                <th>Current Value</th>
-                <th>P&L</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {holdings.length > 0 ?
-                holdings.map((stock) => {
-                  const quantity = Number(stock.quantity || 0);
-
-                  const averagePrice = Number(
-                    stock.averagePrice || stock.avgPrice || 0,
-                  );
-
-                  const currentPrice = Number(
-                    stock.currentPrice || stock.ltp || averagePrice,
-                  );
-
-                  const invested = quantity * averagePrice;
-
-                  const currentValue = quantity * currentPrice;
-
-                  const pnl = currentValue - invested;
-
-                  const pnlPercentage =
-                    invested > 0 ? (pnl / invested) * 100 : 0;
-
-                  const positive = pnl >= 0;
-
-                  return (
-                    <tr key={stock._id || stock.id || stock.symbol}>
-                      {/* STOCK */}
-
-                      <td>
-                        <div className="portfolioStock">
-                          <strong>{stock.symbol}</strong>
-
-                          <small>{stock.company || "Stock"}</small>
-                        </div>
-                      </td>
-
-                      {/* QUANTITY */}
-
-                      <td>{formatNumber(quantity)}</td>
-
-                      {/* AVG PRICE */}
-
-                      <td>{formatMoney(averagePrice)}</td>
-
-                      {/* LTP */}
-
-                      <td>
-                        <span className="portfolioLtp">
-                          {formatMoney(currentPrice)}
-                        </span>
-                      </td>
-
-                      {/* INVESTED */}
-
-                      <td>{formatMoney(invested)}</td>
-
-                      {/* CURRENT */}
-
-                      <td>{formatMoney(currentValue)}</td>
-
-                      {/* P&L */}
-
-                      <td className={positive ? "positive" : "negative"}>
-                        <strong>
-                          {positive ? "+" : "-"}
-                          {formatMoney(Math.abs(pnl))}
-                        </strong>
-
-                        <small className="pnlPercentage">
-                          {positive ? "+" : ""}
-                          {pnlPercentage.toFixed(2)}%
-                        </small>
-                      </td>
-                    </tr>
-                  );
-                })
-              : <tr>
-                  <td colSpan="7" className="emptyPortfolio">
-                    <div className="emptyPortfolioIcon">📊</div>
-
-                    <strong>No holdings available</strong>
-
-                    <p>Buy stocks from your Watchlist to see them here.</p>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* ================= PERFORMANCE ================= */}
-
-      <div className="portfolioSection">
-        <div className="portfolioSectionHeader">
-          <div>
-            <h2>Portfolio Performance</h2>
-
-            <p>Your current portfolio performance.</p>
-          </div>
-        </div>
-
-        <div className="performancePlaceholder">
-          <div className="performanceIcon">📈</div>
-
-          <h3>
-            {positiveReturn ? "Portfolio is in Profit" : "Portfolio is in Loss"}
-          </h3>
-
-          <p className={positiveReturn ? "profitText" : "lossText"}>
-            {positiveReturn ? "+" : "-"}
-            {formatMoney(Math.abs(portfolioSummary.totalReturn))} (
-            {positiveReturn ? "+" : ""}
-            {portfolioSummary.returnPercentage.toFixed(2)}
-            %)
-          </p>
-
-          <small>
-            Live portfolio value is calculated from your current holdings.
-          </small>
-        </div>
-      </div>
-    </section>
+      </form>
+    </div>
   );
-}
+};
 
-export default PortfolioPage;
+export default ProfilePage;

@@ -4,15 +4,8 @@
 
 .holdingsPage {
   width: 100%;
-
   min-height: calc(100vh - 70px);
-
-  padding: 5px 0 40px;
-
-  box-sizing: border-box;
-
-  background: transparent;
-
+  padding: 8px 0 40px;
   color: var(--text);
 }
 
@@ -22,31 +15,32 @@
 
 .holdingsPageHeader {
   display: flex;
-
+  align-items: flex-end;
   justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
 
-  align-items: center;
-
-  margin-bottom: 25px;
-
-  gap: 20px;
+.holdingsEyebrow {
+  display: inline-block;
+  margin-bottom: 7px;
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
 }
 
 .holdingsPageHeader h1 {
   margin: 0;
-
-  font-size: 30px;
-
-  font-weight: 700;
-
   color: var(--text);
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 800;
 }
 
 .holdingsPageHeader p {
-  margin: 7px 0 0;
-
+  margin: 8px 0 0;
   color: var(--text-secondary);
-
   font-size: 14px;
 }
 
@@ -56,54 +50,51 @@
 
 .holdingsHeaderActions {
   display: flex;
-
   align-items: center;
-
+  justify-content: flex-end;
   gap: 10px;
-
-  flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
+.holdingsLiveBadge,
 .holdingsCount {
-  padding: 9px 15px;
-
-  border-radius: 8px;
-
-  background: rgba(56, 126, 209, 0.10);
-
-  color: var(--primary);
-
-  border: 1px solid rgba(56, 126, 209, 0.15);
-
-  font-size: 13px;
-
-  font-weight: 600;
-
-  white-space: nowrap;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
 }
 
-/* =========================================================
-   REFRESH BUTTON
-========================================================= */
+.holdingsLiveBadge {
+  color: var(--success);
+}
+
+.holdingsLiveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 0 4px rgba(21, 148, 71, 0.1);
+}
 
 .refreshHoldingsBtn,
 .retryHoldingsBtn {
-  border: none;
-
+  min-height: 38px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 10px;
   background: var(--primary);
-
   color: #ffffff;
-
-  padding: 9px 14px;
-
-  border-radius: 8px;
-
-  font-size: 13px;
-
-  font-weight: 600;
-
+  font-size: 12px;
+  font-weight: 700;
   cursor: pointer;
-
   transition:
     background 0.2s ease,
     transform 0.2s ease,
@@ -113,103 +104,170 @@
 .refreshHoldingsBtn:hover,
 .retryHoldingsBtn:hover {
   background: var(--primary-dark);
-
   transform: translateY(-1px);
 }
 
 .refreshHoldingsBtn:disabled,
 .retryHoldingsBtn:disabled {
   opacity: 0.6;
-
   cursor: not-allowed;
-
   transform: none;
 }
 
+.refreshIcon {
+  display: inline-block;
+  margin-right: 5px;
+  font-size: 15px;
+}
+
+.refreshIcon.spinning {
+  animation: holdingsSpin 0.8s linear infinite;
+}
+
+@keyframes holdingsSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* =========================================================
-   HOLDINGS CARD
+   SUMMARY CARDS
+========================================================= */
+
+.holdingsSummaryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.holdingsSummaryCard {
+  min-height: 128px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.summaryLabel {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.holdingsSummaryCard strong {
+  display: block;
+  color: var(--text);
+  font-size: 23px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.holdingsSummaryCard small {
+  display: block;
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.summaryProfit strong {
+  color: var(--success);
+}
+
+.summaryLoss strong {
+  color: var(--danger);
+}
+
+/* =========================================================
+   MAIN CARD
 ========================================================= */
 
 .holdingsCard {
   width: 100%;
-
-  background: var(--surface);
-
-  border: 1px solid var(--border);
-
-  border-radius: 14px;
-
   overflow: hidden;
-
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--surface);
   box-shadow: var(--shadow);
-
-  color: var(--text);
 }
 
-/* =========================================================
-   TABLE WRAPPER
-========================================================= */
+.holdingsCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 22px;
+  border-bottom: 1px solid var(--border);
+}
 
-.holdingsTableWrapper {
-  width: 100%;
+.holdingsCardHeader h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 17px;
+  font-weight: 800;
+}
 
-  overflow-x: auto;
+.holdingsCardHeader p {
+  margin: 5px 0 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.holdingsTableStatus {
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: rgba(21, 148, 71, 0.08);
+  color: var(--success);
+  font-size: 11px;
+  font-weight: 700;
 }
 
 /* =========================================================
    TABLE
 ========================================================= */
 
+.holdingsTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
 .holdingsTable {
   width: 100%;
-
-  min-width: 950px;
-
+  min-width: 980px;
   border-collapse: collapse;
-
   background: var(--surface);
 }
 
-/* =========================================================
-   TABLE HEADER
-========================================================= */
-
 .holdingsTable th {
-  padding: 16px 18px;
-
+  padding: 15px 18px;
   background: var(--surface-2);
-
   border-bottom: 1px solid var(--border);
-
   text-align: left;
-
   color: var(--text-secondary);
-
-  font-size: 12px;
-
-  font-weight: 600;
-
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
   white-space: nowrap;
 }
 
-/* =========================================================
-   TABLE BODY
-========================================================= */
-
 .holdingsTable td {
-  padding: 18px;
-
+  padding: 17px 18px;
   border-bottom: 1px solid var(--border);
-
-  color: var(--text-secondary);
-
   background: var(--surface);
-
+  color: var(--text-secondary);
   font-size: 13px;
+  white-space: nowrap;
+}
+
+.holdingsTable tbody tr:last-child td {
+  border-bottom: 0;
 }
 
 .holdingsTable tbody tr {
-  background: var(--surface);
+  transition: background 0.2s ease;
 }
 
 .holdingsTable tbody tr:hover td {
@@ -220,24 +278,55 @@
    STOCK
 ========================================================= */
 
+.holdingStock {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 180px;
+}
+
+.stockSymbolBox {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(56, 126, 209, 0.1);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .holdingStock strong {
   display: block;
-
-  font-size: 14px;
-
   color: var(--text);
-
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .holdingStock small {
   display: block;
-
+  max-width: 150px;
   margin-top: 4px;
-
+  overflow: hidden;
   color: var(--text-muted);
+  font-size: 10px;
+  text-overflow: ellipsis;
+}
 
-  font-size: 11px;
+/* =========================================================
+   TABLE VALUES
+========================================================= */
+
+.tablePrimary {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.currentPrice {
+  color: var(--text);
 }
 
 /* =========================================================
@@ -245,157 +334,172 @@
 ========================================================= */
 
 .holdingProfit {
-  color: #159447 !important;
-
-  font-weight: 600;
+  color: var(--success) !important;
+  font-weight: 700;
 }
 
 .holdingLoss {
-  color: #e53935 !important;
-
-  font-weight: 600;
+  color: var(--danger) !important;
+  font-weight: 700;
 }
 
 .pnlPercent {
   display: block;
-
   margin-top: 4px;
-
-  font-size: 11px;
-
-  font-weight: 600;
-
   color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
 }
 
 /* =========================================================
-   EMPTY HOLDINGS
+   EMPTY / ERROR
 ========================================================= */
 
-.holdingsEmpty {
-  min-height: 420px;
-
+.holdingsEmpty,
+.holdingsLoadingCard {
+  min-height: 400px;
   display: flex;
-
   flex-direction: column;
-
-  justify-content: center;
-
   align-items: center;
-
-  text-align: center;
-
-  background: var(--surface);
-
+  justify-content: center;
+  padding: 30px;
   border: 1px solid var(--border);
-
-  border-radius: 14px;
-
-  color: var(--text);
+  border-radius: 15px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  text-align: center;
 }
 
 .holdingsEmptyIcon {
-  width: 65px;
-
-  height: 65px;
-
+  width: 64px;
+  height: 64px;
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
+  margin-bottom: 16px;
   border-radius: 50%;
-
-  background: rgba(56, 126, 209, 0.10);
-
+  background: rgba(56, 126, 209, 0.1);
   color: var(--primary);
-
-  font-size: 28px;
-
-  margin-bottom: 15px;
+  font-size: 26px;
+  font-weight: 800;
 }
 
-.holdingsEmpty h2 {
+.holdingsErrorState .holdingsEmptyIcon {
+  background: rgba(229, 57, 53, 0.1);
+  color: var(--danger);
+}
+
+.holdingsEmpty h2,
+.holdingsLoadingCard h2 {
   margin: 0;
-
-  font-size: 20px;
-
   color: var(--text);
+  font-size: 20px;
+  font-weight: 800;
 }
 
-.holdingsEmpty p {
-  margin-top: 8px;
-
+.holdingsEmpty p,
+.holdingsLoadingCard p {
+  max-width: 440px;
+  margin: 8px 0 18px;
   color: var(--text-secondary);
-
   font-size: 13px;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.holdingsSpinner {
+  width: 34px;
+  height: 34px;
+  margin-bottom: 18px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: holdingsSpin 0.8s linear infinite;
 }
 
 /* =========================================================
    DARK MODE
 ========================================================= */
 
-html.dark .holdingsCard {
+html.dark .holdingsSummaryCard,
+html.dark .holdingsCard,
+html.dark .holdingsEmpty,
+html.dark .holdingsLoadingCard,
+html.dark .holdingsLiveBadge,
+html.dark .holdingsCount {
   background: var(--surface);
-
   border-color: var(--border);
 }
 
-html.dark .holdingsTable {
+html.dark .holdingsTable,
+html.dark .holdingsTable td {
   background: var(--surface);
 }
 
 html.dark .holdingsTable th {
   background: var(--surface-2);
-
-  color: var(--text-secondary);
-
-  border-color: var(--border);
-}
-
-html.dark .holdingsTable td {
-  background: var(--surface);
-
-  color: var(--text-secondary);
-
-  border-color: var(--border);
 }
 
 html.dark .holdingsTable tbody tr:hover td {
   background: var(--hover-bg);
 }
 
-html.dark .holdingsEmpty {
-  background: var(--surface);
-
-  border-color: var(--border);
-}
-
 /* =========================================================
-   MOBILE
+   RESPONSIVE
 ========================================================= */
 
-@media (max-width: 700px) {
-  .holdingsPage {
-    padding: 0 0 30px;
+@media (max-width: 1000px) {
+  .holdingsSummaryGrid {
+    grid-template-columns: 1fr;
   }
 
   .holdingsPageHeader {
     align-items: flex-start;
-
     flex-direction: column;
+  }
 
-    gap: 15px;
+  .holdingsHeaderActions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 650px) {
+  .holdingsPage {
+    padding-bottom: 25px;
   }
 
   .holdingsPageHeader h1 {
     font-size: 25px;
   }
 
+  .holdingsPageHeader p {
+    font-size: 13px;
+  }
+
   .holdingsHeaderActions {
     width: 100%;
+  }
 
-    justify-content: space-between;
+  .holdingsLiveBadge,
+  .holdingsCount,
+  .refreshHoldingsBtn {
+    flex: 1;
+  }
+
+  .holdingsCardHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .holdingsSummaryCard {
+    min-height: 115px;
+    padding: 17px;
+  }
+
+  .holdingsSummaryCard strong {
+    font-size: 20px;
   }
 }

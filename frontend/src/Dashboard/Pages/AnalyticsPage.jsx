@@ -6,11 +6,20 @@ import {
   disconnectMarketSocket,
 } from "../../services/marketSocket";
 
+import {
+  FaArrowTrendDown,
+  FaArrowTrendUp,
+  FaChartLine,
+  FaCircleCheck,
+  FaCoins,
+  FaRotate,
+  FaTriangleExclamation,
+} from "react-icons/fa6";
+
 import "./AnalyticsPage.css";
 
-// const API_URL = "http://localhost:5000";
-const API_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+
 const MARKET_INSTRUMENTS = {
   INFY: "NSE_EQ|INE009A01021",
   TCS: "NSE_EQ|INE467B01029",
@@ -36,34 +45,35 @@ const getToken = () => {
 function AnalyticsPage() {
   const [holdings, setHoldings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
 
-  // =========================================================
-  // FETCH HOLDINGS
-  // =========================================================
+  /* =====================================================
+     FETCH ANALYTICS DATA
+  ===================================================== */
 
-  const loadAnalytics = useCallback(async () => {
+  const loadAnalytics = useCallback(async (isRefresh = false) => {
     try {
-      setLoading(true);
+      if (isRefresh) {
+        setRefreshing(true);
+      } else {
+        setLoading(true);
+      }
+
       setError("");
 
       const token = getToken();
 
       if (!token) {
-        throw new Error(
-          "Authentication token not found. Please login again."
-        );
+        throw new Error("Authentication token not found. Please login again.");
       }
 
-      const response = await fetch(
-        `${API_URL}/trades/holdings`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/trades/holdings`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const text = await response.text();
 
@@ -76,62 +86,47 @@ function AnalyticsPage() {
       }
 
       if (!response.ok) {
-        throw new Error(
-          data?.message || "Unable to load analytics."
-        );
+        throw new Error(data?.message || "Unable to load analytics.");
       }
 
       if (!data.success) {
-        throw new Error(
-          data?.message || "Unable to load analytics."
-        );
+        throw new Error(data?.message || "Unable to load analytics.");
       }
 
-      setHoldings(
-        Array.isArray(data.holdings)
-          ? data.holdings
-          : []
-      );
+      setHoldings(Array.isArray(data.holdings) ? data.holdings : []);
     } catch (err) {
       console.error("❌ ANALYTICS ERROR:", err);
 
-      setError(
-        err.message || "Unable to load analytics."
-      );
+      setError(err.message || "Unable to load analytics.");
 
       setHoldings([]);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }, []);
 
-  // =========================================================
-  // INITIAL LOAD + TRADE UPDATE
-  // =========================================================
+  /* =====================================================
+     INITIAL LOAD + TRADE UPDATE
+  ===================================================== */
 
   useEffect(() => {
     loadAnalytics();
 
     const handleUpdate = () => {
-      loadAnalytics();
+      loadAnalytics(true);
     };
 
-    window.addEventListener(
-      "tradenest-update",
-      handleUpdate
-    );
+    window.addEventListener("tradenest-update", handleUpdate);
 
     return () => {
-      window.removeEventListener(
-        "tradenest-update",
-        handleUpdate
-      );
+      window.removeEventListener("tradenest-update", handleUpdate);
     };
   }, [loadAnalytics]);
 
-  // =========================================================
-  // LIVE MARKET PRICE
-  // =========================================================
+  /* =====================================================
+     LIVE MARKET PRICE
+  ===================================================== */
 
   useEffect(() => {
     if (holdings.length === 0) {
@@ -146,9 +141,7 @@ function AnalyticsPage() {
       }
 
       const symbol = Object.keys(MARKET_INSTRUMENTS).find(
-        (stockSymbol) =>
-          MARKET_INSTRUMENTS[stockSymbol] ===
-          data.instrumentKey
+        (stockSymbol) => MARKET_INSTRUMENTS[stockSymbol] === data.instrumentKey,
       );
 
       if (!symbol) {
@@ -163,10 +156,7 @@ function AnalyticsPage() {
 
       setHoldings((previous) =>
         previous.map((holding) => {
-          if (
-            holding.symbol?.toUpperCase() !==
-            symbol
-          ) {
+          if (holding.symbol?.toUpperCase() !== symbol) {
             return holding;
           }
 
@@ -174,28 +164,22 @@ function AnalyticsPage() {
             ...holding,
             currentPrice: livePrice,
           };
-        })
+        }),
       );
     };
 
-    marketSocket.on(
-      "market:update",
-      handleMarketUpdate
-    );
+    marketSocket.on("market:update", handleMarketUpdate);
 
     return () => {
-      marketSocket.off(
-        "market:update",
-        handleMarketUpdate
-      );
+      marketSocket.off("market:update", handleMarketUpdate);
 
       disconnectMarketSocket();
     };
   }, [holdings.length]);
 
-  // =========================================================
-  // ANALYTICS CALCULATIONS
-  // =========================================================
+  /* =====================================================
+     CALCULATIONS
+  ===================================================== */
 
   const analytics = useMemo(() => {
     let invested = 0;
@@ -205,31 +189,17 @@ function AnalyticsPage() {
     const stocks = holdings.map((stock) => {
       const qty = Number(stock.quantity || 0);
 
-      const avgPrice = Number(
-        stock.averagePrice ||
-          stock.avgPrice ||
-          0
-      );
+      const avgPrice = Number(stock.averagePrice || stock.avgPrice || 0);
 
-      const currentPrice = Number(
-        stock.currentPrice ||
-          stock.ltp ||
-          avgPrice
-      );
+      const currentPrice = Number(stock.currentPrice || stock.ltp || avgPrice);
 
-      const investedAmount =
-        qty * avgPrice;
+      const investedAmount = qty * avgPrice;
 
-      const currentValue =
-        qty * currentPrice;
+      const currentValue = qty * currentPrice;
 
-      const pnl =
-        currentValue - investedAmount;
+      const pnl = currentValue - investedAmount;
 
-      const pnlPercent =
-        investedAmount > 0
-          ? (pnl / investedAmount) * 100
-          : 0;
+      const pnlPercent = investedAmount > 0 ? (pnl / investedAmount) * 100 : 0;
 
       invested += investedAmount;
       current += currentValue;
@@ -247,29 +217,19 @@ function AnalyticsPage() {
       };
     });
 
-    const totalPnl =
-      current - invested;
+    const totalPnl = current - invested;
 
-    const totalPnlPercent =
-      invested > 0
-        ? (totalPnl / invested) * 100
-        : 0;
+    const totalPnlPercent = invested > 0 ? (totalPnl / invested) * 100 : 0;
 
     const bestStock =
-      stocks.length > 0
-        ? [...stocks].sort(
-            (a, b) =>
-              b.pnlPercent - a.pnlPercent
-          )[0]
-        : null;
+      stocks.length > 0 ?
+        [...stocks].sort((a, b) => b.pnlPercent - a.pnlPercent)[0]
+      : null;
 
     const worstStock =
-      stocks.length > 0
-        ? [...stocks].sort(
-            (a, b) =>
-              a.pnlPercent - b.pnlPercent
-          )[0]
-        : null;
+      stocks.length > 0 ?
+        [...stocks].sort((a, b) => a.pnlPercent - b.pnlPercent)[0]
+      : null;
 
     return {
       stocks,
@@ -284,9 +244,9 @@ function AnalyticsPage() {
     };
   }, [holdings]);
 
-  // =========================================================
-  // FORMATTERS
-  // =========================================================
+  /* =====================================================
+     FORMATTERS
+  ===================================================== */
 
   const money = (value) =>
     `₹${Number(value || 0).toLocaleString("en-IN", {
@@ -299,41 +259,45 @@ function AnalyticsPage() {
       maximumFractionDigits: 2,
     });
 
-  // =========================================================
-  // LOADING
-  // =========================================================
+  /* =====================================================
+     LOADING
+  ===================================================== */
 
   if (loading) {
     return (
       <section className="analyticsPage">
-        <div className="analyticsLoading">
+        <div className="analyticsStateCard">
           <div className="analyticsLoader"></div>
 
-          <h3>Loading Analytics...</h3>
+          <h3>Loading Analytics</h3>
 
-          <p>
-            Calculating your portfolio performance.
-          </p>
+          <p>Calculating your portfolio performance.</p>
         </div>
       </section>
     );
   }
 
-  // =========================================================
-  // ERROR
-  // =========================================================
+  /* =====================================================
+     ERROR
+  ===================================================== */
 
   if (error) {
     return (
       <section className="analyticsPage">
-        <div className="analyticsError">
-          <div>⚠️</div>
+        <div className="analyticsStateCard analyticsError">
+          <div className="analyticsStateIcon error">
+            <FaTriangleExclamation />
+          </div>
 
           <h2>Unable to load analytics</h2>
 
           <p>{error}</p>
 
-          <button onClick={loadAnalytics}>
+          <button
+            className="analyticsRetryButton"
+            onClick={() => loadAnalytics(true)}
+          >
+            <FaRotate />
             Try Again
           </button>
         </div>
@@ -341,212 +305,191 @@ function AnalyticsPage() {
     );
   }
 
-  const profitable =
-    analytics.totalPnl >= 0;
+  const profitable = analytics.totalPnl >= 0;
 
-  // =========================================================
-  // MAIN UI
-  // =========================================================
+  /* =====================================================
+     MAIN UI
+  ===================================================== */
 
   return (
     <section className="analyticsPage">
-
-      {/* HEADER */}
+      {/* =================================================
+          HEADER
+      ================================================= */}
 
       <div className="analyticsHeader">
-        <div>
+        <div className="analyticsTitleBlock">
+          <span className="analyticsEyebrow">PORTFOLIO INSIGHTS</span>
+
           <h1>Analytics</h1>
 
           <p>
-            Analyze your portfolio performance
-            and returns.
+            Analyze your portfolio performance, returns and capital allocation.
           </p>
         </div>
 
-        <div className="analyticsLive">
-          <span></span>
-          Live Market
+        <div className="analyticsHeaderActions">
+          <div className="analyticsLive">
+            <span className="analyticsLiveDot"></span>
+
+            <span>Live Market</span>
+          </div>
+
+          <button
+            className={`analyticsRefreshButton ${
+              refreshing ? "isRefreshing" : ""
+            }`}
+            onClick={() => loadAnalytics(true)}
+            disabled={refreshing}
+          >
+            <FaRotate />
+            {refreshing ? "Refreshing..." : "Refresh"}
+          </button>
         </div>
       </div>
 
-
-      {/* SUMMARY CARDS */}
+      {/* =================================================
+          SUMMARY CARDS
+      ================================================= */}
 
       <div className="analyticsCards">
+        <article className="analyticsCard investedCard">
+          <div className="analyticsCardTop">
+            <div className="analyticsCardIcon">
+              <FaCoins />
+            </div>
 
-        <div className="analyticsCard">
-          <span>Invested</span>
+            <span className="analyticsCardLabel">Invested</span>
+          </div>
 
-          <h2>
-            {money(analytics.invested)}
-          </h2>
+          <h2>{money(analytics.invested)}</h2>
 
-          <small>
-            Total capital invested
-          </small>
-        </div>
+          <p>Total capital invested</p>
+        </article>
 
+        <article className="analyticsCard valueCard">
+          <div className="analyticsCardTop">
+            <div className="analyticsCardIcon">
+              <FaChartLine />
+            </div>
 
-        <div className="analyticsCard">
-          <span>Current Value</span>
+            <span className="analyticsCardLabel">Current Value</span>
+          </div>
 
-          <h2>
-            {money(analytics.current)}
-          </h2>
+          <h2>{money(analytics.current)}</h2>
 
-          <small>
-            Live market value
-          </small>
-        </div>
+          <p>Live market value</p>
+        </article>
 
+        <article className="analyticsCard pnlCard">
+          <div className="analyticsCardTop">
+            <div className="analyticsCardIcon">
+              {profitable ?
+                <FaArrowTrendUp />
+              : <FaArrowTrendDown />}
+            </div>
 
-        <div className="analyticsCard">
-          <span>Total P&amp;L</span>
+            <span className="analyticsCardLabel">Total P&amp;L</span>
+          </div>
 
-          <h2
-            className={
-              profitable
-                ? "analyticsProfit"
-                : "analyticsLoss"
-            }
-          >
+          <h2 className={profitable ? "analyticsProfit" : "analyticsLoss"}>
             {profitable ? "+" : "-"}
-            {money(
-              Math.abs(
-                analytics.totalPnl
-              )
-            )}
+            {money(Math.abs(analytics.totalPnl))}
           </h2>
 
-          <small
-            className={
-              profitable
-                ? "analyticsProfit"
-                : "analyticsLoss"
-            }
-          >
+          <p className={profitable ? "analyticsProfit" : "analyticsLoss"}>
             {profitable ? "+" : ""}
-            {analytics.totalPnlPercent.toFixed(2)}
-            %
-          </small>
-        </div>
+            {analytics.totalPnlPercent.toFixed(2)}% overall return
+          </p>
+        </article>
 
+        <article className="analyticsCard holdingsCountCard">
+          <div className="analyticsCardTop">
+            <div className="analyticsCardIcon">
+              <FaCircleCheck />
+            </div>
 
-        <div className="analyticsCard">
-          <span>Total Holdings</span>
+            <span className="analyticsCardLabel">Total Holdings</span>
+          </div>
 
-          <h2>
-            {analytics.totalStocks}
-          </h2>
+          <h2>{analytics.totalStocks}</h2>
 
-          <small>
-            {number(analytics.quantity)} shares
-          </small>
-        </div>
-
+          <p>{number(analytics.quantity)} shares</p>
+        </article>
       </div>
 
-
-      {/* BEST / WORST */}
+      {/* =================================================
+          BEST / WORST
+      ================================================= */}
 
       <div className="analyticsHighlightGrid">
-
-        <div className="highlightCard bestCard">
-
+        <article className="highlightCard bestCard">
           <div className="highlightIcon">
-            🏆
+            <FaArrowTrendUp />
           </div>
 
-          <div>
-            <span>
-              Best Performer
-            </span>
+          <div className="highlightContent">
+            <span>Best Performer</span>
 
-            {analytics.bestStock ? (
+            {analytics.bestStock ?
               <>
-                <h3>
-                  {analytics.bestStock.symbol}
-                </h3>
+                <h3>{analytics.bestStock.symbol}</h3>
+
+                <strong>+{analytics.bestStock.pnlPercent.toFixed(2)}%</strong>
+              </>
+            : <h3>No holdings</h3>}
+          </div>
+
+          <div className="highlightBadge">TOP</div>
+        </article>
+
+        <article className="highlightCard worstCard">
+          <div className="highlightIcon">
+            <FaArrowTrendDown />
+          </div>
+
+          <div className="highlightContent">
+            <span>Lowest Performer</span>
+
+            {analytics.worstStock ?
+              <>
+                <h3>{analytics.worstStock.symbol}</h3>
 
                 <strong>
-                  +
-                  {analytics.bestStock.pnlPercent.toFixed(
-                    2
-                  )}
-                  %
+                  {analytics.worstStock.pnlPercent >= 0 ? "+" : ""}
+                  {analytics.worstStock.pnlPercent.toFixed(2)}%
                 </strong>
               </>
-            ) : (
-              <h3>No holdings</h3>
-            )}
+            : <h3>No holdings</h3>}
           </div>
 
-        </div>
-
-
-        <div className="highlightCard worstCard">
-
-          <div className="highlightIcon">
-            📉
-          </div>
-
-          <div>
-            <span>
-              Worst Performer
-            </span>
-
-            {analytics.worstStock ? (
-              <>
-                <h3>
-                  {analytics.worstStock.symbol}
-                </h3>
-
-                <strong>
-                  {analytics.worstStock.pnlPercent >= 0
-                    ? "+"
-                    : ""}
-                  {analytics.worstStock.pnlPercent.toFixed(
-                    2
-                  )}
-                  %
-                </strong>
-              </>
-            ) : (
-              <h3>No holdings</h3>
-            )}
-          </div>
-
-        </div>
-
+          <div className="highlightBadge">WATCH</div>
+        </article>
       </div>
 
-
-      {/* STOCK PERFORMANCE */}
+      {/* =================================================
+          STOCK PERFORMANCE
+      ================================================= */}
 
       <div className="analyticsSection">
-
         <div className="analyticsSectionHeader">
-
           <div>
-            <h2>
-              Stock Performance
-            </h2>
+            <span className="sectionEyebrow">PERFORMANCE</span>
 
-            <p>
-              Performance of each stock
-              in your portfolio.
-            </p>
+            <h2>Stock Performance</h2>
+
+            <p>Performance of each stock in your portfolio.</p>
           </div>
 
+          <div className="sectionCount">
+            {analytics.totalStocks}{" "}
+            {analytics.totalStocks === 1 ? "Stock" : "Stocks"}
+          </div>
         </div>
 
-
-        {analytics.stocks.length > 0 ? (
-
+        {analytics.stocks.length > 0 ?
           <div className="analyticsTableWrapper">
-
             <table className="analyticsTable">
-
               <thead>
                 <tr>
                   <th>Stock</th>
@@ -557,216 +500,137 @@ function AnalyticsPage() {
                 </tr>
               </thead>
 
-
               <tbody>
+                {analytics.stocks.map((stock) => {
+                  const positive = stock.pnl >= 0;
 
-                {analytics.stocks.map(
-                  (stock) => {
-
-                    const positive =
-                      stock.pnl >= 0;
-
-                    return (
-                      <tr
-                        key={
-                          stock._id ||
-                          stock.symbol
-                        }
-                      >
-
-                        <td>
-
-                          <div className="analyticsStock">
-
-                            <strong>
-                              {stock.symbol}
-                            </strong>
-
-                            <small>
-                              {stock.company ||
-                                "Stock"}
-                            </small>
-
+                  return (
+                    <tr key={stock._id || stock.symbol}>
+                      <td>
+                        <div className="analyticsStock">
+                          <div className="stockSymbol">
+                            {stock.symbol?.charAt(0) || "S"}
                           </div>
 
-                        </td>
+                          <div className="stockDetails">
+                            <strong>{stock.symbol}</strong>
 
+                            <small>{stock.company || "Stock"}</small>
+                          </div>
+                        </div>
+                      </td>
 
-                        <td>
-                          {money(
-                            stock.investedAmount
-                          )}
-                        </td>
+                      <td>
+                        <span className="tableMoney">
+                          {money(stock.investedAmount)}
+                        </span>
+                      </td>
 
+                      <td>
+                        <span className="tableMoney">
+                          {money(stock.currentValue)}
+                        </span>
+                      </td>
 
-                        <td>
-                          {money(
-                            stock.currentValue
-                          )}
-                        </td>
+                      <td
+                        className={
+                          positive ? "analyticsProfit" : "analyticsLoss"
+                        }
+                      >
+                        <strong>
+                          {positive ? "+" : "-"}
+                          {money(Math.abs(stock.pnl))}
+                        </strong>
+                      </td>
 
-
-                        <td
-                          className={
-                            positive
-                              ? "analyticsProfit"
-                              : "analyticsLoss"
-                          }
+                      <td>
+                        <span
+                          className={`returnBadge ${
+                            positive ? "positive" : "negative"
+                          }`}
                         >
-                          {positive
-                            ? "+"
-                            : "-"}
-
-                          {money(
-                            Math.abs(
-                              stock.pnl
-                            )
-                          )}
-                        </td>
-
-
-                        <td
-                          className={
-                            positive
-                              ? "analyticsProfit"
-                              : "analyticsLoss"
-                          }
-                        >
-                          {positive
-                            ? "+"
-                            : ""}
-
-                          {stock.pnlPercent.toFixed(
-                            2
-                          )}
-                          %
-                        </td>
-
-                      </tr>
-                    );
-                  }
-                )}
-
+                          {positive ? "+" : ""}
+                          {stock.pnlPercent.toFixed(2)}%
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
-
             </table>
-
           </div>
+        : <div className="analyticsEmpty">
+            <div className="analyticsEmptyIcon">
+              <FaChartLine />
+            </div>
 
-        ) : (
+            <h3>No Analytics Available</h3>
 
-          <div className="analyticsEmpty">
-
-            <div>📊</div>
-
-            <h3>
-              No Analytics Available
-            </h3>
-
-            <p>
-              Buy some stocks to start
-              analyzing your portfolio.
-            </p>
-
+            <p>Buy some stocks to start analyzing your portfolio.</p>
           </div>
-
-        )}
-
+        }
       </div>
 
+      {/* =================================================
+          PORTFOLIO ALLOCATION
+      ================================================= */}
 
-      {/* PORTFOLIO ALLOCATION */}
-
-      <div className="analyticsSection">
-
+      <div className="analyticsSection allocationSection">
         <div className="analyticsSectionHeader">
-
           <div>
-            <h2>
-              Portfolio Allocation
-            </h2>
+            <span className="sectionEyebrow">CAPITAL MIX</span>
 
-            <p>
-              Distribution of your invested
-              capital across stocks.
-            </p>
+            <h2>Portfolio Allocation</h2>
+
+            <p>Distribution of invested capital across stocks.</p>
           </div>
-
         </div>
 
-
-        {analytics.stocks.length > 0 ? (
-
+        {analytics.stocks.length > 0 ?
           <div className="allocationList">
+            {analytics.stocks.map((stock) => {
+              const allocation =
+                analytics.invested > 0 ?
+                  (stock.investedAmount / analytics.invested) * 100
+                : 0;
 
-            {analytics.stocks.map(
-              (stock) => {
+              return (
+                <div className="allocationItem" key={stock.symbol}>
+                  <div className="allocationTop">
+                    <div className="allocationName">
+                      <span className="allocationDot"></span>
 
-                const allocation =
-                  analytics.invested > 0
-                    ? (
-                        stock.investedAmount /
-                        analytics.invested
-                      ) * 100
-                    : 0;
-
-                return (
-                  <div
-                    className="allocationItem"
-                    key={stock.symbol}
-                  >
-
-                    <div className="allocationTop">
-
-                      <strong>
-                        {stock.symbol}
-                      </strong>
-
-                      <span>
-                        {allocation.toFixed(2)}%
-                      </span>
-
+                      <strong>{stock.symbol}</strong>
                     </div>
 
-
-                    <div className="allocationBar">
-
-                      <div
-                        className="allocationFill"
-                        style={{
-                          width: `${Math.min(
-                            allocation,
-                            100
-                          )}%`,
-                        }}
-                      ></div>
-
-                    </div>
-
-
-                    <small>
-                      {money(
-                        stock.investedAmount
-                      )}
-                    </small>
-
+                    <span className="allocationPercentage">
+                      {allocation.toFixed(2)}%
+                    </span>
                   </div>
-                );
-              }
-            )}
 
+                  <div className="allocationBar">
+                    <div
+                      className="allocationFill"
+                      style={{
+                        width: `${Math.min(allocation, 100)}%`,
+                      }}
+                    ></div>
+                  </div>
+
+                  <div className="allocationBottom">
+                    <small>{money(stock.investedAmount)}</small>
+
+                    <small>{number(stock.qty)} shares</small>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-
-        ) : (
-
-          <div className="analyticsEmpty">
+        : <div className="analyticsEmpty allocationEmpty">
             No allocation data available.
           </div>
-
-        )}
-
+        }
       </div>
-
     </section>
   );
 }

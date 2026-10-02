@@ -8,9 +8,12 @@ import {
 
 import "./TradeModal.css";
 
-// const API_URL = "http://localhost:5000";
-const API_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+/* =====================================================
+   API
+===================================================== */
+
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+
 /* =====================================================
    UPSTOX INSTRUMENT MAPPING
 ===================================================== */
@@ -84,8 +87,6 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
       return;
     }
 
-    console.log("📡 TradeModal connecting to market...");
-
     connectMarketSocket();
 
     const handleMarketUpdate = (data) => {
@@ -110,8 +111,6 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
       if (!Number.isFinite(price) || price <= 0) {
         return;
       }
-
-      console.log("🔥 TRADE MODAL LIVE PRICE:", liveSymbol, price);
 
       setLivePrice(price);
     };
@@ -143,6 +142,7 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
 
         const response = await fetch(`${API_URL}/funds`, {
           method: "GET",
+
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -155,7 +155,7 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
         try {
           data = JSON.parse(responseText);
         } catch {
-          console.error("❌ FUNDS RAW RESPONSE:", responseText);
+          console.error("FUNDS RAW RESPONSE:", responseText);
 
           throw new Error(
             "Server returned an invalid response while loading funds.",
@@ -167,10 +167,8 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
         }
 
         setAvailableBalance(Number(data.funds?.availableBalance || 0));
-
-        console.log("💰 AVAILABLE BALANCE:", data.funds?.availableBalance);
       } catch (error) {
-        console.error("❌ Trade funds error:", error);
+        console.error("Trade funds error:", error);
 
         setError(error.message || "Unable to load available balance.");
       } finally {
@@ -212,27 +210,21 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
   const handleOrder = async () => {
     setError("");
 
-    /* -----------------------------------------------
-       QUANTITY VALIDATION
-    ------------------------------------------------ */
+    /* Quantity validation */
 
     if (!Number.isFinite(numericQuantity) || numericQuantity <= 0) {
       setError("Please enter a valid quantity.");
       return;
     }
 
-    /* -----------------------------------------------
-       PRICE VALIDATION
-    ------------------------------------------------ */
+    /* Price validation */
 
     if (!Number.isFinite(livePrice) || livePrice <= 0) {
       setError("Invalid live stock price.");
       return;
     }
 
-    /* -----------------------------------------------
-       FUNDS VALIDATION
-    ------------------------------------------------ */
+    /* Funds validation */
 
     if (isBuy && availableBalance !== null && total > availableBalance) {
       setError(
@@ -240,12 +232,11 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
           availableBalance,
         )}.`,
       );
+
       return;
     }
 
-    /* -----------------------------------------------
-       TOKEN
-    ------------------------------------------------ */
+    /* Token */
 
     const token = getToken();
 
@@ -273,8 +264,6 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
         orderType: "MARKET",
       };
 
-      console.log("📤 TRADE REQUEST:", orderData);
-
       const response = await fetch(`${API_URL}/trades/orders`, {
         method: "POST",
 
@@ -287,13 +276,7 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
         body: JSON.stringify(orderData),
       });
 
-      /* =========================================
-         READ RESPONSE SAFELY
-      ========================================= */
-
       const responseText = await response.text();
-
-      console.log("📥 TRADE RAW RESPONSE:", responseText);
 
       let data;
 
@@ -305,12 +288,6 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
         );
       }
 
-      console.log("📥 TRADE RESPONSE:", data);
-
-      /* =========================================
-         API ERROR
-      ========================================= */
-
       if (!response.ok) {
         throw new Error(data.message || "Failed to place order.");
       }
@@ -319,33 +296,23 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
         throw new Error(data.message || "Order placement failed.");
       }
 
-      /* =========================================
-         UPDATE AVAILABLE BALANCE
-      ========================================= */
+      /* Update balance */
 
       if (data.funds) {
         setAvailableBalance(Number(data.funds.availableBalance || 0));
-
-        console.log("💰 UPDATED BALANCE:", data.funds.availableBalance);
       }
 
-      /* =========================================
-         NOTIFY OTHER PAGES
-      ========================================= */
+      /* Notify dashboard pages */
 
       window.dispatchEvent(new Event("tradenest-update"));
 
       window.dispatchEvent(new Event("tradenest-funds-update"));
 
-      /* =========================================
-         SEND ORDER TO PARENT
-      ========================================= */
+      /* Send order to parent */
 
       onSuccess?.(data.order);
 
-      /* =========================================
-         SUCCESS MESSAGE
-      ========================================= */
+      /* Success */
 
       alert(
         `${
@@ -355,7 +322,7 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
 
       onClose();
     } catch (error) {
-      console.error("❌ TRADE ERROR:", error);
+      console.error("TRADE ERROR:", error);
 
       setError(
         error.message || "Something went wrong while placing the order.",
@@ -379,16 +346,20 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
 
   return (
     <div className="tradeModalOverlay" onClick={onClose}>
-      <div className="tradeModal" onClick={(e) => e.stopPropagation()}>
-        {/* =========================================
-            HEADER
-        ========================================= */}
+      <div className="tradeModal" onClick={(event) => event.stopPropagation()}>
+        {/* Header */}
 
         <div className="tradeModalHeader">
-          <div>
-            <h2>
-              {isBuy ? "Buy" : "Sell"} {stock.symbol}
-            </h2>
+          <div className="tradeModalTitle">
+            <span
+              className={`tradeSideBadge ${
+                isBuy ? "buySideBadge" : "sellSideBadge"
+              }`}
+            >
+              {isBuy ? "BUY" : "SELL"}
+            </span>
+
+            <h2>{stock.symbol}</h2>
 
             <p>{stock.company || stock.name || stock.symbol}</p>
           </div>
@@ -397,29 +368,28 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
             className="closeTradeBtn"
             onClick={onClose}
             disabled={loading}
+            aria-label="Close trade modal"
           >
             ×
           </button>
         </div>
 
-        {/* =========================================
-            LIVE PRICE
-        ========================================= */}
+        {/* Live price */}
 
-        <div className="tradePrice">
-          <span>Live Market Price</span>
+        <div className="tradePriceBox">
+          <div>
+            <span className="tradeLabel">Live Market Price</span>
 
-          <strong>{formatMoney(livePrice)}</strong>
+            <strong className="tradeLivePrice">{formatMoney(livePrice)}</strong>
+          </div>
+
+          <div className="livePriceStatus">
+            <span className="liveDot" />
+            Live
+          </div>
         </div>
 
-        <div className="livePriceStatus">
-          <span className="liveDot"></span>
-          Live market price
-        </div>
-
-        {/* =========================================
-            AVAILABLE BALANCE
-        ========================================= */}
+        {/* Available balance */}
 
         <div className="tradeBalance">
           <span>Available Balance</span>
@@ -429,21 +399,20 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
           </strong>
         </div>
 
-        {/* =========================================
-            QUANTITY
-        ========================================= */}
+        {/* Quantity */}
 
         <div className="tradeField">
-          <label>Quantity</label>
+          <label htmlFor="tradeQuantity">Quantity</label>
 
           <input
+            id="tradeQuantity"
             type="number"
             min="1"
             step="1"
             value={quantity}
             disabled={loading}
-            onChange={(e) => {
-              const value = e.target.value;
+            onChange={(event) => {
+              const value = event.target.value;
 
               if (value === "") {
                 setQuantity("");
@@ -459,9 +428,7 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
           />
         </div>
 
-        {/* =========================================
-            ORDER VALUE
-        ========================================= */}
+        {/* Order value */}
 
         <div className="tradeSummary">
           <span>Order Value</span>
@@ -469,28 +436,24 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
           <strong>{formatMoney(total)}</strong>
         </div>
 
-        {/* =========================================
-            INSUFFICIENT FUNDS
-        ========================================= */}
+        {/* Insufficient funds */}
 
         {hasInsufficientFunds && (
           <div className="tradeWarning">
-            Insufficient funds.
-            <br />
-            You need <strong>{formatMoney(total)}</strong> but only have{" "}
-            <strong>{formatMoney(availableBalance)}</strong>.
+            <strong>Insufficient funds</strong>
+
+            <span>
+              You need {formatMoney(total)} but only have{" "}
+              {formatMoney(availableBalance)}.
+            </span>
           </div>
         )}
 
-        {/* =========================================
-            ERROR
-        ========================================= */}
+        {/* Error */}
 
         {error && <div className="tradeError">{error}</div>}
 
-        {/* =========================================
-            CONFIRM BUTTON
-        ========================================= */}
+        {/* Confirm */}
 
         <button
           className={isBuy ? "placeBuyBtn" : "placeSellBtn"}
@@ -505,6 +468,10 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
             "Confirm Buy"
           : "Confirm Sell"}
         </button>
+
+        <p className="tradeDisclaimer">
+          Market order • CNC • Executed at available market price
+        </p>
       </div>
     </div>
   );

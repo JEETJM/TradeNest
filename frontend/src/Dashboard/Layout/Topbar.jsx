@@ -1,7 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { FaBell, FaChevronDown, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaBell,
+  FaChevronDown,
+  FaSignOutAlt,
+  FaUser,
+  FaCog,
+} from "react-icons/fa";
 
 import "./Topbar.css";
 
@@ -12,6 +18,10 @@ function Topbar() {
 
   const [user, setUser] = useState(getStoredUser());
   const [showMenu, setShowMenu] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
+
+  const profileRef = useRef(null);
+  const notificationRef = useRef(null);
 
   /* =====================================================
      LOAD CURRENT USER
@@ -34,7 +44,7 @@ function Topbar() {
   }, []);
 
   /* =====================================================
-     LISTEN FOR PROFILE UPDATE
+     PROFILE UPDATE
   ===================================================== */
 
   useEffect(() => {
@@ -59,10 +69,37 @@ function Topbar() {
   }, []);
 
   /* =====================================================
+     CLOSE DROPDOWNS WHEN CLICKING OUTSIDE
+  ===================================================== */
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setShowMenu(false);
+      }
+
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
+        setNotificationOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+  /* =====================================================
      LOGOUT
   ===================================================== */
 
   const handleLogout = () => {
+    setShowMenu(false);
+
     logout();
 
     navigate("/login", {
@@ -84,12 +121,9 @@ function Topbar() {
 
   const initial = firstName.charAt(0).toUpperCase();
 
-  /*
-   * Supports common backend property names.
-   *
-   * If your backend stores the image as
-   * profileImage, it will work directly.
-   */
+  /* =====================================================
+     PROFILE IMAGE
+  ===================================================== */
 
   const profileImage =
     user?.profileImage ||
@@ -100,7 +134,7 @@ function Topbar() {
     "";
 
   /* =====================================================
-     PROFILE AVATAR
+     AVATAR
   ===================================================== */
 
   const renderAvatar = () => {
@@ -120,6 +154,26 @@ function Topbar() {
     return initial;
   };
 
+  /* =====================================================
+     NAVIGATION
+  ===================================================== */
+
+  const openProfile = () => {
+    setShowMenu(false);
+
+    navigate("/dashboard/profile");
+  };
+
+  const openSettings = () => {
+    setShowMenu(false);
+
+    navigate("/dashboard/settings");
+  };
+
+  /* =====================================================
+     RENDER
+  ===================================================== */
+
   return (
     <header className="topbar">
       {/* =================================================
@@ -128,6 +182,8 @@ function Topbar() {
 
       <div className="topbarLeft">
         <div>
+          <div className="topbarEyebrow">TRADENEST</div>
+
           <h2>Dashboard</h2>
 
           <p>Manage your investments and portfolio</p>
@@ -139,32 +195,96 @@ function Topbar() {
       ================================================= */}
 
       <div className="topbarRight">
-        {/* ================= NOTIFICATION ================= */}
+        {/* ===============================================
+            MARKET STATUS
+        =============================================== */}
 
-        <button type="button" className="iconBtn" title="Notifications">
-          <FaBell />
+        <div className="marketStatus">
+          <span className="marketStatusDot" />
 
-          <span className="notificationDot" />
-        </button>
+          <div>
+            <strong>Market</strong>
 
-        {/* ================= PROFILE ================= */}
+            <small>Live</small>
+          </div>
+        </div>
 
-        <div className="profileDropdown">
+        {/* ===============================================
+            NOTIFICATION
+        =============================================== */}
+
+        <div className="notificationWrapper" ref={notificationRef}>
           <button
             type="button"
-            className="profileBox"
-            onClick={() => setShowMenu(!showMenu)}
+            className={notificationOpen ? "iconBtn active" : "iconBtn"}
+            title="Notifications"
+            aria-label="Notifications"
+            onClick={() => {
+              setNotificationOpen((previous) => !previous);
+
+              setShowMenu(false);
+            }}
           >
-            {/* PROFILE IMAGE */}
+            <FaBell />
+
+            <span className="notificationDot" />
+          </button>
+
+          {notificationOpen && (
+            <div className="notificationMenu">
+              <div className="notificationHeader">
+                <div>
+                  <strong>Notifications</strong>
+
+                  <span>Recent activity</span>
+                </div>
+
+                <span className="notificationCount">1</span>
+              </div>
+
+              <div className="notificationItem">
+                <div className="notificationIcon">
+                  <FaBell />
+                </div>
+
+                <div>
+                  <strong>Welcome to TradeNest</strong>
+
+                  <p>Your trading dashboard is ready.</p>
+
+                  <small>Just now</small>
+                </div>
+              </div>
+
+              <div className="notificationFooter">You're all caught up.</div>
+            </div>
+          )}
+        </div>
+
+        {/* ===============================================
+            PROFILE
+        =============================================== */}
+
+        <div className="profileDropdown" ref={profileRef}>
+          <button
+            type="button"
+            className={showMenu ? "profileBox active" : "profileBox"}
+            onClick={() => {
+              setShowMenu((previous) => !previous);
+
+              setNotificationOpen(false);
+            }}
+          >
+            {/* AVATAR */}
 
             <div className="profileImage">{renderAvatar()}</div>
 
-            {/* USER INFORMATION */}
+            {/* USER */}
 
             <div className="profileText">
               <strong>{fullName}</strong>
 
-              <span>{email}</span>
+              <span>{email || "TradeNest user"}</span>
             </div>
 
             {/* ARROW */}
@@ -174,24 +294,39 @@ function Topbar() {
             />
           </button>
 
-          {/* =================================================
-              DROPDOWN
-          ================================================= */}
+          {/* =============================================
+              PROFILE DROPDOWN
+          ============================================= */}
 
           {showMenu && (
             <div className="profileMenu">
-              <button
-                type="button"
-                onClick={() => {
-                  setShowMenu(false);
+              <div className="profileMenuHeader">
+                <div className="profileMenuAvatar">{renderAvatar()}</div>
 
-                  navigate("/dashboard/profile");
-                }}
-              >
+                <div>
+                  <strong>{fullName}</strong>
+
+                  <span>{email}</span>
+                </div>
+              </div>
+
+              <div className="profileMenuDivider" />
+
+              <button type="button" onClick={openProfile}>
+                <FaUser />
+
                 <span>Profile</span>
               </button>
 
-              <button type="button" onClick={handleLogout} className="danger">
+              <button type="button" onClick={openSettings}>
+                <FaCog />
+
+                <span>Settings</span>
+              </button>
+
+              <div className="profileMenuDivider" />
+
+              <button type="button" className="danger" onClick={handleLogout}>
                 <FaSignOutAlt />
 
                 <span>Logout</span>

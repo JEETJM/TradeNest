@@ -975,6 +975,116 @@ const changePassword = async (req, res) => {
   }
 };
 
+// const updateProfile = async (req, res) => {
+//   try {
+//     const userId = req.user.id;
+
+//     const {
+//       firstName,
+//       lastName,
+//       phone,
+//     } = req.body;
+
+//     const user = await User.findById(userId);
+
+//     if (!user) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "User not found.",
+//       });
+//     }
+
+//     /* =================================================
+//        BASIC INFO
+//     ================================================= */
+
+//     if (
+//       firstName !== undefined &&
+//       firstName.trim() !== ""
+//     ) {
+//       user.firstName = firstName.trim();
+//     }
+
+//     if (
+//       lastName !== undefined &&
+//       lastName.trim() !== ""
+//     ) {
+//       user.lastName = lastName.trim();
+//     }
+
+//     if (phone !== undefined) {
+//       user.phone = phone.trim();
+//     }
+
+//     /* =================================================
+//        PROFILE IMAGE
+//     ================================================= */
+
+//     if (req.file) {
+//       console.log(
+//         "📸 Uploading profile image...",
+//       );
+
+//       try {
+//         const result =
+//           await uploadToCloudinary(
+//             req.file.buffer,
+//           );
+
+//         user.profileImage =
+//           result.secure_url;
+
+//         console.log(
+//           "✅ Profile image uploaded:",
+//           result.secure_url,
+//         );
+//       } catch (uploadError) {
+//         console.error(
+//           "Cloudinary upload error:",
+//           uploadError,
+//         );
+
+//         return res.status(500).json({
+//           success: false,
+//           message:
+//             "Failed to upload profile image.",
+//         });
+//       }
+//     }
+
+//     await user.save();
+
+//     return res.status(200).json({
+//       success: true,
+//       message:
+//         "Profile updated successfully.",
+
+//       user: {
+//         id: user._id,
+//         firstName: user.firstName,
+//         lastName: user.lastName,
+//         email: user.email,
+//         phone: user.phone,
+//         profileImage:
+//           user.profileImage || "",
+//       },
+//     });
+//   } catch (error) {
+//     console.error(
+//       "Update profile error:",
+//       error,
+//     );
+
+//     return res.status(500).json({
+//       success: false,
+//       message:
+//         "Server error while updating profile.",
+//     });
+//   }
+// };
+
+
+
 const updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -983,6 +1093,10 @@ const updateProfile = async (req, res) => {
       firstName,
       lastName,
       phone,
+      address,
+      city,
+      state,
+      pincode,
     } = req.body;
 
     const user = await User.findById(userId);
@@ -994,9 +1108,9 @@ const updateProfile = async (req, res) => {
       });
     }
 
-    /* =================================================
+    /* ================================
        BASIC INFO
-    ================================================= */
+    ================================= */
 
     if (
       firstName !== undefined &&
@@ -1016,23 +1130,43 @@ const updateProfile = async (req, res) => {
       user.phone = phone.trim();
     }
 
-    /* =================================================
+    /* ================================
+       ADDRESS
+    ================================= */
+
+    if (address !== undefined) {
+      user.address = address.trim();
+    }
+
+    if (city !== undefined) {
+      user.city = city.trim();
+    }
+
+    if (state !== undefined) {
+      user.state = state.trim();
+    }
+
+    if (pincode !== undefined) {
+      user.pincode = pincode.trim();
+    }
+
+    /* ================================
        PROFILE IMAGE
-    ================================================= */
+    ================================= */
 
     if (req.file) {
-      console.log(
-        "📸 Uploading profile image...",
-      );
+      console.log("📸 Uploading profile image...");
 
       try {
-        const result =
-          await uploadToCloudinary(
-            req.file.buffer,
-          );
+        const result = await uploadToCloudinary(
+          req.file.buffer,
+        );
 
-        user.profileImage =
-          result.secure_url;
+        user.profileImage = result.secure_url;
+
+        if (result.public_id) {
+          user.cloudinaryPublicId = result.public_id;
+        }
 
         console.log(
           "✅ Profile image uploaded:",
@@ -1052,21 +1186,33 @@ const updateProfile = async (req, res) => {
       }
     }
 
+    /* ================================
+       SAVE USER
+    ================================= */
+
     await user.save();
+
+    /* ================================
+       RESPONSE
+    ================================= */
 
     return res.status(200).json({
       success: true,
-      message:
-        "Profile updated successfully.",
+      message: "Profile updated successfully.",
 
       user: {
         id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        phone: user.phone,
-        profileImage:
-          user.profileImage || "",
+        phone: user.phone || "",
+
+        address: user.address || "",
+        city: user.city || "",
+        state: user.state || "",
+        pincode: user.pincode || "",
+
+        profileImage: user.profileImage || "",
       },
     });
   } catch (error) {

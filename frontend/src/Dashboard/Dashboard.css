@@ -1,34 +1,45 @@
 /* =========================================================
-   TRADENEST GLOBAL THEME
+   TRADENEST DASHBOARD
+   GLOBAL THEME
 ========================================================= */
 
 :root {
-  --bg: #f5f7fb;
+  --bg: #f6f8fc;
 
   --surface: #ffffff;
   --surface-2: #f8fafc;
   --card: #ffffff;
 
-  --border: #e5e7eb;
-  --border-light: #edf0f4;
+  --border: #e7ebf2;
+  --border-light: #eef2f6;
 
-  --text: #111827;
+  --text: #101828;
   --text-secondary: #667085;
   --text-muted: #98a2b3;
   --muted: #98a2b3;
 
   --input-bg: #ffffff;
 
-  --hover-bg: #f3f6fa;
-  --hover: #f3f6fa;
-
-  --shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+  --hover-bg: #f2f6fb;
+  --hover: #f2f6fb;
 
   --primary: #387ed1;
   --primary-dark: #2563eb;
 
   --success: #00875a;
   --danger: #dc2626;
+  --warning: #d97706;
+
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.035);
+
+  --shadow: 0 8px 28px rgba(15, 23, 42, 0.055);
+
+  --shadow-lg: 0 16px 45px rgba(15, 23, 42, 0.08);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
 }
 
 /* =========================================================
@@ -37,32 +48,37 @@
 
 html.dark,
 body.dark {
-  --bg: #0f172a;
+  --bg: #0b1120;
 
-  --surface: #172033;
-  --surface-2: #1e293b;
-  --card: #172033;
+  --surface: #111a2c;
+  --surface-2: #172235;
+  --card: #111a2c;
 
-  --border: #334155;
-  --border-light: #293548;
+  --border: #26344a;
+  --border-light: #202d42;
 
   --text: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --muted: #94a3b8;
+  --text-secondary: #c3cfdd;
+  --text-muted: #8fa0b6;
+  --muted: #8fa0b6;
 
-  --input-bg: #1e293b;
+  --input-bg: #172235;
 
-  --hover-bg: #263449;
-  --hover: #263449;
+  --hover-bg: #1b2a40;
+  --hover: #1b2a40;
 
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  --primary: #4b91e2;
+  --primary-dark: #3b82f6;
 
-  --primary: #3b82f6;
-  --primary-dark: #2563eb;
+  --success: #2ddc8b;
+  --danger: #fb7185;
+  --warning: #f59e0b;
 
-  --success: #22c55e;
-  --danger: #f87171;
+  --shadow-sm: 0 3px 12px rgba(0, 0, 0, 0.16);
+
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+  --shadow-lg: 0 18px 45px rgba(0, 0, 0, 0.28);
 }
 
 /* =========================================================
@@ -80,18 +96,33 @@ body,
 
 html {
   background: var(--bg);
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--bg);
   color: var(--text);
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
   transition:
     background-color 0.25s ease,
     color 0.25s ease;
 }
 
 /* =========================================================
-   DASHBOARD
+   DASHBOARD ROOT
 ========================================================= */
 
 .dashboard {
@@ -102,22 +133,23 @@ body {
 
   background: var(--bg);
   color: var(--text);
+
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
 }
 
 /* =========================================================
-   MAIN
+   MAIN CONTENT
 ========================================================= */
 
 .dashboardMain {
-  flex: 1;
-
   width: calc(100% - 250px);
-
   min-height: 100vh;
 
   margin-left: 250px;
 
-  padding: 26px 28px 40px;
+  padding: 24px 28px 42px;
 
   box-sizing: border-box;
 
@@ -132,7 +164,17 @@ body {
 }
 
 /* =========================================================
-   GLOBAL TEXT
+   CONTENT WRAPPER
+========================================================= */
+
+.dashboardContent {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   GLOBAL HEADINGS
 ========================================================= */
 
 .dashboardMain h1,
@@ -152,24 +194,27 @@ body {
    COMMON CARDS
 ========================================================= */
 
-.card,
-.dashboard-card,
-.dashboardCard,
-.stat-card,
-.statCard,
-.summary-card,
-.summaryCard,
-.settingsCard,
-.profileCard,
-.fundsCard,
-.holdingsCard,
-.watchlistCard,
-.ordersCard,
-.analyticsCard,
-.portfolioCard {
+.dashboardMain .card,
+.dashboardMain .dashboard-card,
+.dashboardMain .dashboardCard,
+.dashboardMain .stat-card,
+.dashboardMain .statCard,
+.dashboardMain .summary-card,
+.dashboardMain .summaryCard,
+.dashboardMain .settingsCard,
+.dashboardMain .profileCard,
+.dashboardMain .fundsCard,
+.dashboardMain .holdingsCard,
+.dashboardMain .watchlistCard,
+.dashboardMain .ordersCard,
+.dashboardMain .analyticsCard,
+.dashboardMain .portfolioCard {
   background: var(--surface);
   color: var(--text);
+
   border-color: var(--border);
+
+  box-shadow: var(--shadow-sm);
 }
 
 /* =========================================================
@@ -177,8 +222,15 @@ body {
 ========================================================= */
 
 .dashboardMain table {
+  width: 100%;
+
   background: var(--surface);
   color: var(--text);
+
+  border-color: var(--border);
+
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .dashboardMain thead {
@@ -189,6 +241,8 @@ body {
   color: var(--text-secondary);
   background: var(--surface-2);
   border-color: var(--border);
+
+  font-weight: 650;
 }
 
 .dashboardMain td {
@@ -199,15 +253,14 @@ body {
 
 .dashboardMain tbody tr {
   background: var(--surface);
-  border-color: var(--border);
 }
 
-.dashboardMain tbody tr:hover {
+.dashboardMain tbody tr:hover td {
   background: var(--hover-bg);
 }
 
 /* =========================================================
-   INPUT
+   FORM ELEMENTS
 ========================================================= */
 
 .dashboardMain input,
@@ -215,7 +268,23 @@ body {
 .dashboardMain select {
   background: var(--input-bg);
   color: var(--text);
+
   border-color: var(--border);
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.dashboardMain input:focus,
+.dashboardMain textarea:focus,
+.dashboardMain select:focus {
+  border-color: var(--primary);
+
+  box-shadow: 0 0 0 3px rgba(56, 126, 209, 0.1);
 }
 
 .dashboardMain input::placeholder,
@@ -224,8 +293,12 @@ body {
 }
 
 /* =========================================================
-   COMMON BUTTONS
+   BUTTONS
 ========================================================= */
+
+.dashboardMain button {
+  font-family: inherit;
+}
 
 .secondary-btn,
 .outline-btn,
@@ -234,6 +307,7 @@ body {
 .outlineButton {
   background: var(--surface-2);
   color: var(--text);
+
   border-color: var(--border);
 }
 
@@ -249,11 +323,12 @@ body {
 .tradeModal {
   background: var(--surface);
   color: var(--text);
+
   border-color: var(--border);
 }
 
 /* =========================================================
-   DROPDOWN
+   DROPDOWNS
 ========================================================= */
 
 .dropdown,
@@ -263,39 +338,7 @@ body {
 .profileDropdown {
   background: var(--surface);
   color: var(--text);
-  border-color: var(--border);
-}
 
-/* =========================================================
-   SIDEBAR
-========================================================= */
-
-.sidebar {
-  background: var(--card);
-  color: var(--text);
-  border-color: var(--border);
-}
-
-.sidebar a {
-  color: var(--text-secondary);
-}
-
-.sidebar a:hover {
-  background: var(--hover);
-  color: var(--primary);
-}
-
-/* =========================================================
-   TOPBAR
-========================================================= */
-
-.topbar,
-.topBar,
-.dashboardHeader,
-.top-header,
-.header {
-  background: var(--card);
-  color: var(--text);
   border-color: var(--border);
 }
 
@@ -303,16 +346,17 @@ body {
    LINKS
 ========================================================= */
 
-a {
+.dashboardMain a {
   color: inherit;
 }
 
 /* =========================================================
-   DIVIDER
+   DIVIDERS
 ========================================================= */
 
-hr {
-  border-color: var(--border);
+.dashboardMain hr {
+  border: 0;
+  border-top: 1px solid var(--border);
 }
 
 /* =========================================================
@@ -330,7 +374,7 @@ hr {
 
 ::-webkit-scrollbar-thumb {
   background: var(--border);
-  border-radius: 10px;
+  border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -338,16 +382,27 @@ hr {
 }
 
 /* =========================================================
-   TRANSITIONS
+   SMOOTH THEME TRANSITION
 ========================================================= */
 
 .dashboard,
 .dashboardMain,
+.dashboardMain table,
+.dashboardMain thead,
+.dashboardMain tbody,
+.dashboardMain tr,
+.dashboardMain td,
+.dashboardMain th,
+.dashboardMain input,
+.dashboardMain textarea,
+.dashboardMain select,
+.dashboardMain button,
 .card,
 .dashboard-card,
 .dashboardCard,
 .stat-card,
 .statCard,
+.summaryCard,
 .settingsCard,
 .profileCard,
 .fundsCard,
@@ -355,21 +410,12 @@ hr {
 .watchlistCard,
 .ordersCard,
 .analyticsCard,
-.portfolioCard,
-table,
-thead,
-tbody,
-tr,
-td,
-th,
-input,
-textarea,
-select,
-button {
+.portfolioCard {
   transition:
     background-color 0.25s ease,
     color 0.25s ease,
-    border-color 0.25s ease;
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 /* =========================================================
@@ -380,6 +426,7 @@ button {
   .dashboardMain {
     width: calc(100% - 76px);
     margin-left: 76px;
+
     padding: 20px 18px 35px;
   }
 }
@@ -392,6 +439,22 @@ button {
   .dashboardMain {
     width: calc(100% - 76px);
     margin-left: 76px;
-    padding: 14px 12px 28px;
+
+    padding: 14px 12px 30px;
+  }
+
+  .dashboardContent {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+  .dashboardMain {
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }

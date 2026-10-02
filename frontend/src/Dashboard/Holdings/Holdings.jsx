@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   marketSocket,
@@ -8,12 +8,7 @@ import {
 
 import "./Holdings.css";
 
-// const API_URL = "http://localhost:5000";
-const API_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:5000/api";
-/* =====================================================
-   UPSTOX INSTRUMENT MAPPING
-===================================================== */
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
 const MARKET_INSTRUMENTS = {
   INFY: "NSE_EQ|INE009A01021",
@@ -28,10 +23,6 @@ const MARKET_INSTRUMENTS = {
   KOTAKBANK: "NSE_EQ|INE237A01036",
 };
 
-/* =====================================================
-   GET TOKEN
-===================================================== */
-
 const getToken = () => {
   return (
     localStorage.getItem("tradenest_token") ||
@@ -41,22 +32,11 @@ const getToken = () => {
   );
 };
 
-/* =====================================================
-   HOLDINGS
-===================================================== */
-
 function Holdings() {
   const [holdings, setHoldings] = useState([]);
-
   const [loading, setLoading] = useState(true);
-
   const [refreshing, setRefreshing] = useState(false);
-
   const [error, setError] = useState("");
-
-  /* =====================================================
-     LOAD HOLDINGS FROM MONGODB
-  ===================================================== */
 
   const loadHoldings = useCallback(async (showRefreshLoader = false) => {
     try {
@@ -74,19 +54,12 @@ function Holdings() {
         throw new Error("Authentication token not found. Please login again.");
       }
 
-      console.log("📤 Fetching holdings from MongoDB...");
-
       const response = await fetch(`${API_URL}/trades/holdings`, {
         method: "GET",
-
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      /* =========================================
-           SAFE RESPONSE
-        ========================================= */
 
       const responseText = await response.text();
 
@@ -95,31 +68,24 @@ function Holdings() {
       try {
         data = JSON.parse(responseText);
       } catch {
-        console.error("❌ INVALID HOLDINGS RESPONSE:", responseText);
-
         throw new Error(
           "Server returned an invalid response. Please check the backend.",
         );
       }
 
-      console.log("📥 HOLDINGS FROM BACKEND:", data);
-
       if (!response.ok) {
-        throw new Error(data.message || "Unable to load holdings.");
+        throw new Error(data?.message || "Unable to load holdings.");
       }
 
       if (!data.success) {
-        throw new Error(data.message || "Unable to load holdings.");
+        throw new Error(data?.message || "Unable to load holdings.");
       }
 
-      const serverHoldings = Array.isArray(data.holdings) ? data.holdings : [];
-
-      setHoldings(serverHoldings);
+      setHoldings(Array.isArray(data.holdings) ? data.holdings : []);
     } catch (err) {
-      console.error("❌ HOLDINGS LOADING ERROR:", err);
+      console.error("Holdings loading error:", err);
 
       setError(err.message || "Unable to load holdings.");
-
       setHoldings([]);
     } finally {
       setLoading(false);
@@ -127,16 +93,14 @@ function Holdings() {
     }
   }, []);
 
-  /* =====================================================
-     INITIAL LOAD + AUTO REFRESH
-  ===================================================== */
+  /* =========================
+     INITIAL LOAD
+  ========================= */
 
   useEffect(() => {
     loadHoldings();
 
     const handleTradeNestUpdate = () => {
-      console.log("🔄 TradeNest update detected. Refreshing holdings...");
-
       loadHoldings(true);
     };
 
@@ -147,39 +111,31 @@ function Holdings() {
     };
   }, [loadHoldings]);
 
-  /* =====================================================
-     LIVE MARKET SOCKET
-  ===================================================== */
+  /* =========================
+     LIVE MARKET PRICE
+  ========================= */
 
   useEffect(() => {
     if (holdings.length === 0) {
       return undefined;
     }
 
-    console.log("📡 Holdings connecting to live market...");
-
     connectMarketSocket();
 
     const handleMarketUpdate = (data) => {
-      if (!data?.instrumentKey) {
-        return;
-      }
+      if (!data?.instrumentKey) return;
 
       const symbol = Object.keys(MARKET_INSTRUMENTS).find(
         (stockSymbol) => MARKET_INSTRUMENTS[stockSymbol] === data.instrumentKey,
       );
 
-      if (!symbol) {
-        return;
-      }
+      if (!symbol) return;
 
       const livePrice = Number(data.ltp);
 
       if (!Number.isFinite(livePrice) || livePrice <= 0) {
         return;
       }
-
-      console.log("🔥 HOLDING LIVE PRICE:", symbol, livePrice);
 
       setHoldings((previousHoldings) =>
         previousHoldings.map((holding) => {
@@ -199,14 +155,13 @@ function Holdings() {
 
     return () => {
       marketSocket.off("market:update", handleMarketUpdate);
-
       disconnectMarketSocket();
     };
   }, [holdings.length]);
 
-  /* =====================================================
-     MONEY FORMAT
-  ===================================================== */
+  /* =========================
+     FORMATTERS
+  ========================= */
 
   const money = (value) => {
     return `₹${Number(value || 0).toLocaleString("en-IN", {
@@ -215,59 +170,91 @@ function Holdings() {
     })}`;
   };
 
-  /* =====================================================
-     NUMBER FORMAT
-  ===================================================== */
-
   const numberFormat = (value) => {
     return Number(value || 0).toLocaleString("en-IN", {
       maximumFractionDigits: 4,
     });
   };
 
-  /* =====================================================
+  /* =========================
+     PORTFOLIO SUMMARY
+  ========================= */
+
+  const summary = useMemo(() => {
+    return holdings.reduce(
+      (result, holding) => {
+        const quantity = Number(holding.quantity || 0);
+
+        const averagePrice = Number(
+          holding.averagePrice || holding.avgPrice || 0,
+        );
+
+        const currentPrice = Number(
+          holding.currentPrice || holding.ltp || averagePrice,
+        );
+
+        const invested = quantity * averagePrice;
+        const currentValue = quantity * currentPrice;
+        const pnl = currentValue - invested;
+
+        result.invested += invested;
+        result.currentValue += currentValue;
+        result.pnl += pnl;
+
+        return result;
+      },
+      {
+        invested: 0,
+        currentValue: 0,
+        pnl: 0,
+      },
+    );
+  }, [holdings]);
+
+  const totalReturn =
+    summary.invested > 0 ? (summary.pnl / summary.invested) * 100 : 0;
+
+  /* =========================
      LOADING
-  ===================================================== */
+  ========================= */
 
   if (loading) {
     return (
       <section className="holdingsPage">
         <div className="holdingsPageHeader">
           <div>
+            <span className="holdingsEyebrow">PORTFOLIO</span>
             <h1>Holdings</h1>
-
             <p>Your current stock investments.</p>
           </div>
         </div>
 
-        <div className="holdingsEmpty">
-          <div className="holdingsEmptyIcon">⏳</div>
-
+        <div className="holdingsLoadingCard">
+          <div className="holdingsSpinner" />
           <h2>Loading holdings...</h2>
-
           <p>Fetching your investments from MongoDB.</p>
         </div>
       </section>
     );
   }
 
-  /* =====================================================
+  /* =========================
      ERROR
-  ===================================================== */
+  ========================= */
 
   if (error) {
     return (
       <section className="holdingsPage">
         <div className="holdingsPageHeader">
           <div>
+            <span className="holdingsEyebrow">PORTFOLIO</span>
             <h1>Holdings</h1>
-
             <p>Your current stock investments.</p>
           </div>
         </div>
 
-        <div className="holdingsEmpty">
-          <div className="holdingsEmptyIcon">⚠️</div>
+        <div className="holdingsEmpty holdingsErrorState">
+          <div className="holdingsEmptyIcon">!</div>
 
           <h2>Unable to load holdings</h2>
 
@@ -286,24 +273,27 @@ function Holdings() {
     );
   }
 
-  /* =====================================================
-     MAIN UI
-  ===================================================== */
-
   return (
     <section className="holdingsPage">
-      {/* =========================================
+      {/* =========================
           HEADER
-      ========================================= */}
+      ========================= */}
 
       <div className="holdingsPageHeader">
         <div>
+          <span className="holdingsEyebrow">PORTFOLIO</span>
+
           <h1>Holdings</h1>
 
-          <p>Your current stock investments.</p>
+          <p>Track your investments, current value and portfolio P&L.</p>
         </div>
 
         <div className="holdingsHeaderActions">
+          <div className="holdingsLiveBadge">
+            <span className="holdingsLiveDot" />
+            Market Live
+          </div>
+
           <div className="holdingsCount">
             {holdings.length} {holdings.length === 1 ? "Stock" : "Stocks"}
           </div>
@@ -314,44 +304,95 @@ function Holdings() {
             onClick={() => loadHoldings(true)}
             disabled={refreshing}
           >
-            {refreshing ? "Refreshing..." : "↻ Refresh"}
+            <span
+              className={refreshing ? "refreshIcon spinning" : "refreshIcon"}
+            >
+              ↻
+            </span>
+
+            {refreshing ? "Refreshing..." : "Refresh"}
           </button>
         </div>
       </div>
 
-      {/* =========================================
+      {/* =========================
+          SUMMARY
+      ========================= */}
+
+      {holdings.length > 0 && (
+        <div className="holdingsSummaryGrid">
+          <div className="holdingsSummaryCard">
+            <span className="summaryLabel">Invested Value</span>
+
+            <strong>{money(summary.invested)}</strong>
+
+            <small>Total amount invested</small>
+          </div>
+
+          <div className="holdingsSummaryCard">
+            <span className="summaryLabel">Current Value</span>
+
+            <strong>{money(summary.currentValue)}</strong>
+
+            <small>Current market value</small>
+          </div>
+
+          <div
+            className={`holdingsSummaryCard ${
+              summary.pnl >= 0 ? "summaryProfit" : "summaryLoss"
+            }`}
+          >
+            <span className="summaryLabel">Total P&L</span>
+
+            <strong>
+              {summary.pnl >= 0 ? "+" : "-"}
+              {money(Math.abs(summary.pnl))}
+            </strong>
+
+            <small>
+              {summary.pnl >= 0 ? "+" : ""}
+              {totalReturn.toFixed(2)}% return
+            </small>
+          </div>
+        </div>
+      )}
+
+      {/* =========================
           EMPTY STATE
-      ========================================= */}
+      ========================= */}
 
       {
         holdings.length === 0 ?
           <div className="holdingsEmpty">
-            <div className="holdingsEmptyIcon">📊</div>
+            <div className="holdingsEmptyIcon">▥</div>
 
             <h2>No holdings yet</h2>
 
             <p>Buy stocks from your Watchlist and they will appear here.</p>
           </div>
-          /* =========================================
-           HOLDINGS TABLE
-        ========================================= */
+          /* =========================
+           TABLE
+        ========================= */
         : <div className="holdingsCard">
+            <div className="holdingsCardHeader">
+              <div>
+                <h2>Your Investments</h2>
+                <p>Live portfolio positions</p>
+              </div>
+
+              <span className="holdingsTableStatus">Live prices enabled</span>
+            </div>
+
             <div className="holdingsTableWrapper">
               <table className="holdingsTable">
                 <thead>
                   <tr>
                     <th>Stock</th>
-
                     <th>Quantity</th>
-
                     <th>Avg. Price</th>
-
                     <th>Current Price</th>
-
                     <th>Invested</th>
-
                     <th>Current Value</th>
-
                     <th>P&L</th>
                   </tr>
                 </thead>
@@ -368,10 +409,6 @@ function Holdings() {
                       holding.currentPrice || holding.ltp || averagePrice,
                     );
 
-                    /* =================================
-                     CALCULATIONS
-                  ================================= */
-
                     const invested = quantity * averagePrice;
 
                     const currentValue = quantity * currentPrice;
@@ -384,42 +421,40 @@ function Holdings() {
                     const isProfit = pnl >= 0;
 
                     return (
-                      <tr key={holding._id || holding.symbol}>
-                        {/* STOCK */}
-
+                      <tr key={holding._id || holding.symbol || Math.random()}>
                         <td>
                           <div className="holdingStock">
-                            <strong>{holding.symbol}</strong>
+                            <div className="stockSymbolBox">
+                              {holding.symbol?.slice(0, 1) || "S"}
+                            </div>
 
-                            <small>{holding.company || "Stock"}</small>
+                            <div>
+                              <strong>{holding.symbol || "N/A"}</strong>
+
+                              <small>{holding.company || "Equity Stock"}</small>
+                            </div>
                           </div>
                         </td>
 
-                        {/* QUANTITY */}
-
-                        <td>{numberFormat(quantity)}</td>
-
-                        {/* AVERAGE PRICE */}
+                        <td>
+                          <span className="tablePrimary">
+                            {numberFormat(quantity)}
+                          </span>
+                        </td>
 
                         <td>{money(averagePrice)}</td>
 
-                        {/* CURRENT PRICE */}
-
                         <td>
-                          <strong>{money(currentPrice)}</strong>
+                          <strong className="currentPrice">
+                            {money(currentPrice)}
+                          </strong>
                         </td>
 
-                        {/* INVESTED */}
-
                         <td>{money(invested)}</td>
-
-                        {/* CURRENT VALUE */}
 
                         <td>
                           <strong>{money(currentValue)}</strong>
                         </td>
-
-                        {/* P&L */}
 
                         <td
                           className={isProfit ? "holdingProfit" : "holdingLoss"}

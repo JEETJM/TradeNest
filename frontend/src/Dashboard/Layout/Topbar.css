@@ -1,85 +1,215 @@
 /* =========================================================
-   TOPBAR — PREMIUM FINTECH STYLE
+   TRADENEST TOPBAR
 ========================================================= */
 
 .topbar {
-  min-height: 82px;
+  position: relative;
+
+  z-index: 100;
+
   width: 100%;
+  min-height: 82px;
 
   display: flex;
+
   align-items: center;
   justify-content: space-between;
 
-  padding: 16px 22px;
+  box-sizing: border-box;
+
+  padding: 15px 18px 15px 22px;
+
   margin-bottom: 24px;
 
   background: var(--card);
+
   border: 1px solid var(--border);
+
   border-radius: 18px;
 
   box-shadow:
-    0 4px 12px rgba(15, 23, 42, 0.03),
-    0 12px 35px rgba(15, 23, 42, 0.035);
+    0 4px 12px rgba(15, 23, 42, 0.025),
+    0 12px 32px rgba(15, 23, 42, 0.035);
 
   transition:
-    background 0.25s ease,
+    background-color 0.25s ease,
     border-color 0.25s ease,
     box-shadow 0.25s ease;
-
-  position: relative;
-  z-index: 100;
 }
-
 
 /* =========================================================
    LEFT
 ========================================================= */
 
 .topbarLeft {
+  min-width: 0;
+
   display: flex;
+
   align-items: center;
+}
+
+.topbarLeft > div {
   min-width: 0;
 }
+
+/* =========================================================
+   EYEBROW
+========================================================= */
+
+.topbarEyebrow {
+  margin-bottom: 3px;
+
+  color: var(--primary);
+
+  font-size: 8.5px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  letter-spacing: 1.25px;
+}
+
+/* =========================================================
+   TITLE
+========================================================= */
 
 .topbarLeft h2 {
   margin: 0;
 
   color: var(--text);
 
-  font-size: 26px;
-  line-height: 1.2;
-  font-weight: 750;
+  font-size: 25px;
 
-  letter-spacing: -0.5px;
+  line-height: 1.2;
+
+  font-weight: 760;
+
+  letter-spacing: -0.55px;
 }
+
+/* =========================================================
+   SUBTITLE
+========================================================= */
 
 .topbarLeft p {
   margin: 5px 0 0;
 
   color: var(--text-secondary);
 
-  font-size: 12.5px;
+  font-size: 12px;
+
   line-height: 1.4;
 }
 
-
 /* =========================================================
-   RIGHT AREA
+   RIGHT
 ========================================================= */
 
 .topbarRight {
   display: flex;
+
   align-items: center;
+
   justify-content: flex-end;
 
-  gap: 12px;
+  gap: 10px;
 
   margin-left: 20px;
 }
 
+/* =========================================================
+   MARKET STATUS
+========================================================= */
+
+.marketStatus {
+  min-height: 42px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 0 12px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 12px;
+
+  background: var(--surface);
+
+  color: var(--text);
+
+  white-space: nowrap;
+}
+
+.marketStatusDot {
+  width: 8px;
+  height: 8px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #16a34a;
+
+  box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.1);
+
+  animation: topbarLivePulse 1.8s infinite;
+}
+
+.marketStatus div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 1px;
+}
+
+.marketStatus strong {
+  color: var(--text);
+
+  font-size: 10.5px;
+
+  line-height: 1.2;
+
+  font-weight: 700;
+}
+
+.marketStatus small {
+  color: #16a34a;
+
+  font-size: 9px;
+
+  line-height: 1.2;
+
+  font-weight: 650;
+}
+
+@keyframes topbarLivePulse {
+  0% {
+    opacity: 1;
+
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.45;
+
+    transform: scale(0.85);
+  }
+
+  100% {
+    opacity: 1;
+
+    transform: scale(1);
+  }
+}
 
 /* =========================================================
-   NOTIFICATION
+   ICON BUTTON
 ========================================================= */
 
 .iconBtn {
@@ -89,55 +219,63 @@
   height: 42px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
   flex-shrink: 0;
 
   border: 1px solid var(--border);
+
   border-radius: 12px;
 
   background: var(--surface);
+
   color: var(--text-secondary);
 
   cursor: pointer;
 
   font-size: 14px;
 
+  outline: none;
+
   transition:
-    background 0.2s ease,
+    background-color 0.2s ease,
     color 0.2s ease,
     border-color 0.2s ease,
     transform 0.2s ease,
     box-shadow 0.2s ease;
 }
 
-.iconBtn:hover {
-  background: #2878d7;
-  border-color: #2878d7;
+.iconBtn:hover,
+.iconBtn.active {
+  background: var(--primary);
+
+  border-color: var(--primary);
+
   color: #ffffff;
 
   transform: translateY(-1px);
 
-  box-shadow:
-    0 6px 15px rgba(40, 120, 215, 0.18);
+  box-shadow: 0 7px 17px rgba(56, 126, 209, 0.18);
 }
 
 .iconBtn:active {
   transform: translateY(0);
 }
 
-
-/* Notification red dot */
+/* =========================================================
+   NOTIFICATION DOT
+========================================================= */
 
 .notificationDot {
   position: absolute;
 
+  top: 7px;
+  right: 7px;
+
   width: 7px;
   height: 7px;
-
-  right: 8px;
-  top: 8px;
 
   border-radius: 50%;
 
@@ -148,15 +286,187 @@
   box-sizing: content-box;
 }
 
+/* =========================================================
+   NOTIFICATION WRAPPER
+========================================================= */
+
+.notificationWrapper {
+  position: relative;
+}
 
 /* =========================================================
-   PROFILE DROPDOWN WRAPPER
+   NOTIFICATION MENU
+========================================================= */
+
+.notificationMenu {
+  position: absolute;
+
+  top: calc(100% + 10px);
+
+  right: 0;
+
+  width: 320px;
+
+  padding: 8px;
+
+  box-sizing: border-box;
+
+  background: var(--card);
+
+  border: 1px solid var(--border);
+
+  border-radius: 15px;
+
+  box-shadow: var(--shadow-lg);
+
+  overflow: hidden;
+
+  animation: topbarDropdownIn 0.18s ease;
+}
+
+/* =========================================================
+   NOTIFICATION HEADER
+========================================================= */
+
+.notificationHeader {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 11px 11px 12px;
+}
+
+.notificationHeader > div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.notificationHeader strong {
+  color: var(--text);
+
+  font-size: 12px;
+
+  font-weight: 750;
+}
+
+.notificationHeader span {
+  color: var(--muted);
+
+  font-size: 9px;
+}
+
+.notificationCount {
+  min-width: 20px;
+  height: 20px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 6px;
+
+  border-radius: 20px;
+
+  background: rgba(56, 126, 209, 0.1);
+
+  color: var(--primary);
+
+  font-size: 9px;
+
+  font-weight: 750;
+}
+
+/* =========================================================
+   NOTIFICATION ITEM
+========================================================= */
+
+.notificationItem {
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 10px;
+
+  padding: 12px;
+
+  border-radius: 11px;
+
+  background: var(--surface-2);
+}
+
+.notificationIcon {
+  width: 31px;
+  height: 31px;
+
+  min-width: 31px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: rgba(56, 126, 209, 0.1);
+
+  color: var(--primary);
+
+  font-size: 11px;
+}
+
+.notificationItem > div:last-child {
+  min-width: 0;
+}
+
+.notificationItem strong {
+  display: block;
+
+  color: var(--text);
+
+  font-size: 10.5px;
+
+  font-weight: 700;
+}
+
+.notificationItem p {
+  margin: 3px 0 4px;
+
+  color: var(--text-secondary);
+
+  font-size: 9.5px;
+
+  line-height: 1.4;
+}
+
+.notificationItem small {
+  color: var(--muted);
+
+  font-size: 8.5px;
+}
+
+.notificationFooter {
+  padding: 10px 7px 4px;
+
+  color: var(--muted);
+
+  text-align: center;
+
+  font-size: 8.5px;
+}
+
+/* =========================================================
+   PROFILE DROPDOWN
 ========================================================= */
 
 .profileDropdown {
   position: relative;
 }
-
 
 /* =========================================================
    PROFILE BUTTON
@@ -166,16 +476,19 @@
   min-width: 245px;
 
   display: flex;
+
   align-items: center;
 
-  gap: 11px;
+  gap: 10px;
 
-  padding: 6px 8px 6px 7px;
+  padding: 5px 8px 5px 6px;
 
   border: 1px solid var(--border);
+
   border-radius: 13px;
 
   background: var(--surface);
+
   color: var(--text);
 
   cursor: pointer;
@@ -185,20 +498,19 @@
   text-align: left;
 
   transition:
-    background 0.2s ease,
+    background-color 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease;
 }
 
-.profileBox:hover {
+.profileBox:hover,
+.profileBox.active {
   background: var(--card);
 
-  border-color: rgba(40, 120, 215, 0.35);
+  border-color: rgba(56, 126, 209, 0.35);
 
-  box-shadow:
-    0 5px 16px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
 }
-
 
 /* =========================================================
    PROFILE IMAGE
@@ -208,9 +520,10 @@
   width: 40px;
   height: 40px;
 
-  flex-shrink: 0;
+  min-width: 40px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -218,22 +531,18 @@
 
   border-radius: 50%;
 
-  background: linear-gradient(
-    135deg,
-    #2878d7,
-    #1769c2
-  );
+  background: linear-gradient(135deg, #4b91e2, #2563eb);
 
   color: #ffffff;
 
-  font-size: 14px;
+  font-size: 13px;
+
   font-weight: 750;
 
-  box-shadow:
-    0 3px 10px rgba(40, 120, 215, 0.2);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.18);
 }
 
-.profileImage img {
+.topbarProfileImage {
   width: 100%;
   height: 100%;
 
@@ -241,7 +550,6 @@
 
   object-fit: cover;
 }
-
 
 /* =========================================================
    PROFILE TEXT
@@ -253,6 +561,7 @@
   flex: 1;
 
   display: flex;
+
   flex-direction: column;
 
   justify-content: center;
@@ -263,13 +572,16 @@
 
   color: var(--text);
 
-  font-size: 12.5px;
+  font-size: 11.5px;
+
   font-weight: 700;
 
   line-height: 1.3;
 
   white-space: nowrap;
+
   overflow: hidden;
+
   text-overflow: ellipsis;
 }
 
@@ -280,15 +592,16 @@
 
   color: var(--muted);
 
-  font-size: 10.5px;
+  font-size: 9px;
 
   line-height: 1.3;
 
   white-space: nowrap;
+
   overflow: hidden;
+
   text-overflow: ellipsis;
 }
-
 
 /* =========================================================
    ARROW
@@ -299,7 +612,7 @@
 
   color: var(--muted);
 
-  font-size: 11px;
+  font-size: 10px;
 
   transition:
     transform 0.25s ease,
@@ -307,71 +620,170 @@
 }
 
 .profileBox:hover .profileArrow {
-  color: #2878d7;
+  color: var(--primary);
 }
 
 .profileArrow.rotate {
   transform: rotate(180deg);
+
+  color: var(--primary);
 }
 
-
 /* =========================================================
-   DROPDOWN MENU
+   PROFILE MENU
 ========================================================= */
 
 .profileMenu {
   position: absolute;
 
   top: calc(100% + 9px);
+
   right: 0;
 
-  width: 180px;
+  width: 215px;
 
-  padding: 6px;
+  padding: 7px;
 
   background: var(--card);
 
   border: 1px solid var(--border);
 
-  border-radius: 13px;
+  border-radius: 14px;
 
-  box-shadow:
-    0 10px 25px rgba(15, 23, 42, 0.10),
-    0 3px 8px rgba(15, 23, 42, 0.04);
-
-  animation: profileMenuIn 0.18s ease;
+  box-shadow: var(--shadow-lg);
 
   overflow: hidden;
+
+  animation: topbarDropdownIn 0.18s ease;
 }
 
-@keyframes profileMenuIn {
+@keyframes topbarDropdownIn {
   from {
     opacity: 0;
+
     transform: translateY(-5px) scale(0.98);
   }
 
   to {
     opacity: 1;
+
     transform: translateY(0) scale(1);
   }
 }
 
+/* =========================================================
+   PROFILE MENU HEADER
+========================================================= */
 
-/* Dropdown buttons */
+.profileMenuHeader {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 8px;
+
+  border-radius: 10px;
+
+  background: var(--surface-2);
+}
+
+.profileMenuAvatar {
+  width: 34px;
+  height: 34px;
+
+  min-width: 34px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 50%;
+
+  background: linear-gradient(135deg, #4b91e2, #2563eb);
+
+  color: #ffffff;
+
+  font-size: 11px;
+
+  font-weight: 750;
+}
+
+.profileMenuAvatar img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.profileMenuHeader > div:last-child {
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+.profileMenuHeader strong {
+  color: var(--text);
+
+  font-size: 10.5px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.profileMenuHeader span {
+  margin-top: 2px;
+
+  color: var(--muted);
+
+  font-size: 8.5px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   DIVIDER
+========================================================= */
+
+.profileMenuDivider {
+  height: 1px;
+
+  margin: 6px 2px;
+
+  background: var(--border);
+}
+
+/* =========================================================
+   MENU BUTTON
+========================================================= */
 
 .profileMenu button {
   width: 100%;
-
-  min-height: 40px;
+  min-height: 39px;
 
   display: flex;
+
   align-items: center;
 
-  gap: 10px;
+  gap: 9px;
 
-  padding: 0 11px;
+  padding: 0 10px;
 
   border: none;
+
   border-radius: 8px;
 
   background: transparent;
@@ -379,7 +791,9 @@
   color: var(--text-secondary);
 
   font-family: inherit;
-  font-size: 12px;
+
+  font-size: 10.5px;
+
   font-weight: 600;
 
   cursor: pointer;
@@ -387,13 +801,20 @@
   text-align: left;
 
   transition:
-    background 0.18s ease,
+    background-color 0.18s ease,
     color 0.18s ease;
+}
+
+.profileMenu button svg {
+  width: 12px;
+
+  flex-shrink: 0;
 }
 
 .profileMenu button:hover {
   background: var(--hover);
-  color: #2878d7;
+
+  color: var(--primary);
 }
 
 .profileMenu button.danger {
@@ -402,20 +823,33 @@
 
 .profileMenu button.danger:hover {
   background: rgba(239, 68, 68, 0.08);
+
   color: #dc2626;
 }
 
-
 /* =========================================================
-   RESPONSIVE
+   TABLET
 ========================================================= */
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
+  .marketStatus {
+    display: none;
+  }
 
+  .profileBox {
+    min-width: 205px;
+  }
+}
+
+/* =========================================================
+   SMALL TABLET
+========================================================= */
+
+@media (max-width: 700px) {
   .topbar {
     min-height: 72px;
 
-    padding: 13px 16px;
+    padding: 12px 14px;
 
     border-radius: 15px;
   }
@@ -425,36 +859,44 @@
   }
 
   .topbarLeft p {
-    font-size: 11px;
+    font-size: 10.5px;
+  }
+
+  .topbarRight {
+    gap: 7px;
   }
 
   .profileBox {
     min-width: auto;
+
+    padding: 5px;
   }
 
   .profileText {
     display: none;
   }
 
-  .profileBox {
-    padding: 5px;
-  }
-
   .profileArrow {
     display: none;
   }
 
+  .notificationMenu {
+    right: -50px;
+  }
 }
 
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media (max-width: 520px) {
-
   .topbar {
-    padding: 11px 13px;
+    padding: 10px 11px;
+
     margin-bottom: 18px;
   }
 
-  .topbarLeft p {
+  .topbarEyebrow {
     display: none;
   }
 
@@ -462,52 +904,58 @@
     font-size: 19px;
   }
 
-  .topbarRight {
-    gap: 7px;
+  .topbarLeft p {
+    display: none;
   }
 
   .iconBtn {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
+    width: 39px;
+    height: 39px;
   }
 
   .profileImage {
     width: 36px;
     height: 36px;
+
+    min-width: 36px;
+  }
+
+  .notificationMenu {
+    position: fixed;
+
+    top: 76px;
+
+    right: 12px;
+    left: 12px;
+
+    width: auto;
   }
 
   .profileMenu {
     right: 0;
+
+    width: 195px;
   }
 }
-/* =====================================================
-   TOPBAR PROFILE IMAGE
-===================================================== */
 
-.profileImage {
-  width: 46px;
-  height: 46px;
-  min-width: 46px;
-  border-radius: 50%;
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@media (max-width: 360px) {
+  .topbarRight {
+    gap: 5px;
+  }
 
-  overflow: hidden;
+  .iconBtn {
+    width: 36px;
+    height: 36px;
+  }
 
-  background: var(--primary);
-  color: #ffffff;
+  .profileImage {
+    width: 34px;
+    height: 34px;
 
-  font-size: 16px;
-  font-weight: 700;
-}
-
-.topbarProfileImage {
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-  display: block;
+    min-width: 34px;
+  }
 }

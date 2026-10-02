@@ -1,13 +1,11 @@
 /* =========================================================
-   TRADENEST ANALYTICS PAGE
+   TRADENEST ANALYTICS
 ========================================================= */
 
 .analyticsPage {
   width: 100%;
   min-height: 100%;
   box-sizing: border-box;
-
-  background: transparent;
   color: var(--text);
 }
 
@@ -17,50 +15,114 @@
 
 .analyticsHeader {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 24px;
+}
 
-  margin-bottom: 25px;
+.analyticsTitleBlock {
+  min-width: 0;
+}
+
+.analyticsEyebrow,
+.sectionEyebrow {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
 }
 
 .analyticsHeader h1 {
   margin: 0;
-
-  font-size: 30px;
-  font-weight: 700;
-
   color: var(--text);
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .analyticsHeader p {
-  margin: 6px 0 0;
-
+  margin: 7px 0 0;
   color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+}
 
-  font-size: 14px;
+.analyticsHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
 }
 
 .analyticsLive {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 7px;
-
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
   color: var(--text-secondary);
-
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
 }
 
-.analyticsLive span {
-  width: 8px;
-  height: 8px;
-  flex-shrink: 0;
-
+.analyticsLiveDot {
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-
   background: #12b76a;
-
   box-shadow: 0 0 0 4px rgba(18, 183, 106, 0.12);
+}
+
+.analyticsRefreshButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.analyticsRefreshButton:hover {
+  transform: translateY(-1px);
+  border-color: var(--primary);
+  background: var(--hover-bg);
+}
+
+.analyticsRefreshButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.analyticsRefreshButton svg {
+  font-size: 11px;
+}
+
+.analyticsRefreshButton.isRefreshing svg {
+  animation: analyticsRotate 0.8s linear infinite;
+}
+
+@keyframes analyticsRotate {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* =========================================================
@@ -69,55 +131,90 @@
 
 .analyticsCards {
   display: grid;
-
   grid-template-columns: repeat(4, minmax(0, 1fr));
-
-  gap: 18px;
-
-  margin-bottom: 22px;
+  gap: 16px;
+  margin-bottom: 18px;
 }
 
 .analyticsCard {
+  position: relative;
+  overflow: hidden;
   box-sizing: border-box;
-
-  background: var(--card);
-
+  min-width: 0;
+  padding: 20px;
   border: 1px solid var(--border);
-
   border-radius: 16px;
-
-  padding: 22px;
-
+  background: var(--card);
   box-shadow: var(--shadow);
-
-  color: var(--text);
-
   transition:
-    background-color 0.25s ease,
-    border-color 0.25s ease,
-    color 0.25s ease,
-    box-shadow 0.25s ease;
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.analyticsCard > span {
-  color: var(--text-secondary);
+.analyticsCard::after {
+  content: "";
+  position: absolute;
+  right: -28px;
+  bottom: -35px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.045);
+  pointer-events: none;
+}
 
-  font-size: 13px;
+.analyticsCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.analyticsCardTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.analyticsCardIcon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--primary);
+}
+
+.analyticsCardIcon svg {
+  font-size: 14px;
+}
+
+.analyticsCardLabel {
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .analyticsCard h2 {
-  margin: 10px 0 5px;
-
-  font-size: 23px;
-  font-weight: 700;
-
+  position: relative;
+  z-index: 1;
+  margin: 18px 0 5px;
   color: var(--text);
+  font-size: 23px;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
-.analyticsCard small {
+.analyticsCard p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
   color: var(--text-muted);
-
-  font-size: 11px;
+  font-size: 10px;
+  line-height: 1.5;
 }
 
 /* =========================================================
@@ -138,81 +235,100 @@
 
 .analyticsHighlightGrid {
   display: grid;
-
   grid-template-columns: repeat(2, minmax(0, 1fr));
-
-  gap: 18px;
-
-  margin-bottom: 22px;
+  gap: 16px;
+  margin-bottom: 18px;
 }
 
 .highlightCard {
+  position: relative;
   display: flex;
   align-items: center;
-
-  gap: 16px;
-
-  box-sizing: border-box;
-
-  background: var(--card);
-
+  gap: 14px;
+  min-width: 0;
+  padding: 18px;
   border: 1px solid var(--border);
-
   border-radius: 16px;
-
-  padding: 20px;
-
+  background: var(--card);
   box-shadow: var(--shadow);
+  overflow: hidden;
+}
 
-  color: var(--text);
+.highlightCard::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+}
 
-  transition:
-    background-color 0.25s ease,
-    border-color 0.25s ease,
-    color 0.25s ease;
+.bestCard::before {
+  background: #12b76a;
+}
+
+.worstCard::before {
+  background: #f04438;
 }
 
 .highlightIcon {
-  width: 48px;
-  height: 48px;
-
-  min-width: 48px;
-
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 12px;
-
-  background: rgba(56, 126, 209, 0.1);
-
-  font-size: 23px;
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--primary);
 }
 
-.highlightCard span {
-  color: var(--text-secondary);
-
-  font-size: 11px;
+.highlightIcon svg {
+  font-size: 17px;
 }
 
-.highlightCard h3 {
-  margin: 4px 0;
+.highlightContent {
+  min-width: 0;
+}
 
+.highlightContent > span {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.highlightContent h3 {
+  margin: 0 0 3px;
   color: var(--text);
-
-  font-size: 18px;
+  font-size: 17px;
+  font-weight: 800;
 }
 
-.highlightCard strong {
-  font-size: 13px;
+.highlightContent strong {
+  font-size: 12px;
 }
 
-.bestCard strong {
+.bestCard .highlightContent strong {
   color: #12b76a;
 }
 
-.worstCard strong {
+.worstCard .highlightContent strong {
   color: #f04438;
+}
+
+.highlightBadge {
+  margin-left: auto;
+  padding: 5px 8px;
+  border-radius: 7px;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
 }
 
 /* =========================================================
@@ -221,46 +337,50 @@
 
 .analyticsSection {
   box-sizing: border-box;
-
-  background: var(--card);
-
+  margin-bottom: 18px;
+  padding: 20px;
   border: 1px solid var(--border);
-
   border-radius: 16px;
-
-  padding: 22px;
-
-  margin-bottom: 22px;
-
+  background: var(--card);
   box-shadow: var(--shadow);
-
   color: var(--text);
-
-  transition:
-    background-color 0.25s ease,
-    border-color 0.25s ease,
-    color 0.25s ease;
 }
 
 .analyticsSectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 18px;
 }
 
 .analyticsSectionHeader h2 {
   margin: 0;
-
   color: var(--text);
-
-  font-size: 19px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 800;
 }
 
 .analyticsSectionHeader p {
-  margin: 5px 0 0;
-
+  margin: 4px 0 0;
   color: var(--text-secondary);
+  font-size: 11px;
+}
 
-  font-size: 12px;
+.sectionEyebrow {
+  margin-bottom: 5px;
+  font-size: 9px;
+}
+
+.sectionCount {
+  flex-shrink: 0;
+  padding: 6px 9px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 700;
 }
 
 /* =========================================================
@@ -269,19 +389,16 @@
 
 .analyticsTableWrapper {
   width: 100%;
-
   overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
 }
 
 .analyticsTable {
   width: 100%;
-
-  min-width: 700px;
-
+  min-width: 720px;
   border-collapse: collapse;
-
   background: var(--surface);
-
   color: var(--text);
 }
 
@@ -290,70 +407,111 @@
 }
 
 .analyticsTable th {
-  padding: 13px;
-
+  padding: 12px 13px;
   text-align: left;
-
-  color: var(--text-secondary);
-
+  white-space: nowrap;
   background: var(--surface-2);
-
-  font-size: 11px;
-  font-weight: 600;
-
+  color: var(--text-secondary);
   border-bottom: 1px solid var(--border);
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .analyticsTable td {
-  padding: 16px 13px;
-
-  color: var(--text);
-
+  padding: 13px;
   background: var(--surface);
-
-  font-size: 12px;
-
+  color: var(--text);
   border-bottom: 1px solid var(--border);
+  font-size: 11px;
+}
+
+.analyticsTable tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .analyticsTable tbody tr {
-  background: var(--surface);
-
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
-.analyticsTable tbody tr:hover {
-  background: var(--hover-bg);
-}
-
+.analyticsTable tbody tr:hover,
 .analyticsTable tbody tr:hover td {
   background: var(--hover-bg);
 }
 
 /* =========================================================
-   STOCK
+   STOCK CELL
 ========================================================= */
 
 .analyticsStock {
   display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 150px;
+}
 
+.stockSymbol {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.stockDetails {
+  display: flex;
   flex-direction: column;
-
   gap: 3px;
 }
 
-.analyticsStock strong {
+.stockDetails strong {
   color: var(--text);
-
-  font-size: 13px;
+  font-size: 11px;
+  font-weight: 800;
 }
 
-.analyticsStock small {
+.stockDetails small {
   color: var(--text-muted);
+  font-size: 9px;
+  white-space: nowrap;
+}
 
-  font-size: 10px;
+.tableMoney {
+  white-space: nowrap;
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* =========================================================
+   RETURN BADGE
+========================================================= */
+
+.returnBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 62px;
+  padding: 5px 7px;
+  border-radius: 7px;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.returnBadge.positive {
+  background: rgba(18, 183, 106, 0.1);
+  color: #12b76a;
+}
+
+.returnBadge.negative {
+  background: rgba(240, 68, 56, 0.1);
+  color: #f04438;
 }
 
 /* =========================================================
@@ -362,10 +520,8 @@
 
 .allocationList {
   display: flex;
-
   flex-direction: column;
-
-  gap: 18px;
+  gap: 17px;
 }
 
 .allocationItem {
@@ -374,133 +530,142 @@
 
 .allocationTop {
   display: flex;
-
-  justify-content: space-between;
   align-items: center;
-
+  justify-content: space-between;
+  gap: 15px;
   margin-bottom: 7px;
+}
+
+.allocationName {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.allocationDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .allocationTop strong {
   color: var(--text);
-
-  font-size: 13px;
+  font-size: 11px;
 }
 
-.allocationTop span {
+.allocationPercentage {
   color: var(--text-secondary);
-
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 800;
 }
 
 .allocationBar {
   width: 100%;
-
-  height: 8px;
-
-  background: var(--border);
-
-  border-radius: 20px;
-
+  height: 7px;
   overflow: hidden;
+  border-radius: 20px;
+  background: var(--border);
 }
 
 .allocationFill {
   height: 100%;
-
-  background: var(--primary);
-
   border-radius: 20px;
-
-  transition: width 0.4s ease;
+  background: var(--primary);
+  transition: width 0.5s ease;
 }
 
-.allocationItem small {
-  display: block;
-
+.allocationBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
   margin-top: 5px;
+}
 
+.allocationBottom small {
   color: var(--text-muted);
-
-  font-size: 10px;
+  font-size: 9px;
 }
 
 /* =========================================================
-   EMPTY
+   EMPTY STATE
 ========================================================= */
 
 .analyticsEmpty {
-  padding: 50px 20px;
-
+  padding: 48px 20px;
   text-align: center;
-
-  color: var(--text-muted);
 }
 
-.analyticsEmpty div {
-  font-size: 32px;
+.analyticsEmptyIcon {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  background: rgba(59, 130, 246, 0.08);
+  color: var(--primary);
+}
 
-  margin-bottom: 10px;
+.analyticsEmptyIcon svg {
+  font-size: 20px;
 }
 
 .analyticsEmpty h3 {
   margin: 0;
-
   color: var(--text);
-
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .analyticsEmpty p {
-  margin-top: 7px;
-
+  margin: 6px 0 0;
   color: var(--text-secondary);
+  font-size: 11px;
+}
 
+.allocationEmpty {
+  color: var(--text-muted);
   font-size: 12px;
 }
 
 /* =========================================================
-   LOADING
+   LOADING / ERROR
 ========================================================= */
 
-.analyticsLoading {
-  min-height: 450px;
-
+.analyticsStateCard {
+  min-height: 440px;
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
   justify-content: center;
-
+  padding: 30px;
+  box-sizing: border-box;
   text-align: center;
 }
 
-.analyticsLoading h3 {
+.analyticsStateCard h3,
+.analyticsStateCard h2 {
   margin: 15px 0 5px;
-
   color: var(--text);
 }
 
-.analyticsLoading p {
+.analyticsStateCard p {
+  max-width: 450px;
   margin: 0;
-
   color: var(--text-secondary);
-
-  font-size: 13px;
+  font-size: 12px;
+  line-height: 1.6;
 }
 
 .analyticsLoader {
   width: 38px;
   height: 38px;
-
   border: 3px solid var(--border);
-
   border-top-color: var(--primary);
-
   border-radius: 50%;
-
   animation: analyticsSpin 0.8s linear infinite;
 }
 
@@ -510,169 +675,117 @@
   }
 }
 
-/* =========================================================
-   ERROR
-========================================================= */
-
-.analyticsError {
-  min-height: 450px;
-
+.analyticsStateIcon {
+  width: 54px;
+  height: 54px;
   display: flex;
-
-  flex-direction: column;
-
   align-items: center;
   justify-content: center;
-
-  text-align: center;
+  border-radius: 15px;
+  font-size: 21px;
 }
 
-.analyticsError > div {
-  font-size: 35px;
+.analyticsStateIcon.error {
+  background: rgba(240, 68, 56, 0.1);
+  color: #f04438;
 }
 
-.analyticsError h2 {
-  margin: 12px 0 5px;
-
-  color: var(--text);
-}
-
-.analyticsError p {
-  color: var(--text-secondary);
-
-  font-size: 13px;
-}
-
-.analyticsError button {
-  border: none;
-
-  background: var(--primary);
-
-  color: #ffffff;
-
+.analyticsRetryButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
   padding: 9px 15px;
-
-  border-radius: 8px;
-
+  border: none;
+  border-radius: 9px;
+  background: var(--primary);
+  color: #fff;
   cursor: pointer;
-
-  font-weight: 600;
-
+  font-size: 11px;
+  font-weight: 700;
   transition:
-    background-color 0.2s ease,
-    transform 0.2s ease;
+    transform 0.2s ease,
+    background-color 0.2s ease;
 }
 
-.analyticsError button:hover {
-  background: var(--primary-dark);
-
+.analyticsRetryButton:hover {
   transform: translateY(-1px);
+  background: var(--primary-dark);
 }
 
 /* =========================================================
-   DARK MODE SAFETY OVERRIDE
-   =========================================================
-   Ei part-ta important.
-   Kono external/global CSS jodi white force kore,
-   tahole Analytics page-er elements dark thakbe.
+   DARK MODE
 ========================================================= */
 
 html.dark .analyticsPage,
 body.dark .analyticsPage {
-  background: transparent !important;
-
   color: #f8fafc !important;
 }
 
 html.dark .analyticsCard,
-body.dark .analyticsCard {
-  background: #172033 !important;
-
-  border-color: #334155 !important;
-
-  color: #f8fafc !important;
-}
-
+body.dark .analyticsCard,
 html.dark .highlightCard,
-body.dark .highlightCard {
-  background: #172033 !important;
-
-  border-color: #334155 !important;
-
-  color: #f8fafc !important;
-}
-
+body.dark .highlightCard,
 html.dark .analyticsSection,
-body.dark .analyticsSection {
+body.dark .analyticsSection,
+html.dark .analyticsLive,
+body.dark .analyticsLive,
+html.dark .analyticsRefreshButton,
+body.dark .analyticsRefreshButton {
   background: #172033 !important;
-
   border-color: #334155 !important;
-
   color: #f8fafc !important;
 }
 
-/* =========================================================
-   DARK TEXT
-========================================================= */
+html.dark .analyticsCard:hover,
+body.dark .analyticsCard:hover {
+  border-color: #475569 !important;
+}
 
-html.dark .analyticsHeader h1,
-body.dark .analyticsHeader h1,
 html.dark .analyticsCard h2,
 body.dark .analyticsCard h2,
-html.dark .highlightCard h3,
-body.dark .highlightCard h3,
+html.dark .analyticsHeader h1,
+body.dark .analyticsHeader h1,
+html.dark .highlightContent h3,
+body.dark .highlightContent h3,
 html.dark .analyticsSectionHeader h2,
 body.dark .analyticsSectionHeader h2,
-html.dark .analyticsStock strong,
-body.dark .analyticsStock strong,
+html.dark .stockDetails strong,
+body.dark .stockDetails strong,
 html.dark .allocationTop strong,
 body.dark .allocationTop strong,
 html.dark .analyticsEmpty h3,
 body.dark .analyticsEmpty h3,
-html.dark .analyticsLoading h3,
-body.dark .analyticsLoading h3,
-html.dark .analyticsError h2,
-body.dark .analyticsError h2 {
+html.dark .analyticsStateCard h3,
+body.dark .analyticsStateCard h3,
+html.dark .analyticsStateCard h2,
+body.dark .analyticsStateCard h2 {
   color: #f8fafc !important;
 }
 
-/* =========================================================
-   DARK SECONDARY TEXT
-========================================================= */
-
 html.dark .analyticsHeader p,
 body.dark .analyticsHeader p,
-html.dark .analyticsLive,
-body.dark .analyticsLive,
-html.dark .analyticsCard > span,
-body.dark .analyticsCard > span,
-html.dark .highlightCard span,
-body.dark .highlightCard span,
+html.dark .analyticsCardLabel,
+body.dark .analyticsCardLabel,
+html.dark .analyticsCard p,
+body.dark .analyticsCard p,
+html.dark .highlightContent > span,
+body.dark .highlightContent > span,
 html.dark .analyticsSectionHeader p,
 body.dark .analyticsSectionHeader p,
-html.dark .allocationTop span,
-body.dark .allocationTop span,
-html.dark .analyticsLoading p,
-body.dark .analyticsLoading p,
-html.dark .analyticsError p,
-body.dark .analyticsError p,
-html.dark .analyticsEmpty p,
-body.dark .analyticsEmpty p {
+html.dark .sectionCount,
+body.dark .sectionCount,
+html.dark .analyticsStateCard p,
+body.dark .analyticsStateCard p {
   color: #cbd5e1 !important;
 }
 
-/* =========================================================
-   DARK MUTED
-========================================================= */
-
-html.dark .analyticsCard small,
-body.dark .analyticsCard small,
-html.dark .analyticsStock small,
-body.dark .analyticsStock small,
-html.dark .allocationItem small,
-body.dark .allocationItem small,
-html.dark .analyticsEmpty,
-body.dark .analyticsEmpty {
+html.dark .analyticsCard p,
+body.dark .analyticsCard p,
+html.dark .stockDetails small,
+body.dark .stockDetails small,
+html.dark .allocationBottom small,
+body.dark .allocationBottom small {
   color: #94a3b8 !important;
 }
 
@@ -680,39 +793,35 @@ body.dark .analyticsEmpty {
    DARK TABLE
 ========================================================= */
 
+html.dark .analyticsTableWrapper,
+body.dark .analyticsTableWrapper {
+  border-color: #334155 !important;
+}
+
 html.dark .analyticsTable,
 body.dark .analyticsTable {
   background: #172033 !important;
-
   color: #f8fafc !important;
 }
 
 html.dark .analyticsTable thead,
-body.dark .analyticsTable thead {
+body.dark .analyticsTable thead,
+html.dark .analyticsTable th,
+body.dark .analyticsTable th {
   background: #1e293b !important;
 }
 
 html.dark .analyticsTable th,
 body.dark .analyticsTable th {
-  background: #1e293b !important;
-
   color: #cbd5e1 !important;
-
   border-color: #334155 !important;
 }
 
 html.dark .analyticsTable td,
 body.dark .analyticsTable td {
   background: #172033 !important;
-
   color: #f8fafc !important;
-
   border-color: #334155 !important;
-}
-
-html.dark .analyticsTable tbody tr,
-body.dark .analyticsTable tbody tr {
-  background: #172033 !important;
 }
 
 html.dark .analyticsTable tbody tr:hover,
@@ -737,53 +846,80 @@ body.dark .allocationFill {
 }
 
 /* =========================================================
-   DARK ICON
+   DARK BUTTON
 ========================================================= */
 
-html.dark .highlightIcon,
-body.dark .highlightIcon {
-  background: rgba(59, 130, 246, 0.14) !important;
+html.dark .analyticsRefreshButton,
+body.dark .analyticsRefreshButton {
+  background: #172033 !important;
 }
 
-/* =========================================================
-   DARK LOADER
-========================================================= */
-
-html.dark .analyticsLoader,
-body.dark .analyticsLoader {
-  border-color: #334155 !important;
-
-  border-top-color: #3b82f6 !important;
+html.dark .analyticsRefreshButton:hover,
+body.dark .analyticsRefreshButton:hover {
+  background: #263449 !important;
 }
 
 /* =========================================================
    RESPONSIVE
 ========================================================= */
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
   .analyticsCards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 650px) {
+@media (max-width: 760px) {
   .analyticsHeader {
     align-items: flex-start;
-
     flex-direction: column;
-
-    gap: 12px;
   }
 
-  .analyticsCards {
-    grid-template-columns: 1fr;
+  .analyticsHeaderActions {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .analyticsHighlightGrid {
     grid-template-columns: 1fr;
   }
+}
+
+@media (max-width: 600px) {
+  .analyticsCards {
+    grid-template-columns: 1fr;
+  }
+
+  .analyticsHeader h1 {
+    font-size: 26px;
+  }
+
+  .analyticsHeaderActions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .analyticsLive,
+  .analyticsRefreshButton {
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
+  }
 
   .analyticsSection {
-    padding: 16px;
+    padding: 15px;
+    border-radius: 13px;
+  }
+
+  .analyticsSectionHeader {
+    flex-direction: column;
+  }
+
+  .highlightCard {
+    padding: 15px;
+  }
+
+  .highlightBadge {
+    display: none;
   }
 }

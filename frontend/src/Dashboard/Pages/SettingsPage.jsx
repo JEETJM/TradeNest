@@ -1,69 +1,59 @@
-import { useEffect, useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import {
-  FaMoon,
-  FaSun,
+  FaCog,
   FaBell,
   FaEnvelope,
   FaShoppingCart,
+  FaMoon,
+  FaSun,
   FaLock,
-  FaTimes,
   FaEye,
   FaEyeSlash,
+  FaShieldAlt,
+  FaKey,
   FaCheckCircle,
+  FaTimes,
+  FaSpinner,
 } from "react-icons/fa";
-
 import "./SettingsPage.css";
 
-/* =====================================================
-   SETTINGS PAGE
-===================================================== */
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+
+const getToken = () =>
+  localStorage.getItem("tradenest_token") ||
+  sessionStorage.getItem("tradenest_token") ||
+  localStorage.getItem("token") ||
+  sessionStorage.getItem("token");
+
+const getBooleanSetting = (key, defaultValue = true) => {
+  const value = localStorage.getItem(key);
+
+  if (value === null) return defaultValue;
+
+  return value === "true";
+};
 
 function SettingsPage() {
-  /* =====================================================
-     SETTINGS STORAGE
-  ===================================================== */
-
-  const getSetting = (key, defaultValue) => {
-    const saved = localStorage.getItem(key);
-
-    if (saved === null) {
-      return defaultValue;
-    }
-
-    return saved === "true";
-  };
-
-  /* =====================================================
-     SETTINGS STATE
-  ===================================================== */
-
   const [notifications, setNotifications] = useState(() =>
-    getSetting("tradenest_notifications", true),
+    getBooleanSetting("tradenest_notifications", true),
   );
 
   const [emailAlerts, setEmailAlerts] = useState(() =>
-    getSetting("tradenest_email_alerts", true),
+    getBooleanSetting("tradenest_email_alerts", true),
   );
 
   const [orderAlerts, setOrderAlerts] = useState(() =>
-    getSetting("tradenest_order_alerts", true),
+    getBooleanSetting("tradenest_order_alerts", true),
   );
 
   const [darkMode, setDarkMode] = useState(() =>
-    getSetting("tradenest_dark_mode", false),
+    getBooleanSetting("tradenest_dark_mode", false),
   );
-
-  /* =====================================================
-     PASSWORD MODAL STATE
-  ===================================================== */
 
   const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   const [currentPassword, setCurrentPassword] = useState("");
-
   const [newPassword, setNewPassword] = useState("");
-
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
@@ -72,158 +62,140 @@ function SettingsPage() {
 
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [changingPassword, setChangingPassword] = useState(false);
 
   const [passwordError, setPasswordError] = useState("");
-
   const [passwordSuccess, setPasswordSuccess] = useState("");
 
-  /* =====================================================
-     GLOBAL DARK MODE
-  ===================================================== */
+  const [savedMessage, setSavedMessage] = useState("");
 
-  useEffect(() => {
-    const root = document.documentElement;
+  /* ---------------- SETTINGS HELPERS ---------------- */
 
-    if (darkMode) {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
+  const saveSetting = (key, value) => {
+    localStorage.setItem(key, String(value));
 
-    localStorage.setItem("tradenest_dark_mode", String(darkMode));
+    setSavedMessage("Settings saved successfully.");
 
-    /* Tell other components theme changed */
-    window.dispatchEvent(new Event("tradenest-theme-update"));
-  }, [darkMode]);
+    setTimeout(() => {
+      setSavedMessage("");
+    }, 2200);
+  };
 
-  /* =====================================================
-     PUSH NOTIFICATIONS
-  ===================================================== */
-
-  const toggleNotifications = () => {
+  const handleNotifications = () => {
     const value = !notifications;
 
     setNotifications(value);
-
-    localStorage.setItem("tradenest_notifications", String(value));
+    saveSetting("tradenest_notifications", value);
   };
 
-  /* =====================================================
-     EMAIL ALERTS
-  ===================================================== */
-
-  const toggleEmailAlerts = () => {
+  const handleEmailAlerts = () => {
     const value = !emailAlerts;
 
     setEmailAlerts(value);
-
-    localStorage.setItem("tradenest_email_alerts", String(value));
+    saveSetting("tradenest_email_alerts", value);
   };
 
-  /* =====================================================
-     ORDER ALERTS
-  ===================================================== */
-
-  const toggleOrderAlerts = () => {
+  const handleOrderAlerts = () => {
     const value = !orderAlerts;
 
     setOrderAlerts(value);
-
-    localStorage.setItem("tradenest_order_alerts", String(value));
+    saveSetting("tradenest_order_alerts", value);
   };
 
-  /* =====================================================
-     OPEN PASSWORD MODAL
-  ===================================================== */
+  /* ---------------- DARK MODE ---------------- */
 
-  const openPasswordModal = () => {
+  const handleDarkMode = () => {
+    const value = !darkMode;
+
+    setDarkMode(value);
+
+    localStorage.setItem("tradenest_dark_mode", String(value));
+
+    document.documentElement.classList.toggle("dark", value);
+
+    window.dispatchEvent(
+      new CustomEvent("tradenest-theme-update", {
+        detail: {
+          darkMode: value,
+        },
+      }),
+    );
+
+    setSavedMessage(value ? "Dark mode enabled." : "Light mode enabled.");
+
+    setTimeout(() => {
+      setSavedMessage("");
+    }, 2200);
+  };
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+  }, [darkMode]);
+
+  /* ---------------- PASSWORD ---------------- */
+
+  const resetPasswordForm = () => {
     setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");
-
+    setPasswordError("");
+    setPasswordSuccess("");
     setShowCurrentPassword(false);
     setShowNewPassword(false);
     setShowConfirmPassword(false);
+  };
 
-    setPasswordError("");
-    setPasswordSuccess("");
-
+  const openPasswordModal = () => {
+    resetPasswordForm();
     setShowPasswordModal(true);
   };
 
-  /* =====================================================
-     CLOSE PASSWORD MODAL
-  ===================================================== */
-
   const closePasswordModal = () => {
-    if (passwordSaving) {
-      return;
-    }
+    if (changingPassword) return;
 
     setShowPasswordModal(false);
-
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-
-    setPasswordError("");
-    setPasswordSuccess("");
+    resetPasswordForm();
   };
 
-  /* =====================================================
-     CHANGE PASSWORD
-  ===================================================== */
-
-  const handlePasswordChange = async () => {
-    setPasswordError("");
-    setPasswordSuccess("");
-
-    /* ================================
-       VALIDATION
-    ================================= */
-
+  const validatePassword = () => {
     if (!currentPassword) {
-      setPasswordError("Please enter your current password.");
-      return;
+      return "Please enter your current password.";
     }
 
     if (!newPassword) {
-      setPasswordError("Please enter your new password.");
-      return;
+      return "Please enter a new password.";
     }
 
     if (newPassword.length < 8) {
-      setPasswordError("New password must contain at least 8 characters.");
-      return;
+      return "New password must contain at least 8 characters.";
     }
 
     if (newPassword === currentPassword) {
-      setPasswordError(
-        "New password must be different from your current password.",
-      );
-      return;
+      return "New password must be different from your current password.";
     }
 
     if (!confirmPassword) {
-      setPasswordError("Please confirm your new password.");
-      return;
+      return "Please confirm your new password.";
     }
 
     if (newPassword !== confirmPassword) {
-      setPasswordError("New password and confirm password do not match.");
+      return "New password and confirm password do not match.";
+    }
+
+    return "";
+  };
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+
+    const validationError = validatePassword();
+
+    if (validationError) {
+      setPasswordError(validationError);
       return;
     }
 
-    /* ================================
-       GET TOKEN
-    ================================= */
-
-    const token =
-      localStorage.getItem("tradenest_token") ||
-      sessionStorage.getItem("tradenest_token") ||
-      localStorage.getItem("token") ||
-      sessionStorage.getItem("token");
+    const token = getToken();
 
     if (!token) {
       setPasswordError("Your session has expired. Please login again.");
@@ -231,58 +203,37 @@ function SettingsPage() {
     }
 
     try {
-      setPasswordSaving(true);
+      setChangingPassword(true);
+      setPasswordError("");
+      setPasswordSuccess("");
 
-      /* ================================
-         API REQUEST
-      ================================= */
-
-      const response = await fetch(
-        "http://localhost:5000/api/auth/change-password",
-        {
-          method: "PUT",
-
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-
-          body: JSON.stringify({
-            currentPassword,
-            newPassword,
-          }),
+      const response = await fetch(`${API_URL}/auth/change-password`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      );
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+        }),
+      });
 
-      /* ================================
-         READ RESPONSE
-      ================================= */
+      const raw = await response.text();
 
-      const text = await response.text();
-
-      let data;
+      let data = {};
 
       try {
-        data = JSON.parse(text);
-      } catch (parseError) {
-        console.error("❌ Change password invalid response:", text);
-
-        throw new Error("Server returned an invalid response.");
+        data = raw ? JSON.parse(raw) : {};
+      } catch {
+        throw new Error("Invalid response received from server.");
       }
-
-      /* ================================
-         API ERROR
-      ================================= */
 
       if (!response.ok) {
-        throw new Error(data.message || "Unable to change password.");
+        throw new Error(data?.message || "Failed to change your password.");
       }
 
-      /* ================================
-         SUCCESS
-      ================================= */
-
-      setPasswordSuccess("Password changed successfully.");
+      setPasswordSuccess(data?.message || "Password changed successfully.");
 
       setCurrentPassword("");
       setNewPassword("");
@@ -293,361 +244,441 @@ function SettingsPage() {
         setPasswordSuccess("");
       }, 1800);
     } catch (error) {
-      console.error("❌ CHANGE PASSWORD ERROR:", error);
+      console.error("Change password error:", error);
 
       setPasswordError(error.message || "Unable to change password.");
     } finally {
-      setPasswordSaving(false);
+      setChangingPassword(false);
     }
   };
 
-  /* =====================================================
-     JSX
-  ===================================================== */
-
   return (
-    <section className="settingsPage">
-      {/* =================================================
-          HEADER
-      ================================================= */}
+    <div className="settingsPage">
+      {/* HEADER */}
 
       <div className="settingsHeader">
-        <h1>Settings</h1>
-
-        <p>Manage your TradeNest preferences and account security.</p>
-      </div>
-
-      {/* =================================================
-          PREFERENCES
-      ================================================= */}
-
-      <div className="settingsCard">
-        <div className="settingsCardHeader">
-          <h2>Preferences</h2>
-
-          <p>Customize how TradeNest works for you.</p>
-        </div>
-
-        <div className="settingsRows">
-          {/* PUSH NOTIFICATIONS */}
-
-          <div className="settingsRow">
-            <div className="settingsRowInfo">
-              <div className="settingsIcon">
-                <FaBell />
-              </div>
-
-              <div>
-                <strong>Push Notifications</strong>
-
-                <p>Receive notifications about your account.</p>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              aria-label="Toggle push notifications"
-              className={notifications ? "toggle active" : "toggle"}
-              onClick={toggleNotifications}
-            >
-              <span />
-            </button>
+        <div>
+          <div className="settingsEyebrow">
+            <FaCog />
+            PREFERENCES
           </div>
 
-          {/* EMAIL ALERTS */}
+          <h1>Settings</h1>
 
-          <div className="settingsRow">
-            <div className="settingsRowInfo">
-              <div className="settingsIcon">
-                <FaEnvelope />
-              </div>
-
-              <div>
-                <strong>Email Alerts</strong>
-
-                <p>Receive important updates through email.</p>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              aria-label="Toggle email alerts"
-              className={emailAlerts ? "toggle active" : "toggle"}
-              onClick={toggleEmailAlerts}
-            >
-              <span />
-            </button>
-          </div>
-
-          {/* ORDER ALERTS */}
-
-          <div className="settingsRow">
-            <div className="settingsRowInfo">
-              <div className="settingsIcon">
-                <FaShoppingCart />
-              </div>
-
-              <div>
-                <strong>Order Alerts</strong>
-
-                <p>Get notified when your orders are executed.</p>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              aria-label="Toggle order alerts"
-              className={orderAlerts ? "toggle active" : "toggle"}
-              onClick={toggleOrderAlerts}
-            >
-              <span />
-            </button>
-          </div>
+          <p>
+            Manage your TradeNest preferences, notifications and account
+            security.
+          </p>
         </div>
       </div>
 
-      {/* =================================================
-          APPEARANCE
-      ================================================= */}
+      {/* SAVE MESSAGE */}
 
-      <div className="settingsCard">
-        <div className="settingsCardHeader">
-          <h2>Appearance</h2>
-
-          <p>Customize the look of your dashboard.</p>
+      {savedMessage && (
+        <div className="settingsSavedMessage">
+          <FaCheckCircle />
+          <span>{savedMessage}</span>
         </div>
+      )}
 
-        <div className="settingsRows">
-          <div className="settingsRow">
-            <div className="settingsRowInfo">
-              <div className="settingsIcon">
-                {darkMode ?
-                  <FaMoon />
-                : <FaSun />}
-              </div>
+      <div className="settingsGrid">
+        {/* NOTIFICATIONS */}
 
-              <div>
-                <strong>Dark Mode</strong>
-
-                <p>Apply dark mode to the entire TradeNest platform.</p>
-              </div>
+        <section className="settingsCard">
+          <div className="settingsCardHeader">
+            <div className="settingsIcon blue">
+              <FaBell />
             </div>
 
-            <button
-              type="button"
-              aria-label="Toggle dark mode"
-              className={darkMode ? "toggle active" : "toggle"}
-              onClick={() => setDarkMode((previous) => !previous)}
-            >
-              <span />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* =================================================
-          SECURITY
-      ================================================= */}
-
-      <div className="settingsCard">
-        <div className="settingsCardHeader">
-          <h2>Security</h2>
-
-          <p>Protect your TradeNest account.</p>
-        </div>
-
-        <div className="settingsRows">
-          <div className="settingsRow">
-            <div className="settingsRowInfo">
-              <div className="settingsIcon">
-                <FaLock />
-              </div>
-
-              <div>
-                <strong>Change Password</strong>
-
-                <p>Update your account password.</p>
-              </div>
+            <div>
+              <h2>Notifications</h2>
+              <p>Control how TradeNest keeps you updated.</p>
             </div>
-
-            <button
-              type="button"
-              className="settingsAction"
-              onClick={openPasswordModal}
-            >
-              Change
-            </button>
           </div>
-        </div>
-      </div>
 
-      {/* =================================================
-          PASSWORD MODAL
-      ================================================= */}
+          <div className="settingsList">
+            <div className="settingsRow">
+              <div className="settingsRowInfo">
+                <div className="settingsRowIcon">
+                  <FaBell />
+                </div>
 
-      {showPasswordModal && (
-        <div
-          className="passwordModalOverlay"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
-              closePasswordModal();
-            }
-          }}
-        >
-          <div className="passwordModal">
-            {/* MODAL HEADER */}
-
-            <div className="passwordModalHeader">
-              <div>
-                <h2>Change Password</h2>
-
-                <p>Keep your TradeNest account secure.</p>
+                <div>
+                  <strong>Push Notifications</strong>
+                  <span>Receive important updates inside TradeNest.</span>
+                </div>
               </div>
 
               <button
                 type="button"
-                className="passwordModalClose"
+                className={`settingsToggle ${notifications ? "active" : ""}`}
+                onClick={handleNotifications}
+                aria-label="Toggle notifications"
+              >
+                <span />
+              </button>
+            </div>
+
+            <div className="settingsRow">
+              <div className="settingsRowInfo">
+                <div className="settingsRowIcon">
+                  <FaEnvelope />
+                </div>
+
+                <div>
+                  <strong>Email Alerts</strong>
+                  <span>Receive important account and market alerts.</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className={`settingsToggle ${emailAlerts ? "active" : ""}`}
+                onClick={handleEmailAlerts}
+                aria-label="Toggle email alerts"
+              >
+                <span />
+              </button>
+            </div>
+
+            <div className="settingsRow">
+              <div className="settingsRowInfo">
+                <div className="settingsRowIcon">
+                  <FaShoppingCart />
+                </div>
+
+                <div>
+                  <strong>Order Alerts</strong>
+                  <span>Get notified when your orders are executed.</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className={`settingsToggle ${orderAlerts ? "active" : ""}`}
+                onClick={handleOrderAlerts}
+                aria-label="Toggle order alerts"
+              >
+                <span />
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* APPEARANCE */}
+
+        <section className="settingsCard">
+          <div className="settingsCardHeader">
+            <div className="settingsIcon purple">
+              {darkMode ?
+                <FaMoon />
+              : <FaSun />}
+            </div>
+
+            <div>
+              <h2>Appearance</h2>
+              <p>Customize how TradeNest looks on your device.</p>
+            </div>
+          </div>
+
+          <div className="settingsList">
+            <div className="settingsRow">
+              <div className="settingsRowInfo">
+                <div className="settingsRowIcon">
+                  {darkMode ?
+                    <FaMoon />
+                  : <FaSun />}
+                </div>
+
+                <div>
+                  <strong>Dark Mode</strong>
+                  <span>
+                    {darkMode ?
+                      "Use the dark TradeNest interface."
+                    : "Use the light TradeNest interface."}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className={`settingsToggle ${darkMode ? "active" : ""}`}
+                onClick={handleDarkMode}
+                aria-label="Toggle dark mode"
+              >
+                <span />
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* SECURITY */}
+
+        <section className="settingsCard">
+          <div className="settingsCardHeader">
+            <div className="settingsIcon green">
+              <FaShieldAlt />
+            </div>
+
+            <div>
+              <h2>Security</h2>
+              <p>Keep your TradeNest account secure.</p>
+            </div>
+          </div>
+
+          <div className="settingsSecurityBox">
+            <div className="settingsSecurityIcon">
+              <FaKey />
+            </div>
+
+            <div className="settingsSecurityInfo">
+              <strong>Password</strong>
+
+              <span>
+                Change your account password regularly for better security.
+              </span>
+            </div>
+
+            <button
+              type="button"
+              className="settingsActionBtn"
+              onClick={openPasswordModal}
+            >
+              <FaLock />
+              Change Password
+            </button>
+          </div>
+        </section>
+
+        {/* ACCOUNT SECURITY STATUS */}
+
+        <section className="settingsCard">
+          <div className="settingsCardHeader">
+            <div className="settingsIcon orange">
+              <FaShieldAlt />
+            </div>
+
+            <div>
+              <h2>Account Protection</h2>
+              <p>Current security information for your account.</p>
+            </div>
+          </div>
+
+          <div className="settingsProtection">
+            <div className="settingsProtectionRow">
+              <div>
+                <strong>Password Protection</strong>
+                <span>Your account uses password authentication.</span>
+              </div>
+
+              <div className="settingsProtectionStatus">
+                <FaCheckCircle />
+                Active
+              </div>
+            </div>
+
+            <div className="settingsProtectionRow">
+              <div>
+                <strong>Session Security</strong>
+                <span>
+                  Authenticated requests use your secure session token.
+                </span>
+              </div>
+
+              <div className="settingsProtectionStatus">
+                <FaCheckCircle />
+                Active
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* PASSWORD MODAL */}
+
+      {showPasswordModal && (
+        <div
+          className="settingsModalOverlay"
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget && !changingPassword) {
+              closePasswordModal();
+            }
+          }}
+        >
+          <div className="settingsModal">
+            <div className="settingsModalHeader">
+              <div>
+                <div className="settingsModalIcon">
+                  <FaLock />
+                </div>
+
+                <h2>Change Password</h2>
+
+                <p>Create a new password for your TradeNest account.</p>
+              </div>
+
+              <button
+                type="button"
+                className="settingsModalClose"
                 onClick={closePasswordModal}
-                disabled={passwordSaving}
+                disabled={changingPassword}
               >
                 <FaTimes />
               </button>
             </div>
 
-            {/* ERROR */}
-
             {passwordError && (
-              <div className="passwordError">{passwordError}</div>
+              <div className="settingsPasswordMessage error">
+                <FaTimes />
+                {passwordError}
+              </div>
             )}
-
-            {/* SUCCESS */}
 
             {passwordSuccess && (
-              <div className="passwordSuccess">
+              <div className="settingsPasswordMessage success">
                 <FaCheckCircle />
-
-                <span>{passwordSuccess}</span>
+                {passwordSuccess}
               </div>
             )}
 
-            {/* FORM */}
+            <form
+              className="settingsPasswordForm"
+              onSubmit={handleChangePassword}
+            >
+              <div className="settingsPasswordField">
+                <label htmlFor="currentPassword">Current Password</label>
 
-            {!passwordSuccess && (
-              <div className="passwordForm">
-                {/* CURRENT PASSWORD */}
+                <div className="settingsPasswordInput">
+                  <FaLock />
 
-                <div className="passwordField">
-                  <label>Current Password</label>
-
-                  <div className="passwordInput">
-                    <input
-                      type={showCurrentPassword ? "text" : "password"}
-                      value={currentPassword}
-                      onChange={(event) =>
-                        setCurrentPassword(event.target.value)
-                      }
-                      placeholder="Enter current password"
-                      autoComplete="current-password"
-                    />
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setShowCurrentPassword((previous) => !previous)
-                      }
-                    >
-                      {showCurrentPassword ?
-                        <FaEyeSlash />
-                      : <FaEye />}
-                    </button>
-                  </div>
-                </div>
-
-                {/* NEW PASSWORD */}
-
-                <div className="passwordField">
-                  <label>New Password</label>
-
-                  <div className="passwordInput">
-                    <input
-                      type={showNewPassword ? "text" : "password"}
-                      value={newPassword}
-                      onChange={(event) => setNewPassword(event.target.value)}
-                      placeholder="Enter new password"
-                      autoComplete="new-password"
-                    />
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setShowNewPassword((previous) => !previous)
-                      }
-                    >
-                      {showNewPassword ?
-                        <FaEyeSlash />
-                      : <FaEye />}
-                    </button>
-                  </div>
-
-                  <small>Minimum 8 characters.</small>
-                </div>
-
-                {/* CONFIRM PASSWORD */}
-
-                <div className="passwordField">
-                  <label>Confirm New Password</label>
-
-                  <div className="passwordInput">
-                    <input
-                      type={showConfirmPassword ? "text" : "password"}
-                      value={confirmPassword}
-                      onChange={(event) =>
-                        setConfirmPassword(event.target.value)
-                      }
-                      placeholder="Confirm new password"
-                      autoComplete="new-password"
-                    />
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setShowConfirmPassword((previous) => !previous)
-                      }
-                    >
-                      {showConfirmPassword ?
-                        <FaEyeSlash />
-                      : <FaEye />}
-                    </button>
-                  </div>
-                </div>
-
-                {/* ACTIONS */}
-
-                <div className="passwordModalActions">
-                  <button
-                    type="button"
-                    className="passwordCancelBtn"
-                    onClick={closePasswordModal}
-                    disabled={passwordSaving}
-                  >
-                    Cancel
-                  </button>
+                  <input
+                    id="currentPassword"
+                    type={showCurrentPassword ? "text" : "password"}
+                    value={currentPassword}
+                    onChange={(e) => {
+                      setCurrentPassword(e.target.value);
+                      setPasswordError("");
+                    }}
+                    autoComplete="current-password"
+                    disabled={changingPassword}
+                    placeholder="Enter current password"
+                  />
 
                   <button
                     type="button"
-                    className="passwordSaveBtn"
-                    onClick={handlePasswordChange}
-                    disabled={passwordSaving}
+                    onClick={() => setShowCurrentPassword((value) => !value)}
+                    tabIndex={-1}
                   >
-                    {passwordSaving ? "Updating..." : "Update Password"}
+                    {showCurrentPassword ?
+                      <FaEyeSlash />
+                    : <FaEye />}
                   </button>
                 </div>
               </div>
-            )}
+
+              <div className="settingsPasswordField">
+                <label htmlFor="newPassword">New Password</label>
+
+                <div className="settingsPasswordInput">
+                  <FaKey />
+
+                  <input
+                    id="newPassword"
+                    type={showNewPassword ? "text" : "password"}
+                    value={newPassword}
+                    onChange={(e) => {
+                      setNewPassword(e.target.value);
+                      setPasswordError("");
+                    }}
+                    autoComplete="new-password"
+                    disabled={changingPassword}
+                    placeholder="Minimum 8 characters"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword((value) => !value)}
+                    tabIndex={-1}
+                  >
+                    {showNewPassword ?
+                      <FaEyeSlash />
+                    : <FaEye />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="settingsPasswordField">
+                <label htmlFor="confirmPassword">Confirm New Password</label>
+
+                <div className="settingsPasswordInput">
+                  <FaKey />
+
+                  <input
+                    id="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => {
+                      setConfirmPassword(e.target.value);
+                      setPasswordError("");
+                    }}
+                    autoComplete="new-password"
+                    disabled={changingPassword}
+                    placeholder="Re-enter new password"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword((value) => !value)}
+                    tabIndex={-1}
+                  >
+                    {showConfirmPassword ?
+                      <FaEyeSlash />
+                    : <FaEye />}
+                  </button>
+                </div>
+              </div>
+
+              <div className="settingsPasswordHint">
+                <FaShieldAlt />
+
+                <span>
+                  Use at least 8 characters and avoid using easily guessable
+                  information.
+                </span>
+              </div>
+
+              <div className="settingsModalActions">
+                <button
+                  type="button"
+                  className="settingsModalCancel"
+                  onClick={closePasswordModal}
+                  disabled={changingPassword}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="submit"
+                  className="settingsModalSubmit"
+                  disabled={changingPassword}
+                >
+                  {changingPassword ?
+                    <>
+                      <FaSpinner className="settingsSpin" />
+                      Updating...
+                    </>
+                  : <>
+                      <FaLock />
+                      Update Password
+                    </>
+                  }
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
-    </section>
+    </div>
   );
 }
 

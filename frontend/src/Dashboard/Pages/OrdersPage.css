@@ -5,9 +5,7 @@
 .ordersPage {
   width: 100%;
   min-height: calc(100vh - 70px);
-  padding: 5px 0 40px;
-  box-sizing: border-box;
-  background: transparent;
+  padding: 8px 0 40px;
   color: var(--text);
 }
 
@@ -17,21 +15,31 @@
 
 .ordersHeader {
   display: flex;
+  align-items: flex-end;
   justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 25px;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.ordersEyebrow {
+  display: inline-block;
+  margin-bottom: 7px;
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
 }
 
 .ordersHeader h1 {
   margin: 0;
-  font-size: 30px;
-  font-weight: 700;
   color: var(--text);
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 800;
 }
 
 .ordersHeader p {
-  margin: 7px 0 0;
+  margin: 8px 0 0;
   color: var(--text-secondary);
   font-size: 14px;
 }
@@ -43,66 +51,133 @@
 .ordersHeaderActions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
-/* =========================================================
-   ORDER COUNT
-========================================================= */
-
+.ordersLiveBadge,
 .orderCount {
-  padding: 9px 15px;
-  border-radius: 8px;
-
-  background: rgba(56, 126, 209, 0.1);
-  color: var(--primary);
-
-  border: 1px solid rgba(56, 126, 209, 0.15);
-
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 13px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
 }
 
-/* =========================================================
-   REFRESH BUTTON
-========================================================= */
+.ordersLiveBadge {
+  color: var(--success);
+}
+
+.ordersLiveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 0 4px rgba(21, 148, 71, 0.1);
+}
 
 .refreshOrdersBtn,
 .retryOrdersBtn {
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-
-  padding: 9px 14px;
-  border-radius: 8px;
-
-  font-size: 13px;
-  font-weight: 600;
-
+  min-height: 38px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
   cursor: pointer;
-
   transition:
     background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
+    transform 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .refreshOrdersBtn:hover,
 .retryOrdersBtn:hover {
-  background: var(--hover-bg);
-  border-color: var(--primary);
-}
-
-.refreshOrdersBtn:active,
-.retryOrdersBtn:active {
-  transform: scale(0.97);
+  background: var(--primary-dark);
+  transform: translateY(-1px);
 }
 
 .refreshOrdersBtn:disabled,
 .retryOrdersBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
+}
+
+.refreshOrderIcon {
+  display: inline-block;
+  margin-right: 5px;
+  font-size: 15px;
+}
+
+.refreshOrderIcon.spinning {
+  animation: ordersSpin 0.8s linear infinite;
+}
+
+@keyframes ordersSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+.ordersSummaryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.ordersSummaryCard {
+  min-height: 125px;
+  padding: 19px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.ordersSummaryCard > span {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.ordersSummaryCard strong {
+  display: block;
+  color: var(--text);
+  font-size: 23px;
+  font-weight: 800;
+}
+
+.ordersSummaryCard small {
+  display: block;
+  margin-top: 7px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.buySummary {
+  color: var(--success) !important;
+}
+
+.sellSummary {
+  color: var(--danger) !important;
 }
 
 /* =========================================================
@@ -111,21 +186,82 @@
 
 .ordersCard {
   width: 100%;
-
-  background: var(--surface);
-
-  border: 1px solid var(--border);
-  border-radius: 14px;
-
   overflow: hidden;
-
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--surface);
   box-shadow: var(--shadow);
+}
 
+.ordersCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 22px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ordersCardHeader h2 {
+  margin: 0;
   color: var(--text);
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.ordersCardHeader p {
+  margin: 5px 0 0;
+  color: var(--text-muted);
+  font-size: 12px;
 }
 
 /* =========================================================
-   TABLE WRAPPER
+   FILTERS
+========================================================= */
+
+.orderFilters {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+
+.orderFilter {
+  min-width: 55px;
+  height: 30px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.orderFilter:hover {
+  color: var(--text);
+}
+
+.orderFilter.active {
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: var(--shadow);
+}
+
+.orderFilter.buyFilter.active {
+  color: var(--success);
+}
+
+.orderFilter.sellFilter.active {
+  color: var(--danger);
+}
+
+/* =========================================================
+   TABLE
 ========================================================= */
 
 .ordersTableWrapper {
@@ -133,61 +269,38 @@
   overflow-x: auto;
 }
 
-/* =========================================================
-   TABLE
-========================================================= */
-
 .ordersTable {
   width: 100%;
-  min-width: 1000px;
-
+  min-width: 1150px;
   border-collapse: collapse;
-
   background: var(--surface);
 }
-
-/* =========================================================
-   TABLE HEADER
-========================================================= */
 
 .ordersTable th {
-  text-align: left;
-
-  padding: 16px 18px;
-
+  padding: 15px 17px;
   background: var(--surface-2);
-
-  color: var(--text-secondary);
-
   border-bottom: 1px solid var(--border);
-
-  font-size: 12px;
-  font-weight: 600;
-
+  text-align: left;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 800;
   white-space: nowrap;
 }
 
-/* =========================================================
-   TABLE BODY
-========================================================= */
-
 .ordersTable td {
-  padding: 17px 18px;
-
-  border-top: 1px solid var(--border);
-
-  font-size: 13px;
-
-  color: var(--text-secondary);
-
+  padding: 17px;
+  border-bottom: 1px solid var(--border);
   background: var(--surface);
-
+  color: var(--text-secondary);
+  font-size: 12px;
   white-space: nowrap;
+}
+
+.ordersTable tbody tr:last-child td {
+  border-bottom: 0;
 }
 
 .ordersTable tbody tr {
-  background: var(--surface);
-
   transition: background 0.2s ease;
 }
 
@@ -200,85 +313,117 @@
 ========================================================= */
 
 .orderId {
-  color: var(--text);
-  font-size: 12px;
-  font-weight: 600;
+  display: inline-flex;
+  padding: 6px 8px;
+  border-radius: 7px;
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  font-size: 10px;
   font-family: monospace;
+  font-weight: 700;
 }
 
 /* =========================================================
    STOCK
 ========================================================= */
 
+.orderStock {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 170px;
+}
+
+.orderStockIcon {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  background: rgba(56, 126, 209, 0.1);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .orderStock strong {
   display: block;
-
-  font-size: 14px;
-
   color: var(--text);
-
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .orderStock small {
   display: block;
-
-  margin-top: 4px;
-
+  max-width: 140px;
+  margin-top: 3px;
+  overflow: hidden;
   color: var(--text-muted);
-
-  font-size: 11px;
+  font-size: 10px;
+  text-overflow: ellipsis;
 }
 
 /* =========================================================
-   BUY / SELL / UNKNOWN
+   BUY / SELL
 ========================================================= */
 
 .buyType,
 .sellType,
 .unknownType {
-  display: inline-block;
-
-  padding: 5px 9px;
-
-  border-radius: 6px;
-
-  font-size: 11px;
-  font-weight: 600;
+  display: inline-flex;
+  min-width: 50px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 9px;
+  border-radius: 7px;
+  font-size: 10px;
+  font-weight: 800;
 }
 
 .buyType {
-  background: rgba(20, 148, 71, 0.1);
-  color: #149447;
+  background: rgba(21, 148, 71, 0.1);
+  color: var(--success);
 }
 
 .sellType {
   background: rgba(229, 57, 53, 0.1);
-  color: #e53935;
+  color: var(--danger);
 }
 
 .unknownType {
-  background: rgba(120, 120, 120, 0.1);
-  color: var(--text-secondary);
+  background: var(--surface-2);
+  color: var(--text-muted);
 }
 
 /* =========================================================
-   PRODUCT TYPE
+   VALUES
+========================================================= */
+
+.tableValue {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.orderTotal {
+  color: var(--text);
+  font-weight: 800;
+}
+
+/* =========================================================
+   PRODUCT
 ========================================================= */
 
 .productType {
-  display: inline-block;
-
-  padding: 5px 9px;
-
-  border-radius: 6px;
-
-  background: rgba(56, 126, 209, 0.08);
-
-  color: var(--primary);
-
-  font-size: 11px;
-  font-weight: 600;
+  display: inline-flex;
+  padding: 6px 9px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 700;
 }
 
 /* =========================================================
@@ -288,148 +433,207 @@
 .completedStatus,
 .cancelledStatus,
 .pendingStatus {
-  display: inline-block;
-
-  padding: 5px 9px;
-
-  border-radius: 6px;
-
-  font-size: 11px;
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 9px;
+  border-radius: 7px;
+  font-size: 10px;
+  font-weight: 800;
 }
 
 .completedStatus {
-  background: rgba(20, 148, 71, 0.1);
-  color: #149447;
+  background: rgba(21, 148, 71, 0.1);
+  color: var(--success);
 }
 
 .cancelledStatus {
   background: rgba(229, 57, 53, 0.1);
-  color: #e53935;
+  color: var(--danger);
 }
 
 .pendingStatus {
-  background: rgba(245, 158, 11, 0.1);
-  color: #d97706;
+  background: rgba(234, 179, 8, 0.1);
+  color: #b78103;
+}
+
+.statusDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* =========================================================
+   DATE
+========================================================= */
+
+.orderDate {
+  color: var(--text-muted);
+  font-size: 11px;
 }
 
 /* =========================================================
    EMPTY
 ========================================================= */
 
-.emptyOrders {
-  min-height: 400px;
-
+.ordersEmpty,
+.ordersLoadingCard,
+.ordersFilteredEmpty {
+  min-height: 390px;
   display: flex;
   flex-direction: column;
-
   align-items: center;
   justify-content: center;
-
-  text-align: center;
-
   padding: 30px;
+  text-align: center;
+}
 
-  box-sizing: border-box;
-
+.ordersLoadingCard {
+  border: 1px solid var(--border);
+  border-radius: 15px;
   background: var(--surface);
+  box-shadow: var(--shadow);
+}
 
+.ordersEmpty h2,
+.ordersLoadingCard h2,
+.ordersFilteredEmpty h3 {
+  margin: 0;
   color: var(--text);
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.ordersEmpty p,
+.ordersLoadingCard p,
+.ordersFilteredEmpty p {
+  max-width: 430px;
+  margin: 8px 0 18px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .emptyOrderIcon {
-  width: 65px;
-  height: 65px;
-
+  width: 64px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
-
+  margin-bottom: 16px;
   border-radius: 50%;
-
   background: rgba(56, 126, 209, 0.1);
-
   color: var(--primary);
-
-  font-size: 28px;
-
-  margin-bottom: 15px;
+  font-size: 25px;
+  font-weight: 800;
 }
 
-.emptyOrders h2 {
-  margin: 0;
-
-  font-size: 20px;
-
-  color: var(--text);
+.ordersErrorState .emptyOrderIcon {
+  background: rgba(229, 57, 53, 0.1);
+  color: var(--danger);
 }
 
-.emptyOrders p {
-  margin: 8px 0 18px;
+/* =========================================================
+   LOADING
+========================================================= */
 
-  color: var(--text-secondary);
-
-  font-size: 13px;
-
-  max-width: 450px;
+.ordersSpinner {
+  width: 34px;
+  height: 34px;
+  margin-bottom: 18px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: ordersSpin 0.8s linear infinite;
 }
 
 /* =========================================================
    DARK MODE
 ========================================================= */
 
-body.dark .ordersCard,
-body.dark .ordersTable,
-body.dark .ordersTable td,
-body.dark .ordersTable tbody tr,
-body.dark .emptyOrders {
+html.dark .ordersSummaryCard,
+html.dark .ordersCard,
+html.dark .ordersLoadingCard,
+html.dark .ordersLiveBadge,
+html.dark .orderCount {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+html.dark .ordersTable,
+html.dark .ordersTable td {
   background: var(--surface);
 }
 
-body.dark .ordersTable th {
+html.dark .ordersTable th {
   background: var(--surface-2);
-  color: var(--text-secondary);
-  border-color: var(--border);
 }
 
-body.dark .ordersTable td {
-  color: var(--text-secondary);
-  border-color: var(--border);
-}
-
-body.dark .ordersTable tbody tr:hover td {
+html.dark .ordersTable tbody tr:hover td {
   background: var(--hover-bg);
 }
 
 /* =========================================================
-   MOBILE
+   RESPONSIVE
 ========================================================= */
 
-@media (max-width: 650px) {
-  .ordersPage {
-    padding: 0 0 30px;
+@media (max-width: 1100px) {
+  .ordersSummaryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .ordersHeader {
     align-items: flex-start;
     flex-direction: column;
-    gap: 15px;
+  }
+
+  .ordersHeaderActions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 700px) {
+  .ordersPage {
+    padding-bottom: 25px;
   }
 
   .ordersHeader h1 {
     font-size: 25px;
   }
 
+  .ordersHeader p {
+    font-size: 13px;
+  }
+
   .ordersHeaderActions {
     width: 100%;
-    justify-content: space-between;
   }
 
-  .orderCount {
-    align-self: flex-start;
-  }
-
+  .ordersLiveBadge,
+  .orderCount,
   .refreshOrdersBtn {
-    margin-left: auto;
+    flex: 1;
+  }
+
+  .ordersSummaryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .ordersSummaryCard {
+    min-height: 110px;
+  }
+
+  .ordersCardHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .orderFilters {
+    width: 100%;
+  }
+
+  .orderFilter {
+    flex: 1;
   }
 }

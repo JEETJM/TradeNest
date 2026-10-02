@@ -1,151 +1,316 @@
-/* =========================================================
+/* =====================================================
    FUNDS PAGE
-========================================================= */
+===================================================== */
 
 .fundsPage {
   width: 100%;
   min-height: calc(100vh - 70px);
 
-  padding: 5px 0 40px;
-
-  background: transparent;
+  padding: 4px 0 40px;
 
   color: var(--text);
 }
 
-/* =========================================================
+/* =====================================================
    HEADER
-========================================================= */
+===================================================== */
 
 .fundsHeader {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+
+  gap: 20px;
+
+  margin-bottom: 26px;
+}
+
+.fundPageTitle {
+  display: flex;
   align-items: center;
 
-  margin-bottom: 28px;
+  gap: 13px;
+}
+
+.fundPageIcon {
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: rgba(56, 126, 209, 0.11);
+
+  color: var(--primary);
+
+  font-size: 19px;
 }
 
 .fundsHeader h1 {
   margin: 0;
 
-  font-size: 30px;
-  font-weight: 700;
+  font-size: 29px;
+  font-weight: 750;
 
   color: var(--text);
 }
 
 .fundsHeader p {
-  margin: 7px 0 0;
+  margin: 5px 0 0;
 
-  color: var(--text-secondary);
-
-  font-size: 14px;
-}
-
-/* =========================================================
-   ADD MONEY BUTTON
-========================================================= */
-
-.addMoneyBtn {
-  border: none;
-
-  background: var(--primary);
-  color: #ffffff;
-
-  padding: 11px 20px;
-
-  border-radius: 8px;
-
-  cursor: pointer;
-
-  font-weight: 600;
-
-  transition: 0.2s ease;
-}
-
-.addMoneyBtn:hover {
-  background: var(--primary-dark);
-  transform: translateY(-1px);
-}
-
-/* =========================================================
-   BALANCE CARDS
-========================================================= */
-
-.fundCards {
-  display: grid;
-
-  grid-template-columns: repeat(4, 1fr);
-
-  gap: 18px;
-
-  margin-bottom: 25px;
-}
-
-.fundCard {
-  background: var(--surface);
-
-  border: 1px solid var(--border);
-
-  border-radius: 14px;
-
-  padding: 22px;
-
-  box-shadow: var(--shadow);
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background-color 0.25s ease,
-    border-color 0.25s ease;
-}
-
-.fundCard:hover {
-  transform: translateY(-2px);
-}
-
-.fundCard span {
   color: var(--text-secondary);
 
   font-size: 13px;
 }
 
-.fundCard h2 {
-  margin: 10px 0 5px;
+.fundHeaderActions {
+  display: flex;
+  align-items: center;
 
-  font-size: 23px;
+  gap: 10px;
+}
+
+.fundRefreshBtn,
+.addMoneyBtn {
+  height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 0 16px;
+
+  border-radius: 9px;
+
+  cursor: pointer;
+
+  font-size: 12px;
+  font-weight: 650;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.fundRefreshBtn {
+  border: 1px solid var(--border);
+
+  background: var(--surface);
+
+  color: var(--text-secondary);
+}
+
+.fundRefreshBtn:hover {
+  background: var(--surface-2);
 
   color: var(--text);
 }
 
-.fundCard small {
-  color: var(--text-muted);
+.fundRefreshBtn:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
 }
 
-.availableMoney {
-  color: var(--success) !important;
+.fundRefreshBtn svg {
+  font-size: 11px;
 }
 
-/* =========================================================
-   FUND SECTION
-========================================================= */
+.addMoneyBtn {
+  border: none;
 
-.fundSection {
+  background: var(--primary);
+
+  color: #ffffff;
+
+  box-shadow: 0 5px 14px rgba(56, 126, 209, 0.2);
+}
+
+.addMoneyBtn:hover {
+  background: var(--primary-dark);
+
+  transform: translateY(-1px);
+}
+
+/* =====================================================
+   BALANCE CARDS
+===================================================== */
+
+.fundCards {
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 16px;
+
+  margin-bottom: 22px;
+}
+
+.fundCard {
+  position: relative;
+
+  overflow: hidden;
+
+  min-width: 0;
+
+  padding: 20px;
+
   background: var(--surface);
 
   border: 1px solid var(--border);
 
-  border-radius: 14px;
+  border-radius: 15px;
 
-  margin-bottom: 25px;
+  box-shadow: var(--shadow);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.fundCard::after {
+  content: "";
+
+  position: absolute;
+
+  width: 80px;
+  height: 80px;
+
+  right: -30px;
+  bottom: -35px;
+
+  border-radius: 50%;
+
+  background: rgba(56, 126, 209, 0.05);
+
+  pointer-events: none;
+}
+
+.fundCard:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    var(--shadow),
+    0 8px 25px rgba(0, 0, 0, 0.04);
+}
+
+.fundCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 18px;
+}
+
+.fundCardIcon {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: rgba(56, 126, 209, 0.1);
+
+  color: var(--primary);
+
+  font-size: 15px;
+}
+
+.fundCardBadge {
+  padding: 4px 8px;
+
+  border-radius: 20px;
+
+  background: var(--surface-2);
+
+  color: var(--text-muted);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.4px;
+}
+
+.successBadge {
+  background: rgba(20, 148, 71, 0.1);
+
+  color: var(--success);
+}
+
+.fundCardLabel {
+  display: block;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+}
+
+.fundCard h2 {
+  margin: 8px 0 5px;
+
+  color: var(--text);
+
+  font-size: 22px;
+  font-weight: 750;
+
+  line-height: 1.2;
+
+  word-break: break-word;
+}
+
+.fundCard small {
+  color: var(--text-muted);
+
+  font-size: 10px;
+}
+
+.availableFundCard .fundCardIcon,
+.withdrawFundCard .fundCardIcon {
+  background: rgba(20, 148, 71, 0.1);
+
+  color: var(--success);
+}
+
+.availableFundCard h2,
+.withdrawFundCard h2 {
+  color: var(--success);
+}
+
+/* =====================================================
+   SECTIONS
+===================================================== */
+
+.fundSection {
+  margin-bottom: 22px;
 
   overflow: hidden;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 15px;
 
   box-shadow: var(--shadow);
 }
 
 .fundSectionHeader {
-  padding: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 20px 22px;
 
   border-bottom: 1px solid var(--border);
 }
@@ -153,35 +318,35 @@
 .fundSectionHeader h2 {
   margin: 0;
 
-  font-size: 19px;
-
   color: var(--text);
+
+  font-size: 17px;
+  font-weight: 700;
 }
 
 .fundSectionHeader p {
-  margin: 6px 0 0;
+  margin: 5px 0 0;
 
   color: var(--text-secondary);
 
-  font-size: 13px;
+  font-size: 12px;
 }
 
-/* =========================================================
+/* =====================================================
    FUND ACTIONS
-========================================================= */
+===================================================== */
 
 .fundActions {
-  padding: 10px 22px;
+  padding: 0 22px;
 }
 
 .fundAction {
   display: flex;
-
   align-items: center;
 
-  gap: 18px;
+  gap: 16px;
 
-  padding: 20px 0;
+  padding: 19px 0;
 
   border-bottom: 1px solid var(--border);
 }
@@ -194,40 +359,42 @@
   width: 42px;
   height: 42px;
 
-  border-radius: 10px;
+  flex: 0 0 42px;
 
   display: flex;
-
   align-items: center;
   justify-content: center;
 
-  background: rgba(56, 126, 209, 0.12);
+  border-radius: 11px;
+
+  font-size: 15px;
+}
+
+.addActionIcon {
+  background: rgba(56, 126, 209, 0.1);
 
   color: var(--primary);
-
-  font-size: 24px;
-
-  font-weight: 600;
-
-  flex-shrink: 0;
 }
 
-.withdrawIcon {
-  background: var(--surface-2);
+.withdrawActionIcon {
+  background: rgba(20, 148, 71, 0.1);
 
-  color: var(--text-secondary);
+  color: var(--success);
 }
 
-.fundAction > div:nth-child(2) {
+.fundActionContent {
   flex: 1;
+
+  min-width: 0;
 }
 
 .fundAction h3 {
   margin: 0;
 
-  font-size: 15px;
-
   color: var(--text);
+
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .fundAction p {
@@ -235,126 +402,210 @@
 
   color: var(--text-secondary);
 
-  font-size: 12px;
+  font-size: 11px;
+
+  line-height: 1.5;
 }
 
-.fundAction button {
+.fundActionBtn {
+  flex: 0 0 auto;
+
+  padding: 9px 15px;
+
   border: 1px solid var(--primary);
+
+  border-radius: 8px;
 
   background: transparent;
 
   color: var(--primary);
 
-  padding: 9px 18px;
-
-  border-radius: 7px;
-
   cursor: pointer;
 
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 650;
 
-  transition: 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
-.fundAction button:hover {
+.fundActionBtn:hover {
   background: var(--primary);
 
   color: #ffffff;
 }
 
-/* =========================================================
-   ACCOUNT BALANCE
-========================================================= */
+/* =====================================================
+   ACCOUNT BALANCE ROWS
+===================================================== */
 
 .fundTransaction {
   display: flex;
-
-  justify-content: space-between;
-
   align-items: center;
 
-  padding: 20px 22px;
+  gap: 14px;
+
+  padding: 17px 22px;
+
+  border-bottom: 1px solid var(--border);
 }
 
-.fundTransaction strong {
+.fundTransaction:last-child {
+  border-bottom: none;
+}
+
+.fundTransactionIcon {
+  width: 34px;
+  height: 34px;
+
+  flex: 0 0 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: rgba(20, 148, 71, 0.1);
+
+  color: var(--success);
+
+  font-size: 13px;
+}
+
+.marginTransactionIcon {
+  background: rgba(56, 126, 209, 0.1);
+
+  color: var(--primary);
+}
+
+.fundTransactionContent {
+  flex: 1;
+
+  min-width: 0;
+}
+
+.fundTransactionContent strong {
   display: block;
 
   color: var(--text);
+
+  font-size: 13px;
 }
 
-.fundTransaction small {
+.fundTransactionContent small {
   display: block;
+
+  margin-top: 4px;
 
   color: var(--text-secondary);
 
-  margin-top: 5px;
+  font-size: 10px;
 }
 
-.positiveFund {
+.fundTransaction > strong:last-child {
+  color: var(--text);
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.fundTransaction > .positiveFund {
   color: var(--success) !important;
 }
 
-/* =========================================================
+/* =====================================================
    MODAL OVERLAY
-========================================================= */
+===================================================== */
 
 .fundModalOverlay {
   position: fixed;
 
   inset: 0;
 
-  background: rgba(15, 23, 42, 0.55);
-
-  backdrop-filter: blur(3px);
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(8, 15, 30, 0.62);
+
+  backdrop-filter: blur(5px);
 
   z-index: 9999;
 
-  padding: 20px;
+  animation: fundOverlayIn 0.18s ease;
 }
 
-/* =========================================================
+/* =====================================================
    MODAL
-========================================================= */
+===================================================== */
 
 .fundModal {
-  width: min(400px, 100%);
-
-  background: var(--surface);
-
-  color: var(--text);
-
-  border: 1px solid var(--border);
-
-  border-radius: 14px;
-
-  padding: 28px;
+  width: 420px;
+  max-width: 100%;
 
   box-sizing: border-box;
 
-  box-shadow:
-    0 25px 70px rgba(0, 0, 0, 0.2);
+  padding: 25px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 18px;
+
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+
+  color: var(--text);
 
   animation: fundModalIn 0.2s ease;
 }
 
-@keyframes fundModalIn {
-  from {
-    opacity: 0;
+.fundModalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
 
-    transform: translateY(10px) scale(0.98);
-  }
+  gap: 15px;
 
-  to {
-    opacity: 1;
+  margin-bottom: 22px;
+}
 
-    transform: translateY(0) scale(1);
-  }
+.modalTitleGroup {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.modalIcon {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 40px;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+}
+
+.addModalIcon {
+  background: rgba(56, 126, 209, 0.1);
+
+  color: var(--primary);
+}
+
+.withdrawModalIcon {
+  background: rgba(20, 148, 71, 0.1);
+
+  color: var(--success);
 }
 
 .fundModal h2 {
@@ -362,85 +613,223 @@
 
   color: var(--text);
 
-  font-size: 22px;
+  font-size: 20px;
+  font-weight: 750;
 }
 
-.fundModal p {
+.fundModalHeader p {
+  margin: 4px 0 0;
+
   color: var(--text-secondary);
 
-  font-size: 13px;
-
-  line-height: 1.5;
+  font-size: 11px;
 }
 
-.fundModal p strong {
+.modalCloseBtn {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50%;
+
+  background: var(--surface-2);
+
+  color: var(--text-secondary);
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.modalCloseBtn:hover {
+  background: var(--border);
+
+  color: var(--text);
+}
+
+.modalCloseBtn:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   WITHDRAW AVAILABLE
+===================================================== */
+
+.withdrawAvailable {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 18px;
+
+  padding: 12px 13px;
+
+  border-radius: 9px;
+
+  background: rgba(20, 148, 71, 0.07);
+
+  border: 1px solid rgba(20, 148, 71, 0.14);
+}
+
+.withdrawAvailable span {
+  color: var(--text-secondary);
+
+  font-size: 11px;
+}
+
+.withdrawAvailable strong {
   color: var(--success);
+
+  font-size: 13px;
 }
 
-/* =========================================================
-   MODAL INPUT
-========================================================= */
+/* =====================================================
+   INPUT
+===================================================== */
 
-.fundModal input {
-  width: 100%;
+.fundModalLabel {
+  display: block;
 
-  height: 45px;
-
-  box-sizing: border-box;
-
-  border: 1px solid var(--border);
-
-  border-radius: 8px;
-
-  padding: 0 12px;
-
-  outline: none;
-
-  font-size: 14px;
-
-  background: var(--input-bg);
+  margin-bottom: 7px;
 
   color: var(--text);
 
-  transition: 0.2s ease;
+  font-size: 12px;
+  font-weight: 650;
 }
 
-.fundModal input:focus {
+.amountInputWrapper {
+  display: flex;
+  align-items: center;
+
+  height: 48px;
+
+  overflow: hidden;
+
+  border: 1px solid var(--border);
+
+  border-radius: 9px;
+
+  background: var(--input-bg);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.amountInputWrapper:focus-within {
   border-color: var(--primary);
 
-  box-shadow:
-    0 0 0 3px rgba(56, 126, 209, 0.1);
+  box-shadow: 0 0 0 3px rgba(56, 126, 209, 0.1);
 }
 
-.fundModal input::placeholder {
+.amountInputWrapper > span {
+  padding-left: 14px;
+
+  color: var(--text-secondary);
+
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.amountInputWrapper input {
+  width: 100%;
+  height: 100%;
+
+  padding: 0 13px 0 7px;
+
+  border: none;
+
+  outline: none;
+
+  background: transparent;
+
+  color: var(--text);
+
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.amountInputWrapper input::placeholder {
   color: var(--text-muted);
 }
 
-/* =========================================================
-   MODAL BUTTONS
-========================================================= */
+/* Hide browser number arrows */
+
+.amountInputWrapper input::-webkit-inner-spin-button,
+.amountInputWrapper input::-webkit-outer-spin-button {
+  margin: 0;
+
+  -webkit-appearance: none;
+}
+
+.amountInputWrapper input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* =====================================================
+   MODAL ERROR
+===================================================== */
+
+.fundModalError {
+  margin-top: 12px;
+
+  padding: 10px 12px;
+
+  border: 1px solid #ffcaca;
+
+  border-radius: 8px;
+
+  background: #fff1f1;
+
+  color: #d33232;
+
+  font-size: 11px;
+
+  line-height: 1.4;
+}
+
+/* =====================================================
+   MODAL ACTIONS
+===================================================== */
 
 .fundModalActions {
   display: flex;
-
   justify-content: flex-end;
 
-  gap: 10px;
+  gap: 9px;
 
   margin-top: 20px;
 }
 
 .cancelBtn,
 .confirmBtn {
-  padding: 10px 16px;
+  min-width: 100px;
 
-  border-radius: 7px;
+  height: 40px;
+
+  padding: 0 15px;
+
+  border-radius: 8px;
 
   cursor: pointer;
 
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 650;
 
-  transition: 0.2s ease;
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .cancelBtn {
@@ -453,6 +842,8 @@
 
 .cancelBtn:hover {
   background: var(--border);
+
+  color: var(--text);
 }
 
 .confirmBtn {
@@ -469,114 +860,279 @@
 
 .cancelBtn:disabled,
 .confirmBtn:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
 
   cursor: not-allowed;
 }
 
-/* =========================================================
+/* =====================================================
    LOADING
-========================================================= */
+===================================================== */
 
-.fundLoading {
-  min-height: 300px;
+.fundLoadingCard {
+  min-height: 330px;
 
   display: flex;
-
+  flex-direction: column;
   align-items: center;
-
   justify-content: center;
+
+  padding: 30px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 15px;
+
+  background: var(--surface);
+
+  box-shadow: var(--shadow);
+
+  text-align: center;
+}
+
+.fundSpinner {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 15px;
+
+  border-radius: 50%;
+
+  background: rgba(56, 126, 209, 0.1);
+
+  color: var(--primary);
+
+  animation: fundSpin 1s linear infinite;
+}
+
+.fundLoadingCard h3 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 16px;
+}
+
+.fundLoadingCard p {
+  margin: 7px 0 0;
 
   color: var(--text-secondary);
 
-  font-size: 15px;
+  font-size: 12px;
 }
 
-/* =========================================================
+/* =====================================================
    ERROR
-========================================================= */
+===================================================== */
 
 .fundError {
+  max-width: 600px;
+
+  margin: 50px auto;
+
+  padding: 35px 25px;
+
+  text-align: center;
+
   background: var(--surface);
 
   border: 1px solid var(--border);
 
-  border-radius: 14px;
-
-  padding: 30px;
-
-  text-align: center;
+  border-radius: 15px;
 
   box-shadow: var(--shadow);
+}
+
+.fundErrorIcon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 14px;
+
+  border-radius: 50%;
+
+  background: rgba(229, 57, 53, 0.1);
+
+  color: #e53935;
+
+  font-weight: 800;
 }
 
 .fundError h2 {
   margin: 0 0 8px;
 
   color: var(--text);
+
+  font-size: 19px;
 }
 
 .fundError p {
+  margin: 0 0 20px;
+
   color: var(--text-secondary);
 
-  margin-bottom: 20px;
+  font-size: 13px;
 }
 
 .fundError button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  height: 40px;
+
+  padding: 0 17px;
+
   border: none;
+  border-radius: 8px;
 
   background: var(--primary);
 
   color: #ffffff;
 
-  padding: 10px 18px;
-
-  border-radius: 7px;
-
   cursor: pointer;
+
+  font-size: 12px;
+  font-weight: 650;
 }
 
 .fundError button:hover {
   background: var(--primary-dark);
 }
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
+/* =====================================================
+   ANIMATIONS
+===================================================== */
 
-@media (max-width: 1100px) {
-  .fundCards {
-    grid-template-columns: repeat(2, 1fr);
+@keyframes fundSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }
 
-@media (max-width: 650px) {
-  .fundsPage {
-    padding: 0 0 30px;
+@keyframes fundOverlayIn {
+  from {
+    opacity: 0;
   }
 
-  .fundsHeader {
-    flex-direction: column;
+  to {
+    opacity: 1;
+  }
+}
 
+@keyframes fundModalIn {
+  from {
+    opacity: 0;
+
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+  .fundCards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .fundsHeader {
     align-items: flex-start;
 
-    gap: 15px;
+    flex-direction: column;
+  }
+
+  .fundHeaderActions {
+    width: 100%;
+  }
+
+  .fundRefreshBtn,
+  .addMoneyBtn {
+    flex: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .fundsPage {
+    padding-bottom: 30px;
+  }
+
+  .fundPageIcon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .fundsHeader h1 {
+    font-size: 25px;
   }
 
   .fundCards {
     grid-template-columns: 1fr;
+
+    gap: 12px;
+  }
+
+  .fundCard {
+    padding: 18px;
   }
 
   .fundAction {
     align-items: flex-start;
+
+    flex-wrap: wrap;
   }
 
-  .fundAction button {
+  .fundActionContent {
+    flex: 1 1 calc(100% - 58px);
+  }
+
+  .fundActionBtn {
+    width: 100%;
+
+    margin-top: 3px;
+  }
+
+  .fundTransaction {
+    align-items: flex-start;
+  }
+
+  .fundTransaction > strong:last-child {
     margin-left: auto;
+
+    text-align: right;
+  }
+
+  .fundModalOverlay {
+    padding: 12px;
   }
 
   .fundModal {
-    width: 100%;
+    padding: 20px;
+
+    border-radius: 16px;
   }
 
   .fundModalActions {
@@ -586,5 +1142,20 @@
   .cancelBtn,
   .confirmBtn {
     width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .fundHeaderActions {
+    flex-direction: column;
+  }
+
+  .fundRefreshBtn,
+  .addMoneyBtn {
+    width: 100%;
+  }
+
+  .fundTransactionContent small {
+    max-width: 150px;
   }
 }

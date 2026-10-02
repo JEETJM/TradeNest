@@ -1,50 +1,72 @@
 import { useCallback, useEffect, useState } from "react";
+import {
+  FaWallet,
+  FaPlus,
+  FaArrowDown,
+  FaMoneyBillTransfer,
+  FaRotate,
+  FaCircleCheck,
+  FaXmark,
+} from "react-icons/fa6";
+
 import "./FundsPage.css";
 
-// const API_URL = "http://localhost:5000";
-const API_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+
+/* =====================================================
+   TOKEN
+===================================================== */
+
+const getToken = () => {
+  return (
+    localStorage.getItem("tradenest_token") ||
+    localStorage.getItem("token") ||
+    sessionStorage.getItem("tradenest_token") ||
+    sessionStorage.getItem("token")
+  );
+};
+
+/* =====================================================
+   INITIAL FUNDS
+===================================================== */
+
+const INITIAL_FUNDS = {
+  totalBalance: 0,
+  availableBalance: 0,
+  usedMargin: 0,
+  withdrawable: 0,
+};
+
+/* =====================================================
+   FUNDS PAGE
+===================================================== */
+
 function FundsPage() {
-  const [funds, setFunds] = useState({
-    totalBalance: 0,
-    availableBalance: 0,
-    usedMargin: 0,
-    withdrawable: 0,
-  });
+  const [funds, setFunds] = useState(INITIAL_FUNDS);
 
   const [amount, setAmount] = useState("");
+
   const [showAddMoney, setShowAddMoney] = useState(false);
   const [showWithdraw, setShowWithdraw] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
+
   const [error, setError] = useState("");
 
-  /* =========================
-     TOKEN
-  ========================= */
-
-  const getToken = () => {
-    return (
-      localStorage.getItem("tradenest_token") ||
-      localStorage.getItem("token") ||
-      sessionStorage.getItem("tradenest_token") ||
-      sessionStorage.getItem("token")
-    );
-  };
-
-  /* =========================
+  /* =====================================================
      FORMAT MONEY
-  ========================= */
+  ===================================================== */
 
   const formatMoney = (value) =>
     `₹${Number(value || 0).toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })}`;
 
-  /* =========================
+  /* =====================================================
      LOAD FUNDS
-  ========================= */
+  ===================================================== */
 
   const loadFunds = useCallback(async () => {
     try {
@@ -59,6 +81,7 @@ function FundsPage() {
 
       const response = await fetch(`${API_URL}/funds`, {
         method: "GET",
+
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -72,12 +95,15 @@ function FundsPage() {
 
       setFunds({
         totalBalance: Number(data.funds?.totalBalance || 0),
+
         availableBalance: Number(data.funds?.availableBalance || 0),
+
         usedMargin: Number(data.funds?.usedMargin || 0),
+
         withdrawable: Number(data.funds?.withdrawable || 0),
       });
     } catch (error) {
-      console.error("❌ Funds loading error:", error);
+      console.error("Funds loading error:", error);
 
       setError(error.message || "Unable to load funds.");
     } finally {
@@ -85,17 +111,17 @@ function FundsPage() {
     }
   }, []);
 
-  /* =========================
+  /* =====================================================
      INITIAL LOAD
-  ========================= */
+  ===================================================== */
 
   useEffect(() => {
     loadFunds();
   }, [loadFunds]);
 
-  /* =========================
-     LISTEN FOR FUND UPDATES
-  ========================= */
+  /* =====================================================
+     FUND UPDATE LISTENER
+  ===================================================== */
 
   useEffect(() => {
     const handleFundsUpdate = () => {
@@ -113,34 +139,71 @@ function FundsPage() {
     };
   }, [loadFunds]);
 
-  /* =========================
+  /* =====================================================
+     CLOSE MODALS
+  ===================================================== */
+
+  const closeModals = () => {
+    if (processing) {
+      return;
+    }
+
+    setAmount("");
+    setShowAddMoney(false);
+    setShowWithdraw(false);
+  };
+
+  /* =====================================================
+     OPEN ADD MONEY
+  ===================================================== */
+
+  const openAddMoney = () => {
+    setAmount("");
+    setShowWithdraw(false);
+    setShowAddMoney(true);
+  };
+
+  /* =====================================================
+     OPEN WITHDRAW
+  ===================================================== */
+
+  const openWithdraw = () => {
+    setAmount("");
+    setShowAddMoney(false);
+    setShowWithdraw(true);
+  };
+
+  /* =====================================================
      ADD MONEY
-  ========================= */
+  ===================================================== */
 
   const handleAddMoney = async () => {
     const value = Number(amount);
 
-    if (!value || value <= 0) {
-      alert("Please enter a valid amount.");
+    if (!Number.isFinite(value) || value <= 0) {
+      setError("Please enter a valid amount.");
       return;
     }
 
     try {
       setProcessing(true);
+      setError("");
 
       const token = getToken();
 
       if (!token) {
-        alert("Authentication token not found.");
-        return;
+        throw new Error("Authentication token not found.");
       }
 
       const response = await fetch(`${API_URL}/funds/add`, {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
+
           Authorization: `Bearer ${token}`,
         },
+
         body: JSON.stringify({
           amount: value,
         }),
@@ -154,12 +217,13 @@ function FundsPage() {
 
       setFunds({
         totalBalance: Number(data.funds?.totalBalance || 0),
+
         availableBalance: Number(data.funds?.availableBalance || 0),
+
         usedMargin: Number(data.funds?.usedMargin || 0),
+
         withdrawable: Number(data.funds?.withdrawable || 0),
       });
-
-      alert(data.message || "Money added successfully.");
 
       setAmount("");
       setShowAddMoney(false);
@@ -168,47 +232,51 @@ function FundsPage() {
 
       window.dispatchEvent(new Event("tradenest-update"));
     } catch (error) {
-      console.error("❌ Add money error:", error);
+      console.error("Add money error:", error);
 
-      alert(error.message || "Unable to add money.");
+      setError(error.message || "Unable to add money.");
     } finally {
       setProcessing(false);
     }
   };
 
-  /* =========================
+  /* =====================================================
      WITHDRAW MONEY
-  ========================= */
+  ===================================================== */
 
   const handleWithdraw = async () => {
     const value = Number(amount);
 
-    if (!value || value <= 0) {
-      alert("Please enter a valid amount.");
+    if (!Number.isFinite(value) || value <= 0) {
+      setError("Please enter a valid amount.");
       return;
     }
 
     if (value > Number(funds.withdrawable || 0)) {
-      alert("Insufficient available balance.");
+      setError("The withdrawal amount exceeds your withdrawable balance.");
+
       return;
     }
 
     try {
       setProcessing(true);
+      setError("");
 
       const token = getToken();
 
       if (!token) {
-        alert("Authentication token not found.");
-        return;
+        throw new Error("Authentication token not found.");
       }
 
       const response = await fetch(`${API_URL}/funds/withdraw`, {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
+
           Authorization: `Bearer ${token}`,
         },
+
         body: JSON.stringify({
           amount: value,
         }),
@@ -222,12 +290,13 @@ function FundsPage() {
 
       setFunds({
         totalBalance: Number(data.funds?.totalBalance || 0),
+
         availableBalance: Number(data.funds?.availableBalance || 0),
+
         usedMargin: Number(data.funds?.usedMargin || 0),
+
         withdrawable: Number(data.funds?.withdrawable || 0),
       });
-
-      alert(data.message || "Money withdrawn successfully.");
 
       setAmount("");
       setShowWithdraw(false);
@@ -236,71 +305,70 @@ function FundsPage() {
 
       window.dispatchEvent(new Event("tradenest-update"));
     } catch (error) {
-      console.error("❌ Withdraw error:", error);
+      console.error("Withdraw error:", error);
 
-      alert(error.message || "Unable to withdraw money.");
+      setError(error.message || "Unable to withdraw money.");
     } finally {
       setProcessing(false);
     }
   };
 
-  /* =========================
-     OPEN ADD MONEY
-  ========================= */
+  /* =====================================================
+     ESCAPE KEY
+  ===================================================== */
 
-  const openAddMoney = () => {
-    setAmount("");
-    setShowWithdraw(false);
-    setShowAddMoney(true);
-  };
+  useEffect(() => {
+    const handleEscape = (event) => {
+      if (event.key === "Escape" && !processing) {
+        closeModals();
+      }
+    };
 
-  /* =========================
-     OPEN WITHDRAW
-  ========================= */
+    document.addEventListener("keydown", handleEscape);
 
-  const openWithdraw = () => {
-    setAmount("");
-    setShowAddMoney(false);
-    setShowWithdraw(true);
-  };
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [processing]);
 
-  /* =========================
-     CLOSE MODALS
-  ========================= */
-
-  const closeModals = () => {
-    if (processing) return;
-
-    setAmount("");
-    setShowAddMoney(false);
-    setShowWithdraw(false);
-  };
-
-  /* =========================
+  /* =====================================================
      LOADING
-  ========================= */
+  ===================================================== */
 
   if (loading) {
     return (
       <section className="fundsPage">
-        <div className="fundLoading">Loading your funds...</div>
+        <div className="fundLoadingCard">
+          <div className="fundSpinner">
+            <FaRotate />
+          </div>
+
+          <h3>Loading your funds</h3>
+
+          <p>Please wait while we fetch your latest account balance.</p>
+        </div>
       </section>
     );
   }
 
-  /* =========================
+  /* =====================================================
      ERROR
-  ========================= */
+  ===================================================== */
 
-  if (error) {
+  if (error && !showAddMoney && !showWithdraw) {
     return (
       <section className="fundsPage">
         <div className="fundError">
+          <div className="fundErrorIcon">!</div>
+
           <h2>Unable to load funds</h2>
 
           <p>{error}</p>
 
-          <button onClick={loadFunds}>Retry</button>
+          <button onClick={loadFunds}>
+            <FaRotate />
+            Retry
+          </button>
         </div>
       </section>
     );
@@ -308,156 +376,291 @@ function FundsPage() {
 
   return (
     <section className="fundsPage">
-      {/* =========================
+      {/* =================================================
           HEADER
-      ========================= */}
+      ================================================= */}
 
       <div className="fundsHeader">
         <div>
-          <h1>Funds</h1>
+          <div className="fundPageTitle">
+            <div className="fundPageIcon">
+              <FaWallet />
+            </div>
 
-          <p>Manage your trading balance and available funds.</p>
+            <div>
+              <h1>Funds</h1>
+
+              <p>Manage your trading balance and available funds.</p>
+            </div>
+          </div>
         </div>
 
-        <button className="addMoneyBtn" onClick={openAddMoney}>
-          + Add Money
-        </button>
+        <div className="fundHeaderActions">
+          <button
+            className="fundRefreshBtn"
+            onClick={loadFunds}
+            disabled={loading}
+            title="Refresh funds"
+          >
+            <FaRotate />
+            Refresh
+          </button>
+
+          <button className="addMoneyBtn" onClick={openAddMoney}>
+            <FaPlus />
+            Add Money
+          </button>
+        </div>
       </div>
 
-      {/* =========================
+      {/* =================================================
           BALANCE CARDS
-      ========================= */}
+      ================================================= */}
 
       <div className="fundCards">
-        {/* TOTAL */}
+        {/* Total */}
 
-        <div className="fundCard">
-          <span>Total Balance</span>
+        <article className="fundCard totalFundCard">
+          <div className="fundCardTop">
+            <div className="fundCardIcon">
+              <FaWallet />
+            </div>
+
+            <span className="fundCardBadge">Account</span>
+          </div>
+
+          <span className="fundCardLabel">Total Balance</span>
 
           <h2>{formatMoney(funds.totalBalance)}</h2>
 
           <small>Total funds in your account</small>
-        </div>
+        </article>
 
-        {/* AVAILABLE */}
+        {/* Available */}
 
-        <div className="fundCard">
-          <span>Available Balance</span>
+        <article className="fundCard availableFundCard">
+          <div className="fundCardTop">
+            <div className="fundCardIcon">
+              <FaMoneyBillTransfer />
+            </div>
 
-          <h2 className="availableMoney">
-            {formatMoney(funds.availableBalance)}
-          </h2>
+            <span className="fundCardBadge successBadge">Available</span>
+          </div>
+
+          <span className="fundCardLabel">Available Balance</span>
+
+          <h2>{formatMoney(funds.availableBalance)}</h2>
 
           <small>Available for trading</small>
-        </div>
+        </article>
 
-        {/* USED MARGIN */}
+        {/* Used margin */}
 
-        <div className="fundCard">
-          <span>Used Margin</span>
+        <article className="fundCard marginFundCard">
+          <div className="fundCardTop">
+            <div className="fundCardIcon">
+              <FaArrowDown />
+            </div>
+
+            <span className="fundCardBadge">In Use</span>
+          </div>
+
+          <span className="fundCardLabel">Used Margin</span>
 
           <h2>{formatMoney(funds.usedMargin)}</h2>
 
-          <small>Currently used</small>
-        </div>
+          <small>Currently used for positions</small>
+        </article>
 
-        {/* WITHDRAWABLE */}
+        {/* Withdrawable */}
 
-        <div className="fundCard">
-          <span>Withdrawable</span>
+        <article className="fundCard withdrawFundCard">
+          <div className="fundCardTop">
+            <div className="fundCardIcon">
+              <FaMoneyBillTransfer />
+            </div>
+
+            <span className="fundCardBadge successBadge">Ready</span>
+          </div>
+
+          <span className="fundCardLabel">Withdrawable</span>
 
           <h2>{formatMoney(funds.withdrawable)}</h2>
 
           <small>Available to withdraw</small>
-        </div>
+        </article>
       </div>
 
-      {/* =========================
+      {/* =================================================
           FUND MANAGEMENT
-      ========================= */}
+      ================================================= */}
 
       <div className="fundSection">
         <div className="fundSectionHeader">
-          <h2>Fund Management</h2>
+          <div>
+            <h2>Fund Management</h2>
 
-          <p>Add or withdraw money from your TradeNest account.</p>
+            <p>Add or withdraw money from your TradeNest account.</p>
+          </div>
         </div>
 
         <div className="fundActions">
-          {/* ADD MONEY */}
+          {/* Add */}
 
           <div className="fundAction">
-            <div className="fundActionIcon">+</div>
+            <div className="fundActionIcon addActionIcon">
+              <FaPlus />
+            </div>
 
-            <div>
+            <div className="fundActionContent">
               <h3>Add Money</h3>
 
-              <p>Add funds to your trading account.</p>
+              <p>
+                Add funds to your trading account and increase your available
+                balance.
+              </p>
             </div>
 
-            <button onClick={openAddMoney}>Add</button>
+            <button className="fundActionBtn" onClick={openAddMoney}>
+              Add Money
+            </button>
           </div>
 
-          {/* WITHDRAW */}
+          {/* Withdraw */}
 
           <div className="fundAction">
-            <div className="fundActionIcon withdrawIcon">↓</div>
-
-            <div>
-              <h3>Withdraw Money</h3>
-
-              <p>Transfer available funds to your bank.</p>
+            <div className="fundActionIcon withdrawActionIcon">
+              <FaArrowDown />
             </div>
 
-            <button onClick={openWithdraw}>Withdraw</button>
+            <div className="fundActionContent">
+              <h3>Withdraw Money</h3>
+
+              <p>
+                Withdraw funds that are currently available from your account.
+              </p>
+            </div>
+
+            <button className="fundActionBtn" onClick={openWithdraw}>
+              Withdraw
+            </button>
           </div>
         </div>
       </div>
 
-      {/* =========================
+      {/* =================================================
           ACCOUNT BALANCE
-      ========================= */}
+      ================================================= */}
 
       <div className="fundSection">
         <div className="fundSectionHeader">
-          <h2>Account Balance</h2>
+          <div>
+            <h2>Account Balance</h2>
 
-          <p>Your current TradeNest balance.</p>
+            <p>Current balance information for your TradeNest account.</p>
+          </div>
         </div>
 
         <div className="fundTransaction">
-          <div>
+          <div className="fundTransactionIcon">
+            <FaCircleCheck />
+          </div>
+
+          <div className="fundTransactionContent">
             <strong>Available Trading Balance</strong>
 
-            <small>Funds currently available for trading</small>
+            <small>Funds currently available for placing trades</small>
           </div>
 
           <strong className="positiveFund">
             {formatMoney(funds.availableBalance)}
           </strong>
         </div>
+
+        <div className="fundTransaction">
+          <div className="fundTransactionIcon marginTransactionIcon">
+            <FaArrowDown />
+          </div>
+
+          <div className="fundTransactionContent">
+            <strong>Used Margin</strong>
+
+            <small>Funds currently being used</small>
+          </div>
+
+          <strong>{formatMoney(funds.usedMargin)}</strong>
+        </div>
+
+        <div className="fundTransaction">
+          <div className="fundTransactionIcon">
+            <FaCircleCheck />
+          </div>
+
+          <div className="fundTransactionContent">
+            <strong>Withdrawable Balance</strong>
+
+            <small>Maximum amount currently available for withdrawal</small>
+          </div>
+
+          <strong className="positiveFund">
+            {formatMoney(funds.withdrawable)}
+          </strong>
+        </div>
       </div>
 
-      {/* =========================
+      {/* =================================================
           ADD MONEY MODAL
-      ========================= */}
+      ================================================= */}
 
       {showAddMoney && (
         <div className="fundModalOverlay" onClick={closeModals}>
-          <div className="fundModal" onClick={(e) => e.stopPropagation()}>
-            <h2>Add Money</h2>
+          <div
+            className="fundModal"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="fundModalHeader">
+              <div className="modalTitleGroup">
+                <div className="modalIcon addModalIcon">
+                  <FaPlus />
+                </div>
 
-            <p>Enter the amount you want to add.</p>
+                <div>
+                  <h2>Add Money</h2>
 
-            <input
-              type="number"
-              min="1"
-              step="0.01"
-              placeholder="Enter amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              disabled={processing}
-            />
+                  <p>Add funds to your trading account.</p>
+                </div>
+              </div>
+
+              <button
+                className="modalCloseBtn"
+                onClick={closeModals}
+                disabled={processing}
+              >
+                <FaXmark />
+              </button>
+            </div>
+
+            <label className="fundModalLabel" htmlFor="addMoneyAmount">
+              Amount
+            </label>
+
+            <div className="amountInputWrapper">
+              <span>₹</span>
+
+              <input
+                id="addMoneyAmount"
+                type="number"
+                min="1"
+                step="0.01"
+                placeholder="0.00"
+                value={amount}
+                onChange={(event) => setAmount(event.target.value)}
+                disabled={processing}
+                autoFocus
+              />
+            </div>
+
+            {error && <div className="fundModalError">{error}</div>}
 
             <div className="fundModalActions">
               <button
@@ -480,30 +683,66 @@ function FundsPage() {
         </div>
       )}
 
-      {/* =========================
+      {/* =================================================
           WITHDRAW MODAL
-      ========================= */}
+      ================================================= */}
 
       {showWithdraw && (
         <div className="fundModalOverlay" onClick={closeModals}>
-          <div className="fundModal" onClick={(e) => e.stopPropagation()}>
-            <h2>Withdraw Money</h2>
+          <div
+            className="fundModal"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="fundModalHeader">
+              <div className="modalTitleGroup">
+                <div className="modalIcon withdrawModalIcon">
+                  <FaArrowDown />
+                </div>
 
-            <p>
-              Available to withdraw:{" "}
+                <div>
+                  <h2>Withdraw Money</h2>
+
+                  <p>Withdraw available funds.</p>
+                </div>
+              </div>
+
+              <button
+                className="modalCloseBtn"
+                onClick={closeModals}
+                disabled={processing}
+              >
+                <FaXmark />
+              </button>
+            </div>
+
+            <div className="withdrawAvailable">
+              <span>Available to withdraw</span>
+
               <strong>{formatMoney(funds.withdrawable)}</strong>
-            </p>
+            </div>
 
-            <input
-              type="number"
-              min="1"
-              max={funds.withdrawable}
-              step="0.01"
-              placeholder="Enter amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              disabled={processing}
-            />
+            <label className="fundModalLabel" htmlFor="withdrawAmount">
+              Amount
+            </label>
+
+            <div className="amountInputWrapper">
+              <span>₹</span>
+
+              <input
+                id="withdrawAmount"
+                type="number"
+                min="1"
+                max={funds.withdrawable}
+                step="0.01"
+                placeholder="0.00"
+                value={amount}
+                onChange={(event) => setAmount(event.target.value)}
+                disabled={processing}
+                autoFocus
+              />
+            </div>
+
+            {error && <div className="fundModalError">{error}</div>}
 
             <div className="fundModalActions">
               <button

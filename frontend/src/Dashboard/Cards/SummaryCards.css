@@ -1,60 +1,207 @@
+/* =========================================================
+   SUMMARY CARDS
+========================================================= */
+
 .summaryGrid {
+  width: 100%;
+
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 25px;
-  margin-top: 35px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 18px;
+
+  margin-top: 0;
 }
 
+/* =========================================================
+   CARD
+========================================================= */
+
 .summaryCard {
+  position: relative;
+
+  min-width: 0;
+  min-height: 175px;
+
+  padding: 22px;
+
+  overflow: hidden;
+
   background: var(--surface);
-  color: var(--text);
-  padding: 28px;
-  border-radius: 18px;
+
+  border: 1px solid var(--border-light);
+  border-radius: 17px;
+
   box-shadow: var(--shadow);
 
+  color: var(--text);
+
   transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.3s ease;
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease,
+    background 0.22s ease;
+}
+
+.summaryCard::after {
+  content: "";
+
+  position: absolute;
+
+  width: 90px;
+  height: 90px;
+
+  right: -35px;
+  bottom: -40px;
+
+  border-radius: 50%;
+
+  background: rgba(56, 126, 209, 0.045);
+
+  pointer-events: none;
 }
 
 .summaryCard:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px);
+
+  border-color: rgba(56, 126, 209, 0.18);
+
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.09);
 }
 
-.cardIcon {
-  width: 55px;
-  height: 55px;
+/* =========================================================
+   CARD TOP
+========================================================= */
 
-  background: var(--hover-bg);
-  border-radius: 50%;
-
+.summaryCardTop {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: space-between;
 
-  font-size: 22px;
-  color: var(--primary);
+  gap: 10px;
 
   margin-bottom: 20px;
 }
 
-.summaryCard h4 {
-  font-size: 16px;
+/* =========================================================
+   ICON
+========================================================= */
+
+.cardIcon {
+  width: 46px;
+  height: 46px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background: rgba(56, 126, 209, 0.09);
+
+  color: var(--primary);
+
+  font-size: 19px;
+
+  transition:
+    transform 0.22s ease,
+    background 0.22s ease;
+}
+
+.summaryCard:hover .cardIcon {
+  transform: scale(1.05);
+  background: rgba(56, 126, 209, 0.13);
+}
+
+/* =========================================================
+   DIFFERENT CARD ICON TONES
+========================================================= */
+
+.summaryCard.portfolio .cardIcon {
+  background: rgba(56, 126, 209, 0.09);
+  color: var(--primary);
+}
+
+.summaryCard.pnl .cardIcon {
+  background: rgba(0, 135, 90, 0.09);
+  color: var(--success);
+}
+
+.summaryCard.return .cardIcon {
+  background: rgba(124, 92, 231, 0.09);
+  color: #7c5ce7;
+}
+
+.summaryCard.balance .cardIcon {
+  background: rgba(217, 119, 6, 0.09);
+  color: #d97706;
+}
+
+/* =========================================================
+   TREND BADGE
+========================================================= */
+
+.cardTrend {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 5px 8px;
+
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+.trendPositive {
+  background: rgba(0, 135, 90, 0.08);
+  color: var(--success);
+}
+
+.trendNegative {
+  background: rgba(220, 38, 38, 0.08);
+  color: var(--danger);
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.summaryCardContent {
+  min-width: 0;
+}
+
+.summaryCardTitle {
+  margin: 0 0 8px;
+
   color: var(--text-secondary);
-  margin-bottom: 10px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  line-height: 1.4;
 }
 
 .summaryCard h2 {
-  font-size: 28px;
-  color: var(--text);
   margin: 0;
-}
 
-/* =========================================
-   PROFIT / LOSS
-========================================= */
+  color: var(--text);
+
+  font-size: clamp(22px, 2vw, 28px);
+  font-weight: 750;
+
+  letter-spacing: -0.025em;
+
+  line-height: 1.15;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 .summaryCard .profit {
   color: var(--success);
@@ -64,18 +211,112 @@
   color: var(--danger);
 }
 
-/* =========================================
-   RESPONSIVE
-========================================= */
+/* =========================================================
+   PERCENTAGE
+========================================================= */
+
+.summaryPercentage {
+  display: inline-block;
+
+  margin-top: 7px;
+
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.summaryPercentage.profit {
+  color: var(--success);
+}
+
+.summaryPercentage.loss {
+  color: var(--danger);
+}
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+html.dark .summaryCard,
+body.dark .summaryCard {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16);
+}
+
+html.dark .summaryCard:hover,
+body.dark .summaryCard:hover {
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.24);
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
 
 @media (max-width: 1200px) {
   .summaryGrid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .summaryCard {
+    min-height: 165px;
   }
 }
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media (max-width: 650px) {
   .summaryGrid {
     grid-template-columns: 1fr;
+    gap: 13px;
+  }
+
+  .summaryCard {
+    min-height: auto;
+    padding: 18px;
+    border-radius: 15px;
+  }
+
+  .summaryCardTop {
+    margin-bottom: 16px;
+  }
+
+  .cardIcon {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 11px;
+
+    font-size: 17px;
+  }
+
+  .summaryCard h2 {
+    font-size: 23px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 400px) {
+  .summaryGrid {
+    gap: 11px;
+  }
+
+  .summaryCard {
+    padding: 16px;
+  }
+
+  .summaryCardTitle {
+    font-size: 11px;
+  }
+
+  .summaryCard h2 {
+    font-size: 21px;
+  }
+
+  .cardTrend {
+    padding: 4px 7px;
+    font-size: 9px;
   }
 }

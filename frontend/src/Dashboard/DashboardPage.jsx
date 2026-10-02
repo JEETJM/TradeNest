@@ -5,13 +5,9 @@ import { Routes, Route } from "react-router-dom";
 
 import Sidebar from "./Layout/Sidebar";
 import Topbar from "./Layout/Topbar";
-
 import DashboardHome from "./Home/DashboardHome";
 
-/* =====================================================
-   PAGES
-===================================================== */
-
+// Pages
 import PortfolioPage from "./Pages/PortfolioPage";
 import WatchlistPage from "./Pages/WatchlistPage";
 import HoldingsPage from "./Pages/HoldingsPage";
@@ -21,37 +17,24 @@ import AnalyticsPage from "./Pages/AnalyticsPage";
 import ProfilePage from "./Pages/ProfilePage";
 import SettingsPage from "./Pages/SettingsPage";
 
-/* =====================================================
-   INVESTMENT OFFERING
-===================================================== */
-
+// Investment
 import InvestmentPage from "../Landing_Page/InvestmentOfferings/InvestmentPage";
 
-/* =====================================================
-   LIVE MARKET SOCKET
-===================================================== */
-
+// Live market socket
 import {
   marketSocket,
   connectMarketSocket,
   disconnectMarketSocket,
 } from "../services/marketSocket";
 
-/* =====================================================
-   DASHBOARD PAGE
-===================================================== */
-
 function DashboardPage() {
-
-  /* ===================================================
-     GLOBAL THEME INITIALIZATION
-  =================================================== */
+  /* =====================================================
+     THEME INITIALIZATION
+  ===================================================== */
 
   useEffect(() => {
     const savedDarkMode =
-      localStorage.getItem(
-        "tradenest_dark_mode"
-      ) === "true";
+      localStorage.getItem("tradenest_dark_mode") === "true";
 
     const root = document.documentElement;
 
@@ -62,19 +45,16 @@ function DashboardPage() {
     }
   }, []);
 
-  /* ===================================================
-     LISTEN FOR THEME CHANGES
-  =================================================== */
+  /* =====================================================
+     THEME UPDATE LISTENER
+  ===================================================== */
 
   useEffect(() => {
     const handleThemeUpdate = () => {
       const savedDarkMode =
-        localStorage.getItem(
-          "tradenest_dark_mode"
-        ) === "true";
+        localStorage.getItem("tradenest_dark_mode") === "true";
 
-      const root =
-        document.documentElement;
+      const root = document.documentElement;
 
       if (savedDarkMode) {
         root.classList.add("dark");
@@ -83,138 +63,66 @@ function DashboardPage() {
       }
     };
 
-    window.addEventListener(
-      "tradenest-theme-update",
-      handleThemeUpdate
-    );
+    window.addEventListener("tradenest-theme-update", handleThemeUpdate);
 
     return () => {
-      window.removeEventListener(
-        "tradenest-theme-update",
-        handleThemeUpdate
-      );
+      window.removeEventListener("tradenest-theme-update", handleThemeUpdate);
     };
   }, []);
 
-  /* ===================================================
-     LIVE MARKET CONNECTION
-  =================================================== */
+  /* =====================================================
+     LIVE MARKET SOCKET
+  ===================================================== */
 
   useEffect(() => {
-
-    console.log(
-      "📡 Connecting to TradeNest live market..."
-    );
-
     connectMarketSocket();
 
-    /* =========================
-       CONNECT
-    ========================= */
-
     const handleConnect = () => {
-      console.log(
-        "🟢 Connected to TradeNest Market Server:",
-        marketSocket.id
-      );
+      console.log("🟢 TradeNest market socket connected:", marketSocket.id);
     };
-
-    /* =========================
-       MARKET UPDATE
-    ========================= */
 
     const handleMarketUpdate = (data) => {
-      console.log(
-        "🔥 LIVE MARKET UPDATE:",
-        data
+      if (!data) return;
+
+      window.dispatchEvent(
+        new CustomEvent("tradenest-market-update", {
+          detail: data,
+        }),
       );
     };
-
-    /* =========================
-       DISCONNECT
-    ========================= */
 
     const handleDisconnect = (reason) => {
-      console.log(
-        "🔴 Market Socket Disconnected:",
-        reason
-      );
+      console.log("🔴 TradeNest market socket disconnected:", reason);
     };
-
-    /* =========================
-       CONNECTION ERROR
-    ========================= */
 
     const handleConnectError = (error) => {
       console.error(
-        "❌ Market Socket Connection Error:",
-        error.message
+        "❌ TradeNest market socket error:",
+        error?.message || error,
       );
     };
 
-    /* =========================
-       SOCKET EVENTS
-    ========================= */
-
-    marketSocket.on(
-      "connect",
-      handleConnect
-    );
-
-    marketSocket.on(
-      "market:update",
-      handleMarketUpdate
-    );
-
-    marketSocket.on(
-      "disconnect",
-      handleDisconnect
-    );
-
-    marketSocket.on(
-      "connect_error",
-      handleConnectError
-    );
-
-    /* =========================
-       CLEANUP
-    ========================= */
+    marketSocket.on("connect", handleConnect);
+    marketSocket.on("market:update", handleMarketUpdate);
+    marketSocket.on("disconnect", handleDisconnect);
+    marketSocket.on("connect_error", handleConnectError);
 
     return () => {
-
-      marketSocket.off(
-        "connect",
-        handleConnect
-      );
-
-      marketSocket.off(
-        "market:update",
-        handleMarketUpdate
-      );
-
-      marketSocket.off(
-        "disconnect",
-        handleDisconnect
-      );
-
-      marketSocket.off(
-        "connect_error",
-        handleConnectError
-      );
+      marketSocket.off("connect", handleConnect);
+      marketSocket.off("market:update", handleMarketUpdate);
+      marketSocket.off("disconnect", handleDisconnect);
+      marketSocket.off("connect_error", handleConnectError);
 
       disconnectMarketSocket();
     };
-
   }, []);
 
-  /* ===================================================
+  /* =====================================================
      RENDER
-  =================================================== */
+  ===================================================== */
 
   return (
-
     <div className="dashboard">
-
       {/* =================================================
           SIDEBAR
       ================================================= */}
@@ -222,95 +130,64 @@ function DashboardPage() {
       <Sidebar />
 
       {/* =================================================
-          MAIN DASHBOARD
+          MAIN CONTENT
       ================================================= */}
 
-      <div className="dashboardMain">
-
-        {/* TOPBAR */}
+      <main className="dashboardMain">
+        {/* =================================================
+            TOPBAR
+        ================================================= */}
 
         <Topbar />
 
         {/* =================================================
-            NESTED ROUTES
+            DASHBOARD ROUTES
         ================================================= */}
 
-        <Routes>
+        <div className="dashboardContent">
+          <Routes>
+            {/* HOME */}
 
-          {/* DASHBOARD HOME */}
+            <Route index element={<DashboardHome />} />
 
-          <Route
-            index
-            element={<DashboardHome />}
-          />
+            {/* PORTFOLIO */}
 
-          {/* PORTFOLIO */}
+            <Route path="portfolio" element={<PortfolioPage />} />
 
-          <Route
-            path="portfolio"
-            element={<PortfolioPage />}
-          />
+            {/* WATCHLIST */}
 
-          {/* WATCHLIST */}
+            <Route path="watchlist" element={<WatchlistPage />} />
 
-          <Route
-            path="watchlist"
-            element={<WatchlistPage />}
-          />
+            {/* HOLDINGS */}
 
-          {/* HOLDINGS */}
+            <Route path="holdings" element={<HoldingsPage />} />
 
-          <Route
-            path="holdings"
-            element={<HoldingsPage />}
-          />
+            {/* ORDERS */}
 
-          {/* ORDERS */}
+            <Route path="orders" element={<OrdersPage />} />
 
-          <Route
-            path="orders"
-            element={<OrdersPage />}
-          />
+            {/* FUNDS */}
 
-          {/* FUNDS */}
+            <Route path="funds" element={<FundsPage />} />
 
-          <Route
-            path="funds"
-            element={<FundsPage />}
-          />
+            {/* ANALYTICS */}
 
-          {/* ANALYTICS */}
+            <Route path="analytics" element={<AnalyticsPage />} />
 
-          <Route
-            path="analytics"
-            element={<AnalyticsPage />}
-          />
+            {/* INVESTMENT OFFERING */}
 
-          {/* INVESTMENT OFFERING */}
+            <Route path="investment-offering" element={<InvestmentPage />} />
 
-          <Route
-            path="investment-offering"
-            element={<InvestmentPage />}
-          />
+            {/* PROFILE */}
 
-          {/* PROFILE */}
+            <Route path="profile" element={<ProfilePage />} />
 
-          <Route
-            path="profile"
-            element={<ProfilePage />}
-          />
+            {/* SETTINGS */}
 
-          {/* SETTINGS */}
-
-          <Route
-            path="settings"
-            element={<SettingsPage />}
-          />
-
-        </Routes>
-
-      </div>
-
+            <Route path="settings" element={<SettingsPage />} />
+          </Routes>
+        </div>
+      </main>
     </div>
   );
 }

@@ -10,30 +10,70 @@ import dashboardData from "../../data/dashboard";
 
 function DashboardHome() {
   return (
-    <section className="dashboardHome">
-      {/* HEADER */}
-      <div className="dashboardWelcome">
+    <main className="dashboardHome">
+      {/* =========================
+          PAGE HEADER
+      ========================= */}
+      <section className="dashboardHomeHeader">
         <div>
+          <span className="dashboardEyebrow">TRADENEST OVERVIEW</span>
+
           <h1>Dashboard</h1>
-          <p>Manage your investments and portfolio</p>
+
+          <p>
+            Manage your investments, portfolio and market activity from one
+            place.
+          </p>
         </div>
-      </div>
 
-      {/* SUMMARY */}
-      <SummaryCards data={dashboardData.summary} />
+        <div className="dashboardHeaderBadge">
+          <span className="dashboardLiveDot"></span>
+          <span>Market Live</span>
+        </div>
+      </section>
 
-      {/* HOLDINGS */}
-      <Holdings holdings={dashboardData.holdings} />
+      {/* =========================
+          SUMMARY CARDS
+      ========================= */}
+      <section className="dashboardSection">
+        <div className="dashboardSectionHeader">
+          <div>
+            <h2>Portfolio Overview</h2>
+            <p>Your account summary at a glance</p>
+          </div>
+        </div>
 
-      {/* ANALYTICS */}
-      <Analytics />
+        <SummaryCards data={dashboardData?.summary || {}} />
+      </section>
 
-      {/* ORDERS */}
-      <Orders orders={dashboardData.orders} />
+      {/* =========================
+          HOLDINGS
+      ========================= */}
+      <section className="dashboardSection">
+        <Holdings holdings={dashboardData?.holdings || []} />
+      </section>
 
-      {/* MARKET */}
-      <MarketInsights />
-    </section>
+      {/* =========================
+          ANALYTICS
+      ========================= */}
+      <section className="dashboardSection">
+        <Analytics />
+      </section>
+
+      {/* =========================
+          ORDERS
+      ========================= */}
+      <section className="dashboardSection">
+        <Orders orders={dashboardData?.orders || []} />
+      </section>
+
+      {/* =========================
+          MARKET INSIGHTS
+      ========================= */}
+      <section className="dashboardSection dashboardLastSection">
+        <MarketInsights />
+      </section>
+    </main>
   );
 }
 
