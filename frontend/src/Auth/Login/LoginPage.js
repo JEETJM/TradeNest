@@ -1,9 +1,6 @@
 import "./Login.css";
 
-import {
-  Link,
-  useNavigate,
-} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   FaEnvelope,
@@ -15,18 +12,23 @@ import {
 
 import { useState } from "react";
 
-import {
-  saveToken,
-  saveUser,
-} from "../auth";
+import { saveToken, saveUser } from "../auth";
 
+/* =====================================================
+   API URL
+   Local:
+   http://localhost:5000/api
+
+   Production:
+   https://tradenest-backend-59w5.onrender.com/api
+===================================================== */
+
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 
 function LoginPage() {
-
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
 
   const [errors, setErrors] = useState({});
@@ -39,60 +41,39 @@ function LoginPage() {
 
   const [loading, setLoading] = useState(false);
 
-
-  /* =========================================
+  /* =====================================================
      VALIDATION
-  ========================================= */
+  ===================================================== */
 
   const validateForm = () => {
-
     const newErrors = {};
 
     /* EMAIL */
 
     if (!email.trim()) {
-
       newErrors.email = "Email is required.";
-
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
-        email.trim()
-      )
-    ) {
-
-      newErrors.email =
-        "Enter a valid email address.";
-
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email.trim())) {
+      newErrors.email = "Enter a valid email address.";
     }
-
 
     /* PASSWORD */
 
     if (!password) {
-
-      newErrors.password =
-        "Password is required.";
-
+      newErrors.password = "Password is required.";
     } else if (password.length < 6) {
-
-      newErrors.password =
-        "Password must be at least 6 characters.";
-
+      newErrors.password = "Password must be at least 6 characters.";
     }
-
 
     setErrors(newErrors);
 
     return Object.keys(newErrors).length === 0;
   };
 
-
-  /* =========================================
+  /* =====================================================
      LOGIN
-  ========================================= */
+  ===================================================== */
 
   const handleLogin = async (e) => {
-
     e.preventDefault();
 
     setServerError("");
@@ -103,98 +84,91 @@ function LoginPage() {
 
     setLoading(true);
 
-
     try {
+      console.log("🔐 Login API:", `${API_URL}/auth/login`);
 
-      const response = await fetch(
-        "http://localhost:5000/api/auth/login",
-        {
-          method: "POST",
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
 
-          headers: {
-            "Content-Type": "application/json",
-          },
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-          body: JSON.stringify({
-            email: email.trim(),
-            password,
-          }),
-        }
-      );
+        body: JSON.stringify({
+          email: email.trim(),
+          password,
+        }),
+      });
 
+      /* =================================================
+         RESPONSE
+      ================================================= */
 
       const data = await response.json();
 
+      console.log("📡 Login response:", data);
+
+      /* =================================================
+         LOGIN ERROR
+      ================================================= */
 
       if (!response.ok || !data.success) {
-
-        setServerError(
-          data.message ||
-          "Invalid email or password."
-        );
+        setServerError(data.message || "Invalid email or password.");
 
         return;
       }
 
+      /* =================================================
+         SAVE TOKEN
+      ================================================= */
 
-      /* =====================================
-         SAVE AUTH DATA
-      ===================================== */
+      if (data.token) {
+        saveToken(data.token);
+      }
 
-      saveToken(
-        data.token,
-        rememberMe
-      );
+      /* =================================================
+         SAVE USER
+      ================================================= */
 
-      saveUser(data.user);
+      if (data.user) {
+        saveUser(data.user);
+      }
 
+      /* =================================================
+         SUCCESS
+      ================================================= */
 
-      /* =====================================
+      console.log("✅ Login successful");
+
+      /* =================================================
          GO TO DASHBOARD
-      ===================================== */
+      ================================================= */
 
       navigate("/dashboard", {
         replace: true,
       });
-
     } catch (error) {
-
-      console.error(
-        "Login error:",
-        error
-      );
+      console.error("❌ Login error:", error);
 
       setServerError(
-        "Unable to connect to server. Please make sure backend is running."
+        "Unable to connect to server. Please make sure backend is running.",
       );
-
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
-
-  /* =========================================
+  /* =====================================================
      UI
-  ========================================= */
+  ===================================================== */
 
   return (
-
     <main className="loginPage">
-
       {/* BACK TO HOME */}
 
       <div className="authHomeLink">
-
-        <Link to="/">
-          ← Back to Home
-        </Link>
-
+        <Link to="/">← Back to Home</Link>
       </div>
-
 
       {/* BACKGROUND GLOW */}
 
@@ -202,78 +176,40 @@ function LoginPage() {
 
       <div className="loginGlow loginGlowTwo"></div>
 
-
       {/* LOGIN CARD */}
 
       <div className="loginCard">
-
-
-        {/* =================================
-            BRAND
-        ================================= */}
+        {/* BRAND */}
 
         <div className="loginBrand">
-
-          <div className="brandIcon">
-            T
-          </div>
+          <div className="brandIcon">T</div>
 
           <div className="brandText">
-
             <h1>
               Trade<span>Nest</span>
             </h1>
 
-            <p>
-              Trade smarter
-            </p>
-
+            <p>Trade smarter</p>
           </div>
-
         </div>
 
-
-        {/* =================================
-            HEADING
-        ================================= */}
+        {/* HEADING */}
 
         <div className="loginHeading">
+          <h2>Welcome back</h2>
 
-          <h2>
-            Welcome back
-          </h2>
-
-          <p>
-            Sign in to continue to your account
-          </p>
-
+          <p>Sign in to continue to your account</p>
         </div>
 
-
-        {/* =================================
-            FORM
-        ================================= */}
+        {/* FORM */}
 
         <form onSubmit={handleLogin}>
-
-
           {/* EMAIL */}
 
           <div className="fieldGroup">
+            <label htmlFor="email">Email address</label>
 
-            <label htmlFor="email">
-              Email address
-            </label>
-
-
-            <div
-              className={`loginInput ${
-                errors.email
-                  ? "inputError"
-                  : ""
-              }`}
-            >
-
+            <div className={`loginInput ${errors.email ? "inputError" : ""}`}>
               <FaEnvelope />
 
               <input
@@ -282,290 +218,149 @@ function LoginPage() {
                 placeholder="you@example.com"
                 value={email}
                 autoComplete="email"
-
                 onChange={(e) => {
-
-                  setEmail(
-                    e.target.value
-                  );
+                  setEmail(e.target.value);
 
                   if (errors.email) {
-
                     setErrors((prev) => ({
                       ...prev,
                       email: "",
                     }));
-
                   }
-
                 }}
               />
-
             </div>
 
-
-            {errors.email && (
-
-              <span className="errorText">
-                {errors.email}
-              </span>
-
-            )}
-
+            {errors.email && <span className="errorText">{errors.email}</span>}
           </div>
-
 
           {/* PASSWORD */}
 
           <div className="fieldGroup">
-
-
             <div className="passwordLabel">
+              <label htmlFor="password">Password</label>
 
-              <label htmlFor="password">
-                Password
-              </label>
-
-              <Link to="/forgot-password">
-                Forgot password?
-              </Link>
-
+              <Link to="/forgot-password">Forgot password?</Link>
             </div>
 
-
             <div
-              className={`loginInput ${
-                errors.password
-                  ? "inputError"
-                  : ""
-              }`}
+              className={`loginInput ${errors.password ? "inputError" : ""}`}
             >
-
               <FaLock />
 
               <input
                 id="password"
-                type={
-                  showPassword
-                    ? "text"
-                    : "password"
-                }
+                type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
                 value={password}
                 autoComplete="current-password"
-
                 onChange={(e) => {
-
-                  setPassword(
-                    e.target.value
-                  );
+                  setPassword(e.target.value);
 
                   if (errors.password) {
-
                     setErrors((prev) => ({
                       ...prev,
                       password: "",
                     }));
-
                   }
-
                 }}
               />
-
 
               <button
                 type="button"
                 className="eyeButton"
-
-                aria-label={
-                  showPassword
-                    ? "Hide password"
-                    : "Show password"
-                }
-
-                onClick={() =>
-                  setShowPassword(
-                    (prev) => !prev
-                  )
-                }
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                onClick={() => setShowPassword((prev) => !prev)}
               >
-
-                {showPassword ? (
+                {showPassword ?
                   <FaEyeSlash />
-                ) : (
-                  <FaEye />
-                )}
-
+                : <FaEye />}
               </button>
-
             </div>
 
-
             {errors.password && (
-
-              <span className="errorText">
-                {errors.password}
-              </span>
-
+              <span className="errorText">{errors.password}</span>
             )}
-
           </div>
-
 
           {/* REMEMBER ME */}
 
           <div className="rememberRow">
-
             <label className="rememberCheck">
-
               <input
                 type="checkbox"
                 checked={rememberMe}
-
-                onChange={(e) =>
-                  setRememberMe(
-                    e.target.checked
-                  )
-                }
+                onChange={(e) => setRememberMe(e.target.checked)}
               />
 
               <span className="customCheck"></span>
 
-              <span>
-                Remember me
-              </span>
-
+              <span>Remember me</span>
             </label>
-
           </div>
-
 
           {/* SERVER ERROR */}
 
-          {serverError && (
-
-            <div className="serverError">
-              {serverError}
-            </div>
-
-          )}
-
+          {serverError && <div className="serverError">{serverError}</div>}
 
           {/* LOGIN BUTTON */}
 
-          <button
-            type="submit"
-            className="loginButton"
-            disabled={loading}
-          >
-
-            {loading ? (
-
+          <button type="submit" className="loginButton" disabled={loading}>
+            {loading ?
               <>
                 <span className="loader"></span>
                 Signing in...
               </>
+            : <>
+                <span>Sign in</span>
 
-            ) : (
-
-              <>
-                <span>
-                  Sign in
-                </span>
-
-                <strong>
-                  →
-                </strong>
+                <strong>→</strong>
               </>
-
-            )}
-
+            }
           </button>
-
         </form>
 
-
-        {/* =================================
-            DIVIDER
-        ================================= */}
+        {/* DIVIDER */}
 
         <div className="orDivider">
-
           <span></span>
 
-          <p>
-            OR
-          </p>
+          <p>OR</p>
 
           <span></span>
-
         </div>
 
-
-        {/* =================================
-            GOOGLE
-        ================================= */}
+        {/* GOOGLE */}
 
         <button
           type="button"
           className="googleButton"
-
           onClick={() => {
-
-            console.log(
-              "Google login will be connected later."
-            );
-
+            console.log("Google login will be connected later.");
           }}
         >
-
           <FaGoogle />
 
-          <span>
-            Continue with Google
-          </span>
-
+          <span>Continue with Google</span>
         </button>
 
-
-        {/* =================================
-            SIGNUP
-        ================================= */}
+        {/* SIGNUP */}
 
         <div className="createAccount">
+          <span>Don't have an account?</span>
 
-          <span>
-            Don't have an account?
-          </span>
-
-          <Link to="/signup">
-            Create account
-          </Link>
-
+          <Link to="/signup">Create account</Link>
         </div>
 
-
-        {/* =================================
-            SECURITY
-        ================================= */}
+        {/* SECURITY */}
 
         <div className="secureText">
-
-          <span className="secureDot">
-            ●
-          </span>
-
+          <span className="secureDot">●</span>
           Secure & encrypted connection
-
         </div>
-
-
       </div>
-
     </main>
-
   );
-
 }
 
 export default LoginPage;
