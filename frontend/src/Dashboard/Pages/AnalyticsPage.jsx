@@ -56,7 +56,7 @@ function AnalyticsPage() {
       }
 
       const response = await fetch(
-        `${API_URL}/api/trades/holdings`,
+        `${API_URL}/trades/holdings`,
         {
           method: "GET",
           headers: {

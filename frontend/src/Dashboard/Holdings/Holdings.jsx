@@ -76,7 +76,7 @@ function Holdings() {
 
       console.log("📤 Fetching holdings from MongoDB...");
 
-      const response = await fetch(`${API_URL}/api/trades/holdings`, {
+      const response = await fetch(`${API_URL}/trades/holdings`, {
         method: "GET",
 
         headers: {
