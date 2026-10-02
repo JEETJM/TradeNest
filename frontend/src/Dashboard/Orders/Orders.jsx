@@ -273,7 +273,7 @@ function Orders() {
          BACKEND REQUEST
       ========================= */
 
-      const response = await fetch(`${API_URL}/api/trades/orders`, {
+      const response = await fetch(`${API_URL}/trades/orders`, {
         method: "POST",
 
         headers: {

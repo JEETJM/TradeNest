@@ -275,7 +275,7 @@ function TradeModal({ stock, side, onClose, onSuccess }) {
 
       console.log("📤 TRADE REQUEST:", orderData);
 
-      const response = await fetch(`${API_URL}/api/trades/orders`, {
+      const response = await fetch(`${API_URL}/trades/orders`, {
         method: "POST",
 
         headers: {

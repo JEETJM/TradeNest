@@ -49,7 +49,7 @@ function OrdersPage() {
 
       console.log("📤 Fetching orders from MongoDB...");
 
-      const response = await fetch(`${API_URL}/api/trades/orders`, {
+      const response = await fetch(`${API_URL}/trades/orders`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
