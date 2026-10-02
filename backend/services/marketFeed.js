@@ -18,9 +18,9 @@ const startMarketFeed = (io) => {
     }
 
     console.log(
-      "🔐 Upstox access token loaded:",
-      `${accessToken.substring(0, 8)}...`,
-    );
+  "🔐 Upstox access token loaded:",
+  Boolean(process.env.UPSTOX_ACCESS_TOKEN)
+);
 
     /* =========================
        UPSTOX AUTH
