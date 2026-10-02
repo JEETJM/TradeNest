@@ -69,7 +69,7 @@ app.use(
    PREFLIGHT
 ========================= */
 
-app.options("*", cors());
+// app.options("*", cors());
 
 /* =========================
    BODY PARSER
